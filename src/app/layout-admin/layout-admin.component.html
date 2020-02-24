@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>AdminLTE 3 | Blank Page</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+
+  <!-- <link rel="stylesheet" href="assets/plugins/fontawesome-free/css/all.min.css"> -->
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="assets/plugins/css/adminlte.min.css">
+  <!-- Google Font: Source Sans Pro -->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
+<body class="hold-transition sidebar-mini " [ngClass]="[ isActiveLeftBar ? 'sidebar-open' : '']">
+<!-- Site wrapper -->
+<div class="wrapper">
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item" >
+        <a (click)="ToggleSlideBar()" class="nav-link" data-widget="pushmenu" href="javascript:void(0)"><i class="fas fa-bars"></i></a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="../../index3.html" class="nav-link">Home</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="#" class="nav-link">Contact</a>
+      </li>
+    </ul>
+
+    <!-- SEARCH FORM -->
+    <form class="form-inline ml-3">
+      <div class="input-group input-group-sm">
+        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+        <div class="input-group-append">
+          <button class="btn btn-navbar" type="submit">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+      <!-- Messages Dropdown Menu -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="far fa-comments"></i>
+          <span class="badge badge-danger navbar-badge">3</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <a href="#" class="dropdown-item">
+            <!-- Message Start -->
+            <div class="media">
+              <img src="../../dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  Brad Diesel
+                  <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">Call me whenever you can...</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+              </div>
+            </div>
+            <!-- Message End -->
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <!-- Message Start -->
+            <!-- <div class="media">
+              <img src="../../dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  John Pierce
+                  <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">I got your message bro</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+              </div>
+            </div> -->
+            <!-- Message End -->
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <!-- Message Start -->
+            <!-- <div class="media">
+              <img src="../../dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  Nora Silvester
+                  <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">The subject goes here</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+              </div>
+            </div> -->
+            <!-- Message End -->
+          </a>
+          <!-- <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">See All Messages</a> -->
+        </div>
+      </li>
+      <!-- Notifications Dropdown Menu -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="far fa-bell"></i>
+          <span class="badge badge-warning navbar-badge">15</span>
+        </a>
+      
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#">
+          <i class="fas fa-th-large"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="../../index3.html" class="brand-link">
+      <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxITEhUTEhMWFhUVFxUVGBcVFRUVFRUXFRUXFxUXFRUYHSggGBolGxUVITEhJSkrLi4uFx8zODMtNygtLisBCgoKDg0OGhAQGi0lHx0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLf/AABEIALcBEwMBEQACEQEDEQH/xAAbAAABBQEBAAAAAAAAAAAAAAAFAgMEBgcBAP/EADsQAAEDAgUCAwYFBAAGAwAAAAEAAgMEEQUGEiExQVETImEHcYGRocEUMkJS0SOx4fAVFjOCkvEXJGL/xAAaAQADAQEBAQAAAAAAAAAAAAAAAQIDBAUG/8QAKhEAAgICAgICAQQDAAMAAAAAAAECEQMhEjEEQRNRIgUUMnFhgaGRweH/2gAMAwEAAhEDEQA/AHaanc8DZWcYXZh9m7DdVQAsufqKhug2OUlE4m5QkmGwhPC8Czbq+IWSIaZ2kXKOIIYghIfuUkgsI1DDbZROLZaYFxV7423v0uhRoTZQarN8uoi6ieOMuyk2i1ZKxcSHzHcqoQUeiXJt7L4yYKcmZRLjGyRHKCrx5OQNUclcFqyCFU1rW8mwChyGZTnvNxnPhROIjHJH6j/CYJFHJQMTdIDl0AcugD10AdQB5yYHAd0gPOQB26AO3QAuOVMCVDvwlQh2KqkYRpcfglQF1wTN7/Kx25WU4WNOi/UNU14vflGKHHZUpWeqx6roMwBXVW+nquTyoycKj2aYmk9gV07r8rx0vJXs6vwDOH1el3ovftpnDotMRBaCOq0QA6so7uuFlOLY0S6SKwWkFSEyWWhEsij2CjZy4SjkUhuNAisqAx+5VMglMrWkchYZMyiaxjZGxosMRv2WsZWiJKjFMSjHiOtxdJgugplyVzXC17JckS+y6SZiIFgCVlkgplqdBrAsULxvcK4RUUHKww+oB4KFkt0Mz32iYxptCw+Y7ut0HZUluwM4cbqxiSgRwpAJCAOgIA4gDqAOlAxJQB5yAPIA6gR5p3QMdilINwgQZoofE8wF7WuOtu4QS9Fow7Bo32PB2+fvUjSLBDqjIY47cB/2cpU1dFcXQQqQ+wufitbIorNZGfGFiSpboSQmooZNRsEqQ9ljgoQWpxdoTRYqNnlstAo6IUh0PRQgJgckAWM4qXZSdAPF8XZDy4Jwio9EykZtmXMznu8u1lbEkDIsxygcrnljUuy1oRW5nle22orWKpUKr7AzZTe5Q0Mu+W5ohGdRF7Lz8zlyIRAqcVZ4mxsLruw3x2Jo0DLtnR3Nlppgh3EMRZTsfI48DYd1nwSZSZjmJ1jpZHSP5cb+6/AWhZDKYjyAOOCQHrIA4EAeaEAeIQApw2QxobcgDxQBwIAUgBIQMWgRKoat0bg5p4QFFsoMyAcgAqWhdFowrG4pxpcfN69VySxNuzVTpBSGTSdLjdp4PZdUVozY1LC0PDtrdE5rRK7JT5RdcM/IadGygqB+TppHsu7jou+KpGF2WU1QbsvG879UeGfFI68WBSVkuCa4XpeJn+aCkY5I8XQmecAEk8LroxszbMGdyyQtZ0WDi7H2VSatlq38laJB0Oz5bkY3U7dFCs5hmXHyAm3CVDsA4hTeG8t7FBSZHBQA/HO4cFQ4oQ/RtBeC5Keo6E2aHQ4vHHGA25Num9ly4Zz5bJsreasZ8YNaD1ufsF3lwXsrDuUFM4QmI4gDjggBVkCOiPZIpo4xqAEW/wB+KBMdmah9lLoYcEEnEDOBACkAJQMWECFhAD9KN7FAMtNPhtmiRjtxb3qGJBBmIvcC0ncceq4cvlfGzeGLkiXQ1juu9l04sqyIynHiwmMRb1SlgTdiUw3gOlnktwutGSCk0DSVzZPEx5HbRtHI10Qax7mtOhawxqCqJEpWUOcYhUPdHu1t+fRXbIAmKZSnZyL+qVDToLZOwBzJA48JiezQK2iY5mk2U5JcVZaVkWOkbGwho5XNi8lTdGksdGX5ppAHk22XUYp7KuAkWPMaglkijgL5GtBtqNroq9CbpGk4PgMlI4OfaSN45tu0+o7JqHFkdme41Mx00jmbN1GyDdaRFp4HPdpaLlJtIpRcugxR5TqHi5bpCzeQ3j4/2FXez+TTdr97cW6pfIyvgX2MxZCnd1AQsr+hPx0vYg5GqA6znNt8b/JDzUOPit+zuKZVlaGBguLG5HQ8/c/JSspU/G6oDy4LM0ElhsLdO/CtZUZvx5A6OM346/dackYcXY/XR6SQeRYH39Uk7HJVohEf3VGZwhAHgEDPFAHAkMWmB5pQBMnZZwcOoB+yBFwyyCWbn1ClxEEKjDbOa7o7+65cvjRmaRyNB6moGN57LbDhWNaJlJyexw4REd9t1sRRKlZoOpLLkjjVsmMWx1mJgrnxeXDI6RtLE0rHqVpc70XVZlQQjpGtdcKXOK7Y+LEYhTBwtZVaYmgayiIFm9ELYNUV7GnVURLwCWjdZ5cTkqHGVML5WqvxMOo+5ZYPFUNlyy8ipZnwmaSUxtbsN79F00zG9lTpsAkdIYyNwhRBzC8eT5eAOU+IuRZckZbjjLhUR+a+xI+VlUUT2y7YtoZTyEWIaxxA9wRLo0SMBoKF88mhguTclYuVI6IR5OjRst5QEQ1vIJIWMrfZ1wio9FrooxcNPZTHumXLrQREIC00jNNsjucAbBZuX0aqP2IFDfdxU8PbK+T0hf4VnonxSFcmdOHNcOBunwJc6A1TlKn3OgA+m1jzdHFoTkmZnm7DDE8m3JP+/Ky0xv0YeRGtlccP7rc4xJGyQzgCBnnBAHAkM65AHY0wChjvE09tvggksGUHlx0A/lNx8eQkwLpicI8MW6dFy+R5McX8jSGNyB/40uZbrwrw5o5FomUWiIGzfuK2I2HsRxWJ/l1WWPkYvlVFQnxBNA5rnkNd7lz+P4UcUrRc83JFywYPDbFd7ToyRCxGql8Sw4Xx/mZcrzNNvXR3wjpUT45iWbnf1Xu+AssvHXPs58vFT0PUhDhsRdepjjSOeTtkxsTXgtcFqSMYRhTYLhosCboBIefSNBJtuUBQIiwUeKZLblIVBiGjaOiSkmXxJDqZhG4VCpAbHMIDoZACRdrv7JPoSRnWQcKvE94/M55Zf0b2XJku6PQ8eu2WGowudosDcLncZHoQnAXQSPY5odf9u/qhOmKaTRYpHm2y1k9HPFKyvVc8uo2uud2da40cjbVP2uQipsrljQ5DhlS06i6/z/8ASpQkuxPLB6QYge4c3B+i0Rg1ZMc+7VonaOdqmZr7RmbNPv8A9/3uqx9mef8AiZ68bBbnEJcPKkM4RwgBLkDElIaPOKBi4OUAFKKTyOaVhkyOMkVGCaC2UH6Z7dxb5brdOzNl9qZBaxXB53iLMl/g1w5eIxRYZ5r32KjwfGlj7HlmpdBllI0Cy9SjnM4zRQugAIcbnkoqiUVmjxWVrgWuN0i3FGyZSxCV8QL+yCEHiWnkbrCUMXK2tmqcqAuJUrnkhri0ei2hFejOR3AKMRneS5PcrVIgtcNuUMpHnz7ryPK8nNGaUEdMIRa2OtcDyvSwyk4pyMZVZx5AVzutEqiKZtJ3K4PHxZYzbm+zacotaOivjFyXCw9V6Rz2C8wZhp2U8jtYJ0kAAi5JGwCT6C7K7k2VlPh8ckhDQdTyT6uK5Jypno4Y3ER/8gUjnWvJa/5jG7T8wipPdD+TGnVlhhe2QNe2xB3BCRVj80SmUbKjKiGGWd3UxjTLlK0AsVzwyKR0UUbpCzZxa0G3vJcAFrCM5/xRz5MmPH/N7HsKzqyT84Me9rSsLBfbbxGlzeo5tylKOSPZePJin0y008wcpTTNJRaFyN7K0ZvfZn3tIi/pA9j/AHsE49meVXFmYTuWxxpHGm4+SEDOuG6AEOCBjbkhnCgCdhMAc+xNgAT8t0AydhNPd1u6xyY7KUqJ9Izw5x6ELWKpEN2X+qLHR6utrpza47JS2V+lx17TboCvL/cyT0dCx/Za6fFQWgkchelHJaMGjK81Y8ah23A6LRsUUAITY37KSmbVkaqDqdp7BErrRESTU1r9dgvlc+bPLMd0UkiJPjLWEhx3X0nit8NnHk7AsVcHSamuI333XUYl4wjENhc3UynXZcVYTe4P4KzcI5HZpbQoRu0mx3WyVGbZnOM5srI5XsZGSG9QDZK2IrddnCqlIAu0nZSD/sarJaw+V+vcdL7ptMzAk8jhcOvcbWN9lJpBGvHKxqKKnjMmhrY2XFuTYcrCUG3dnqYcsYx4tWVh3s8qA4BtRGGh1xyTz2C3jkaVHNPx+TbNRw6g0sAPPut0Auqk1J2TBPGuNks0wUcS+Yj8EEKKG5syqs9nFSXSFtQweI4lwIcOSTbncbpQbiqDLiU3yLJlrKEkDHtkla8yG7iQCOLWANxZW8jqiY4IJ3L/AIE8Lyw6D/pTO0/sf5m/9vVvw29FzPE27TO79xCqcQ54Btur40YOdlQ9oFCXU0m3AJ+ST0wq4tGKObsVscQmHt3TBjr27pMELpKR0rg1guSQAlKSirZcIOTpB2pyTMGBwcC6xJb9livIV0zpfiSq0yrOaQSDsRstzkC2E0bnNcR8T6KWxsn4DGTKT0aFz+TkcIl4ocmPVJd4t2jkfey0wZVOJOSHFlrpGEw/1DbZbOHJUZ3QIjngYHbi4usY+LBMbyNj0WaogALcLXiKzOHJjPAoAuuBZrEEOgcqrM6dlsGOMZAJHdRf1us3gh3RXyPozzHMVMz9TSQqquhf2D2VT2m4KdhSYcwzNUjBYlKVNbEk10axladxja9/6gCjHjUOh8nIskjbjbqtAI0eFsDTdoJPomKgNV5Uhc9rwwXBvwnRDiEHYay4u0JFUVDMeSWzyh7Ba5A+B5UuIJtM0KOlGkN6AAfILLjZ2qVHocPY03tunGCQ5ZZS0SGuHRUZ0e1osrgca8FJMTi0Jlpw5DVjjJxEMowO6nhRbytjoYihWdsgRBxOjEjHMPDgR8wpkioSpmS4l7P3gkMO1wB7u5WXyOPZs/HjLpgytyZKy1tyBc+/r9kvn3sH4n46Yk5TlLW2/Vcn0CP3C7YftHpL/ZY6HLphDWxDfl0nr6LnlNz2duLDCCANXFNT1YAe4m45JNwUSriy4r8tdFdzAwCplA/d9SBf6ruxO4I8bPSySovGDULY6Ek/mePsiMHytmTlqh7L1BFGHauSOvc7qpY4y7EpNdEJ1RCJiA4XGw+CmGJR6HKdldxzHJdTmB23S3ZbdEVZX/Gd35SHRKgiJaDugTIJSGJQMU0piYQqMRe9gaeEWQlRDukUc1IAP5cyzJVeZhAsU6IcvRt+F0xbA1j+WgfRZ5p/HBy+jTHG9D8OJAHT2Xza/XZqVuOjr+CPQVYdQuvp8U1OKkvZxyVOhLrDlGTLHGrkxKNnDpcpxZ4ZP4uxyg12ILQCFs3oUVsf1gLK0dPFkSprLD1OwWbmaxxbIr8Sazy3vbk+ql5Uujoj47lti6XEmO2uEo5U+xzwSj0LqJtJBHBVOVMhY7TCEElwtouzkkqY6mSJIUlISUhjUillRBtSxYTOuHRDmpwVm1ZakD8XpiIyWjdrbgKMkNG2B2yix1NXG/d7rOdex9eyl1WjqUN7CWbnCLTUPG4Y0Ad3m9k4wc2onJkzLFBv/wAGatD5Hk8ucbn3lemlSpHiSd7YYkxWoYGskBDRbZMgn/8AMjAw9yD9UxFSfOS4m+5KRQ6YXO3KAH/+EvtcDZJCsOUuCSBgCdE2C8wYI6A26JtDiwIpLOhMQsPQI8SkAkuTAu3s6x9kDvDd+sgD4ppkSVOzboG6mj1U5MayRcX7Li62QjhfnuF88/0FOf8AL8Tr/cquthRg0iwX0WLGscVFejklK3YCxmtdewXh/rUJzSS6Ojx2kdwjxCb9Fj+jeNlhJyekV5E4tUGZGkC6+jl0c0P5Ihyz7crklI9KMQdI7W5o6XUx/Jlv8E2C48n/ANR0pe5pN+HGzr8XalHA0qZtLzIuqRyTJTXkPc9xc0gtIcWltuCLcFCwNLsb8uLfQWpqWa/9S2kcb7pY8c099E5cuNx/HsJ0L7EjsuiLOKasn+KrcjJR2c1qbLo6XIsVCXIBEGoCxmdONkchQiwbisbnflPOx3tsoyq9nX49R0yLPgzS5j3uvp/S0cn3qXHW2P5ntJFE9qdSXTxxD9LdRA7u2H0B+a7MK9nkeTLaREoKY0UQmkb5n7N+S2RxyAWLYy6YEEAJhQHSGP0jLuCBMuWG4RrbsFLsEFYYLAtI25TWhDb6qxtfhO0FAnNPiSeY8KhIq5pdvVZ8tlWRSxWFnCEAcugZ5ABPLjR+Ijv0cD9UiJ9G/RVx8IaDc2XP5GaUINx7LgrBMeY3xg+Nt6rzfF8/NN8ZI0ljSVkGnzyJJfDiaXX6jovajJnO2WTxGm2q1ynKKl2UnQVjIY0FPUUHZyapBGxUzl+JWP8AkgJVyHgLhk36PaxJJWxFO/zBXj7M8y0TpMRYPK54aTxc2W0ppabM8eGT2lYluJR8NkaT6EFR8kekzZ4J9uIs1l1XIyeM7BJvfuhGcl6Jnidkm/oEq7HI3oTFJDoKog44oYJESoKxmzeCINTJZpPFt/gFPo2h2QqCsinYN1mpQkqZ0yhODtbRKq6uOFndx2a0ck9gtYpejkyya2ypU2UXvqDPUEOe86rdB2HuAsulRaVHmSlcrJWeqAPjbG1mpw4A91lozNmR4vh0kD9ErdJIugLB6QybhTCXi3dMTNWwoHSLtAQCBWOVul2kbLz/ADM0o6R04Mae2AZJNzuuFZp12dHxxDmbahrI9Itcr3zzPZnb53KaKobugBDimNCUgHGtQIU11jcIEXrBc9eDDocC51tlm4WJWj1TmBtVA4P8ruLf2KhYoxehub9gjL2LimcXWut0zJ9hjA80OdVa5X2aenQKkN2X/wD5gjmsxjr37Fc3kSfRomiU2j4Ooqfi5JbKi6dkh0d+ENHqRnojyM0kuPACSVOym+SoybNOMyGZ5Yf1bddglGKk7Z05cksMEodgpmK1DTqDt/d/Cr4oGX73yF3X/gt+WM5u1Njn4NgHevqlxcf6H8kcvqn/AMZosL7gEFUYSX2T2cJvRHYpkiiynHQ6JFVmbiec9DYJEGokWMmbxQPxK5jLR1Fvmpb0VFbKpjlFI2NjYTpdfkbGyUIpv8kTlyygvxdFky3gYaxskrnPk51PNyPd2XXGCSs8+eSUn+TsOGZmrlYT/UfHhLi5DWCbV0IqWtHmtcrtjNSVoxaadMo2d8ANUNTBd44VMitmX1GDyMm8I/m9FL0Oy34HlIxua97rcGywnmodNlxrWuZGXt3sLrSMm1YmQIaNlTE55Hm4SnhjkWyoTceiBDlcaRqO/VYrw4mnzspWM1DnvN3G110xdoxQinw+4VWgIldTaUAD0FC4wgljhSEN6kxkukkbfdSyZL6Hap7f0pIhWR2PumU0ckCYIO5QfM2XUwE/wk42D/waxglRI8/1NrdLKoxoLC8nlPp0WU1TO/FLlEiVcuu7QNrXJ+yxbt0deOKjTZT63LUExu1+k9RYA3Up10enKEZqpL/aIj8kMA/6v9v8J8pL6M/2+N62IgyvTg2e/wARx4a3Zo95UvKaR8OK/KXX+S+4RQmJgGokAAb7nYLWKrZ5meak6Q9JVb2vZZSns2hi1YoP9UMn/Q82dCkZuJyao2RKQRgMndTVjbo8+K6deibK06lfU4gyNh/pxC7+1+y0xq3Rnl0uTL/U0w0aRtsuucOcXH7OBOnZSZK10L9Lm6xfdzN/mvml+jR51OV/0ejPyEkqQdoqpkjLi9vXlev4PjPx4cLtejkzy5OyPiVMHtsHaR3C9CjmZRpaSlp5hKJC9197m6yyq1oEP4/4sgD4XeWy87JilKVvopvWgplGsdJGYpfzeq38TJtwYNasJ4fh4iaWDuV3JUQPugCYzFoma91mlSAfhcWndYSk7KSI+KuBW0ehARysZ1pQKjhcgKOIA60oEO6khUcBQAcyxhgqJNJTIfZqWVcqiF23z9EJWOi801E1vRalDWJUgkaWDYjcHsVnkhyVGuLJwlYGw821NeLOBsVzRVaZ2TldNA2ry21zi6N5afRQ8X0dWPy5xVMhTZcqDzNcDpb/ACpeKRuvNrodwrAXMddzr29LKY49k5fLk0WrbTZdPo85XdgDEIbOuFyTjs9HFm/GhEdRba6V0N7H46i6CGh8OVEWPscAq6M3sZq6qw0MGqR+zW/c+ia3pBVbfQXy7g4p2G+8jzqe7uT9l14sfFHDny83/gXi1f4TdWh7xe3kbqI9SOyuc+KuicOL5ZVaX9gmCjjeXOA03s4hotf3+qyhBSk30GWc/wCMndAnFcUjpdTnb6iLAck9fknlmsexwg5oC1eaY5RobqGrb5rH9zFjeCSB+K5edoAAs07l31XTTo5no5S4o9pZDDEXgWF+inikNMtdRT6GiQjS4b7LLI1CLkWlboVTVj5G6h0Xjw8jy80ZZI9L0dXDHFqL9j7arbcLpxefOUE5R2TLCk9MxTC6kBet6ORk+smabWWXALBte+4VRBECKPUbKxsejozrDT1QK9DlTQEIaBMieC7sgdiC1AHroEdagDSPZ7CzYm+pUjL2a3hzQArotE6NyBjbd3FAEHEqPWfLse/f0WU4cjXHPj2VfEax8OxG45/n3Llm3HR6eFxkrIsGPk736rNzZsoQ6CUeMBw2Nj26p/ITLEkJ/wCInuk5sXxogYhX36rOUhpUQ46knoos0QRpnKkSyWKi2wFz2COQuNj8dO+2p5DfQblVGLfZDnFaQYwPCAwmV487u/LR0C7sWPjs4M+bk6XQTnk7LY5iutq6twf4sbImtJ02kuXt9/TZYOWRp2q/9nTmhhil8crb710EQWsjJDbDTey3ilGOkc3bMn9oOJB0/hC39Pdx/wD04A2HoBb5rh8h8pV9HZh1EB4OzXLG39z2j6rl426NrpWbZW0TZYjGdgW2uOmy9qtUeW9lQw/LtXSOHhvZLGT5tWzreilxoEHcWhe9haALELPLj5x4sqMqYGwcGMFj+VzePh+KPE0lPk7JpkC34RItmF0rrFUwZJfIkiT0QDiATyqSB6CdVlyRoD49+uypxoSlfYayrRNkP9RtnDbdS5UHGws/AQ5/opU0+h8WiRNl+KOMktubLQlozTFtPiENGwKljRAKCkOU58wSYPotuUZHmoY1l7X3txZGNOzBo3OkbsPcty0Sw7ZIoTAeUADK3ELPtxZc88tSoYzX0jKmPs4DY/YolFZYmuLK8b/wUDE6B8JLXNI9eh+K5JJxdM9KM1LaIkTiN9/mpNFNkqGZ3+SpY+ZNjYOTuUgOve1u7j8P8JMtP0TKSN8nTQ315P8ACVNibSDuH01to23PU/yVtjxt9I58mRJfkw5R0AB1PN3dOzfcu2GOtvs4cmZy0uiaXLUwK3iv4wzt8N0bKcDzEk+I477AdOiyyfJy06R1Y346xPnbl6+iRQ0jXMa+RpLiL+YkpYsalFOS2czZXs6ZlFMCLai/ytbtbYXJd3A229VWXJx0aY4WZHPO57nPebucSST1J5XC9u2dSVaLBkSn11kQ/bd3/iE8UbyIWR1Bmzgr1DzzrQgRFnCTQ7KNmd8kcmr9JG33Xkedly45KumdWKEZIFsx0gKI+Y62N4TNGFeoc44XFAh2GBzuAUBZasCmqWWBaXN7HdWmZuvRb4mgDVaxPK8j9U8h44/idfjQTexMdbZ4XmeJnyfIrfZ15YR4hHFCDEbnkL6mO0eXIyDGGAPNu6TBAwoKCWEYeZHcbBROXFWTJmv5DwJkbdenc9+yrx7cbZBd9Wy3KFMOyBiIjukBCrKEPfqPT6rz/Mko79muOHLsiY5if4aLW1oPQX2ssMXmSvrvo7MHiLLKrAeB4k2YnxvO2UlzSSDpsN225aOy6sc1L+Xs18nA8a5Q1xJD8uxu8zbhp4VfDF7Ryx8h+wNi+FTwt1MaHj32PwCylho2jmshUtDXScRlovby2v8AMlR8b9I1WVLtlhwrKsvLgGnu46nJrx5PsiXlQXRZqTBWNtqJcfkPkuiPjxXeznn5Mn1onwTR3cxhbdttTQRdtxcXHRbKul6MJKVKTXYmWraL7i/a9rpuSRAPrcXAYS39uoHtY7hYyzqtfQ6OYXUCZ3iX2tYN7dyR0JTxyWR8hMdxupDGc293NhufotpOkOCtmCYxXvnlc95J3IaOjW32AXnylZ2xVEQKSi8+zCnvLJJ+1oA+J/wtvGX539Ixzv8AE01riu84xbEADK6VwJBG3cJNlJFUzYXGLvY7FcXmY/kx0a4pcWU78NIf0lcC8aVG3yopwC9c5ibR0pebBBDZZcIpzE4At59E7Qmi/U7GMZqdYbKqJGmytmGx549y5vJ8WOaNM1x5XF6IcmFEHVfgrixeAsTs2lnbRBzNMXQnS6xGxXpxdo5mZnK433O6BjaBl8yLPFqDXclRw5PZn0zW6CdgFhZdKVASZZEFIchdsgQ3WS6G6zw3cpS1spb0LjmD2hw6rHLiWWJUZOLGcRwls2gPPladRH7tuD6LDLijSitUb4fJljtrt/8AATV4BHA0uiG7j6cHoPRYfC4K0wzeTPLSYXoadwaC51xbiwFl3wTS2znI2INY61uRe3ZU0mWrRJw8keUj1SS9Cl9nq3EBF+cGx4I/hRkyKH8loQDxbFpmwtkaXtaHefS1uotOzdJf5RuQuV+RLiq+/wDh3eFjhkm4yVtrX1/uit4FU1H4i7WlrnSSNdK7S90pPmaJACPKGtNi34LD5ZxTnBW9/wC/8HreRDE8fGXSSpdV61/9L9Kbgh30+2y5P3+T5Zcnr69L/dd/Z47wR46AgwVzpNDneVouL9ifRd+HFOdKetWckqT0GvxDIQGMaNh8SfcF6KSgqQkrA2PzaaeV7udLjf1IUzdRbLh2kYkVwI6zrUAaf7NqUtpy/wDe4/Ju38rr8VabOfO9pFxEhXUc48X2CAIFRUfuG3cfcJWNL6A2LU2pjgOo2SoCnNxoR+Rw3bsfgoqhFJlptrpMaZMwfU1wsLppCZcoqg6Q61yFy53KLtFR2jk1Y+UWJ0hPDllPsUlRCpsWbHKGB23C7LMkvZcKivY1ouRYhTRVmb5grz4jtB8ruizS4jWyvyb7pjGuqCgvluJ7p2Bnf6Ko9kS6NppqEgA33stKCwh4ptumAQpH3CBHayPU0juCEmrVDTpmZYdmp9NK+Ke7o2kgEDzNsevcLz8WdxfGXo7J4r2i74bnGllbqbK0ADcE2I94K6uUJbOdwaJUWO00oJbIx9uzgfoqXHtE0yVE9723Hlae/NlW2PSGjStvfr3ToOQpryy55CH9iX0dqaNspDib8WHQC9z8Vjkxc9h0TzAwt0loLexFxt6LLJj9NFxm4u0yJLhkPjCoLR4jW6A6+1j6cX6fFVjxRjLlRo/IyfH8V6G6mqjB/MDtwD872Wb8aHNyk7W6XXe312JTlSSAVdiUh2aLcgAdB6laK0lGCpIpRXb2yThdPpF3Elx3JO61jGjOTBPtFqtNG4D9Za367/2U53UB4l+Rj4O65PR0j0URc4NHJIHz2UjNrwiiEMLIxw1oHx6/Vejjjxikcc5W7JoNirMzkr3O2agZGdSk8uRTC0RXU5YOdvVFUJuyr19HC6RziBcn7J6I2UFz+i5nZrQQw+ZrOQrjIzkWGkxOIN3sLpyimJOgRjGLN8wZ8LKFBRKuyueA8u1Jt0MJ4lNL4YFyQhTTBIHwzN0nVz6qJJ2FEF791aKoS1AFx9mjR+IJPQLTGZT7RsDFoMjSHdSykSKOYatI5QIIGXoUwMpz/h/h1HiD8sgv8RyvL8mFT/s7sMrj/RT5qcFRGbRo0mFMmQgVTR3vb39F04ZXKjDLGlZtOH13l0u2I2XYcpKuDwqAZqIyRa6QENkLxYg8KWikxqoxOdrL2F7222A+HVQ5OilFENs00v53bHoNh7kvyfZS4onRUgaNhb4KlETkcjpBe6aiDkTGtVURZQPanUjTHH3JPyH+Vz+Q+kbYfbM5jC5pG6DmT6bXVx3GwJd/4i4+qeNJySJm2otmvagBuvSOMSZbC/RSFEYVun4oG0Rq/Fg0c79gm5UJIrlXiUslwNgo5MdIEy0VySXm6dElKZKoKJkNQCLFOkSxireW7ApcgRFgqCDugdFjhcZG+UAFcuV0KhUp0s826WDspvRW6lwJ2XWBxtISpsLPPhLeUxF79mVDu6T4LWC0Zyds0GerLBsqbopIg02Kl8gaRZSpWU40EqJ4EqPYmGtiqEVbPOF+JA4jlnmHw5XP5EOUb+jbDKpV9mUROvsvOkjsRLwqbw5439nj5X3VY5cWmKcbVG3wBjmjbler2eeNkmP1amBKY+4TAcjtZJgMVMILbdyP5U0NMiup7Hyp0FjsclwmApAHHFAGR+0apL6rT0Y0D4nc/ZceaVz/AKOnEvxKreyx7NOg/kiT/wC2w77B3x8pVY1WREzdwZp4DzubW7LvOUj1dWRtwkOgPVYj2RYUNAgi557pdgM1JsLDkpiIJpu53TJP/9k="
+           alt="AdminLTE Logo"
+           class="brand-image img-circle elevation-3"
+           style="opacity: .8">
+      <span class="brand-text font-weight-light">AdminLTE 3</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar user (optional) -->
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+          <img src="../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+        </div>
+        <div class="info">
+          <a href="#" class="d-block">Alexander Pierce</a>
+        </div>
+      </div>
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Dashboard
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="../../index.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Dashboard v1</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../../index2.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Dashboard v2</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../../index3.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Dashboard v3</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="../widgets.html" class="nav-link">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Widgets
+                <span class="right badge badge-danger">New</span>
+              </p>
+            </a>
+          </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-copy"></i>
+              <p>
+                Layout Options
+                <i class="fas fa-angle-left right"></i>
+                <span class="badge badge-info right">6</span>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="../layout/top-nav.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Top Navigation</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../layout/top-nav-sidebar.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Top Navigation + Sidebar</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../layout/boxed.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Boxed</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../layout/fixed-sidebar.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Fixed Sidebar</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../layout/fixed-topnav.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Fixed Navbar</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../layout/fixed-footer.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Fixed Footer</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../layout/collapsed-sidebar.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Collapsed Sidebar</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-chart-pie"></i>
+              <p>
+                Charts
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="../charts/chartjs.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>ChartJS</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../charts/flot.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Flot</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../charts/inline.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Inline</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-tree"></i>
+              <p>
+                UI Elements
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="../UI/general.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>General</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../UI/icons.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Icons</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../UI/buttons.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Buttons</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../UI/sliders.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Sliders</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../UI/modals.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Modals & Alerts</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../UI/navbar.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Navbar & Tabs</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../UI/timeline.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Timeline</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../UI/ribbons.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Ribbons</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-edit"></i>
+              <p>
+                Forms
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="../forms/general.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>General Elements</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../forms/advanced.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Advanced Elements</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../forms/editors.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Editors</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../forms/validation.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Validation</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-table"></i>
+              <p>
+                Tables
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="../tables/simple.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Simple Tables</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../tables/data.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>DataTables</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../tables/jsgrid.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>jsGrid</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-header">EXAMPLES</li>
+          <li class="nav-item">
+            <a href="../calendar.html" class="nav-link">
+              <i class="nav-icon far fa-calendar-alt"></i>
+              <p>
+                Calendar
+                <span class="badge badge-info right">2</span>
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="../gallery.html" class="nav-link">
+              <i class="nav-icon far fa-image"></i>
+              <p>
+                Gallery
+              </p>
+            </a>
+          </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon far fa-envelope"></i>
+              <p>
+                Mailbox
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="../mailbox/mailbox.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Inbox</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../mailbox/compose.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Compose</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../mailbox/read-mail.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Read</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <!-- <li class="nav-item has-treeview menu-open">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-book"></i>
+              <p>
+                Pages
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="../examples/invoice.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Invoice</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../examples/profile.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Profile</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../examples/e_commerce.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>E-commerce</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../examples/projects.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Projects</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../examples/project_add.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Project Add</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../examples/project_edit.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Project Edit</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../examples/project_detail.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Project Detail</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../examples/contacts.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Contacts</p>
+                </a>
+              </li>
+            </ul>
+          </li> -->
+          
+         
+        
+          <li class="nav-header">LABELS</li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon far fa-circle text-danger"></i>
+              <p class="text">Important</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon far fa-circle text-warning"></i>
+              <p>Warning</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon far fa-circle text-info"></i>
+              <p>Informational</p>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Blank Page</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Blank Page</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <!-- <product-list></product-list> -->
+        <router-outlet></router-outlet>
+      <!-- /.card -->
+
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- <footer class="main-footer">
+    <div class="float-right d-none d-sm-block">
+      <b>Version</b> 3.0.2
+    </div>
+    <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong> All rights
+    reserved.
+  </footer> -->
+
+  <!-- Control Sidebar -->
+  <!-- <aside class="control-sidebar control-sidebar-dark">
+  </aside> -->
+  <!-- /.control-sidebar -->
+</div>
+
+</body>
+</html>

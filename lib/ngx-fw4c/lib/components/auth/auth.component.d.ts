@@ -1,0 +1,38 @@
+import { ElementRef, AfterViewInit, EventEmitter, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { AuthenticationLoginRequest, AuthenticationLoginResponse } from './auth.model';
+import { AuthenticationService } from './auth.service';
+import { DataService } from '../shared/services/data.service';
+import { ValidationService, ClientValidator } from '../shared/validation';
+import { BaseTemplate } from '../shared/models/base.model';
+import { ButtonComponent } from '../shared/button/button/button.component';
+import { SettingService } from '../shared/services/setting.service';
+import { CacheService } from '../shared/services/cache.service';
+export declare class AuthComponent implements OnInit, AfterViewInit {
+    route: ActivatedRoute;
+    private _router;
+    private _cacheService;
+    private _settingService;
+    private _authenticationService;
+    private _validationService;
+    private _dataService;
+    title: string;
+    validator: ClientValidator;
+    succeedPath: string;
+    template: BaseTemplate;
+    api: string;
+    success: boolean;
+    completed: EventEmitter<AuthenticationLoginResponse>;
+    formRef: ElementRef;
+    btn: ButtonComponent;
+    request: AuthenticationLoginRequest;
+    errorMessage: string;
+    protected mock: AuthenticationLoginResponse;
+    constructor(route: ActivatedRoute, _router: Router, _cacheService: CacheService, _settingService: SettingService, _authenticationService: AuthenticationService, _validationService: ValidationService, _dataService: DataService);
+    ngOnInit(): void;
+    ngAfterViewInit(): void;
+    login(close: any): void;
+    trigger(): void;
+    private useMock;
+    private initValidations;
+}
