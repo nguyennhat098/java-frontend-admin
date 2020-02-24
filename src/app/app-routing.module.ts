@@ -9,15 +9,18 @@ import { LoginAdminComponent } from './login-admin/login-admin.component';
 const routes: Routes = [
   {
     path:'',
-    component:ProductListComponent,
+    component:LayoutAdminComponent,
+    children:[
+      {
+        path:'product',component:ProductListComponent,
+      },
+      {
+        path: 'not-found',
+        component: NotFoundComponent
+      }
+    ]
   },
-  {
-    path:'product',component:ProductListComponent,
-  },
-  {
-    path: 'not-found',
-    component: NotFoundComponent
-  }
+ 
 ];
 
 @NgModule({

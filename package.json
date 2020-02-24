@@ -20,7 +20,6 @@
     "@angular/platform-browser-dynamic": "~8.2.14",
     "@angular/router": "~8.2.14",
     "@swimlane/ngx-dnd": "^8.1.0",
-    "jquery": "^3.4.1",
     "ngx-fw4c": "file:lib/ngx-fw4c",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
