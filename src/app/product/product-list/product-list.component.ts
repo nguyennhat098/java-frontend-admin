@@ -1,6 +1,7 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { TableConstant, TableOption, DataService, PermisisonProvider, AuthenticationService, ModalService, TableComponent, TemplateViewModel } from 'ngx-fw4c';
+import { TableConstant, TableOption, DataService, PermisisonProvider, AuthenticationService, ModalService, TableComponent, TemplateViewModel, TableColumnType } from 'ngx-fw4c';
 import { of } from 'rxjs';
+import { ProductService } from '../product.service';
 
 @Component({
   selector: 'product-list',
@@ -11,35 +12,13 @@ export class ProductListComponent implements OnInit {
 
   @ViewChild("activity", { static: true }) public activitiy: TemplateRef<any>;
   public option: TableOption;
-public data=[{
-  id:1,
-  name:'f'
-},
-{
-  id:2,
-  name:'f1'
-},
-{
-  id:3,
-  name:'f2'
-},
-{
-  id:4,
-  name:'f3'
-},
-{
-  id:5,
-  name:'f4'
-},
-{
-  id:6,
-  name:'f5'
-}]
+
   constructor(
     private _modalService: ModalService,
     private _authenticationService: AuthenticationService,
     private _permissionprovider: PermisisonProvider,
     private _dataService: DataService,
+    private _productService:ProductService
   ) { }
 
   public ngOnInit(): void {
@@ -49,7 +28,7 @@ public data=[{
   private initList(): void {
   
     this.option = new TableOption({
-      localData:()=>of(this.data),
+      paging: true,
       topButtons: [
         {
           icon: '',
@@ -153,17 +132,27 @@ public data=[{
       searchFields: ['name'],
       mainColumns: [
         {
+          type: TableColumnType.Description,
           title: () => 'name',
           valueRef: () => 'name',
         
         },
-       
+        {
+          type: TableColumnType.Description,
+          title: () =>'test',
+          allowSort: false,
+          valueRef: () => 'content',
+          width: 180,
+          inlineEdit: false
+        },
       ],
       serviceProvider: {
-        // searchAsync: (request) => {
-        //   return this._permissionService.searchPermission(request);
-        // }
-      },
+        searchAsync: request => {
+          this._productService.search(request).subscribe(s=>console.log(s))
+        
+          return this._productService.search(request);
+        }
+      }
     });
   }
 }
