@@ -1,0 +1,10 @@
+.button-file{
+    padding-right: 50px;
+}
+img{
+    margin-bottom: 20px;
+    margin: 15px;
+}
+:host() /deep/ .ck-editor__editable{
+    height: 150px;
+}

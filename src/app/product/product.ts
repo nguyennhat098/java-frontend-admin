@@ -1,5 +1,7 @@
+import { Categories } from '../categories/categories';
+
 export class Products {
-    id?: string;
+    id?: number;
     name?: number;
     slug?: string;
     content?: string;
@@ -11,7 +13,7 @@ export class Products {
     modifileDate?: Date;
     status?: boolean;
     topHot?: boolean;
-    catgoryName?: string;
+    categoryID:Categories;
     constructor(init?: Partial<Products>) {
         Object.assign(this, init);
     }

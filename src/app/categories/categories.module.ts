@@ -2,12 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Framework4CModule } from 'ngx-fw4c';
-import { ProductListComponent } from './product-list/product-list.component';
-import { EditProductComponent } from './edit-product/edit-product.component';
 import { BrowserModule } from '@angular/platform-browser';
+import { CategoriesListComponent } from './categories-list/categories-list.component';
+import { CategoriesEditComponent } from './categories-edit/categories-edit.component';
 const declarations = [
-  ProductListComponent,
-  EditProductComponent
+  CategoriesListComponent,
+  CategoriesEditComponent
 ];
 @NgModule({
   declarations: declarations,
@@ -23,4 +23,4 @@ const declarations = [
 })
 
 
-export class ProductModule { }
+export class CategoryModule { }

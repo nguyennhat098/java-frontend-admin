@@ -35046,14 +35046,11 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
-// @import "~ng-pick-datetime/assets/style/picker.min.css";
-// @import "~@ng-select/ng-select/themes/default.theme.css";
-// @import "~angular-tree-component/dist/angular-tree-component.css";
-// @import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
-// @import "~ngx-toastr/toastr";
-// #toast-container > .toast-success {
-//   background-image: url("../src/assets/images/icons8-checked-144.png") !important;
-// }
+
+@import "~ngx-toastr/toastr";
+#toast-container > .toast-success {
+  background-image: url("../src/assets/images/icons8-checked-144.png") !important;
+}
 .tags {
   list-style: none;
   margin: 0;

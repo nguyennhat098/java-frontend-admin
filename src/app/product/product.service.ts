@@ -1,4 +1,4 @@
-import { MockService } from 'ngx-fw4c';
+import { MockService, ValidationRuleResponse } from 'ngx-fw4c';
 import { AppConsts } from '../shared/AppConsts';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs'
@@ -12,29 +12,30 @@ import { Products } from './product';
   })
 
 export class ProductService extends MockService {
-    private href = 'http://localhost:8080/WebAppDemostration';
+    private href = 'http://localhost:8080';
     constructor(private _httpClient: HttpClient){
         super();
     }
 
     public create (request: Products)
         : Observable<ActionItem<Products>> {
-            return this._httpClient.post<ActionItem<Products>>(`${this.href}`,  request );
+            debugger
+            return this._httpClient.post<ActionItem<Products>>(`${this.href}/product/create`,  request );
         }
     
     public update(request: Products)
         : Observable<ActionItem<Products>> {
-            return this._httpClient.put<ActionItem<Products>>(`${this.href}`,  request);
+            return this._httpClient.put<ActionItem<Products>>(`${this.href}/product/update`,  request);
     }
 
     public delete(request: ActionRequest<Products>)
     : Observable<ActionResponse<Products>> {
-        return this._httpClient.delete<ActionResponse<Products>>(`${this.href}`,  {params: request as any});
+        return this._httpClient.delete<ActionResponse<Products>>(`${this.href}/product/delete`,  {params: request as any});
 }
 
    
     public search(request: any): Observable<SearchResponse<Products>> {
-    return this._httpClient.get<SearchResponse<Products>>(`${this.href}` + '/product/getAll', {params: request as any}).pipe(retry(2));
+    return this._httpClient.get<SearchResponse<Products>>(`${this.href}/product/search`, {params: request as any}).pipe(retry(2));
     }
 
     // public getAllActive(): Observable<SearchResponse<System>> {
@@ -48,10 +49,9 @@ export class ProductService extends MockService {
     //     return this._httpClient.put<ActionItem<System>>(`${this.href}` + '/GetById', request);
     // }
 
-    // public checkUniqueKey(key: string, id: string): Observable<any> {
-    //     var checkunique = `${this.href}` + '/CheckUniqueKey';
-    //     return this._httpClient.get(checkunique, { params: { key: key, id : id } });
-    //    }
+    public checkUniqueName(request: string): Observable<ValidationRuleResponse> {
+        return this._httpClient.get(`${this.href}/product/checkUniqueName?params=${request}`, { params: request as any });
+       }
     // public getSystemById( request: number): Observable<System> {
     //     return this._httpClient.get<System>(`${this.href}` + '/GetById', {params: {id: request} as any});
     // }

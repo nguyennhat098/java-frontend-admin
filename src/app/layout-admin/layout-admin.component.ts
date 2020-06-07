@@ -6,12 +6,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./layout-admin.component.scss']
 })
 export class LayoutAdminComponent implements OnInit {
-  public isActiveLeftBar:boolean=false;
+  // public isActiveLeftBar:boolean=false;
   constructor() { }
 
   ngOnInit() {
   }
-  public ToggleSlideBar(){
-    this.isActiveLeftBar=true;
-  }
+  // public ToggleSlideBar(){
+  //   this.isActiveLeftBar=false;
+  // }
 }

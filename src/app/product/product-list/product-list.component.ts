@@ -1,24 +1,28 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { TableConstant, TableOption, DataService, PermisisonProvider, AuthenticationService, ModalService, TableComponent, TemplateViewModel, TableColumnType } from 'ngx-fw4c';
+import { TableConstant, TableOption, DataService, AuthenticationService, ModalService, TableComponent, TemplateViewModel, TableColumnType, TableDatetimeFormat } from 'ngx-fw4c';
 import { of } from 'rxjs';
 import { ProductService } from '../product.service';
-
+import { AppIcons, AppConsts } from 'src/app/shared/AppConsts';
+import { EditProductComponent } from '../edit-product/edit-product.component';
+import { ToastrService } from 'ngx-toastr';
+import { Products } from '../product';
 @Component({
   selector: 'product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss']
 })
 export class ProductListComponent implements OnInit {
-
-  @ViewChild("activity", { static: true }) public activitiy: TemplateRef<any>;
+  @ViewChild('tableList', { static: true }) tableList: TableComponent;
+  @ViewChild("list", { static: true }) public list: TemplateRef<any>;
   public option: TableOption;
 
   constructor(
     private _modalService: ModalService,
     private _authenticationService: AuthenticationService,
-    private _permissionprovider: PermisisonProvider,
+    // private _permissionprovider: PermisisonProvider,
     private _dataService: DataService,
-    private _productService:ProductService
+    private _productService:ProductService,
+    private _toastr: ToastrService,
   ) { }
 
   public ngOnInit(): void {
@@ -29,28 +33,32 @@ export class ProductListComponent implements OnInit {
   
     this.option = new TableOption({
       paging: true,
+      title:'Products Management',
       topButtons: [
         {
-          icon: '',
-          customClass: "primary",
-          title: () => '',
-        
+          icon: AppIcons.Add,
+          customClass: 'primary',
+          title: () => AppConsts.New,
+          // hide: () => {
+          //   return !this._permissionprovider.hasPermisison(this._authenticationService.currentUser, 'system', 'create');
+          // },
+
           executeAsync: item => {
             this._modalService.showTemplateDialog(
               new TemplateViewModel({
-                // template: CreatePermissionComponent,
+                 template: EditProductComponent,
                 customSize: 'modal-lg',
-                validationKey: 'CreatePermissionComponent',
-                // icon: AppIcons.Add,
-                // data: {
-                //   permission: new Permissions()
-                // },
-                title: "system permission",
-                acceptCallback: permission => {
-                  // return this._permissionService.createPermission(permission).subscribe(() => {
-                  //   this.tableList.reload();
-                  //   this._toastr.success('Changes saved', 'Success');
-                  // });
+                validationKey: 'NewProductComponent',
+                icon: AppIcons.Add,
+                data: {
+                  item: new Products()
+                },
+                title: "New Product",
+                acceptCallback: item => {
+                  return this._productService.create(item).subscribe(() => {
+                    this.tableList.reload;
+                    this._toastr.success('Changes saved', 'Success');
+                  });
                 }
               })
             );
@@ -59,28 +67,28 @@ export class ProductListComponent implements OnInit {
       ],
       actions: [
         {
-          icon: 'AppIcons.Edit',
-          customClass: "primary",
+          icon: AppIcons.Edit,
+          customClass: 'primary',
          
-          // executeAsync: item => {
-          //   this._modalService.showTemplateDialog(new TemplateViewModel({
-          //     title: "system permission",
-          //     customSize: 'modal-lg',
-          //     icon: 'AppIcons.Edit',
-          //     template: CreatePermissionComponent,
-          //     validationKey: "EditPermissionComponent",
-          //     data: {
-          //       permission: this._dataService.cloneItem(item)
-          //     },
-          //     acceptCallback: permission => {
-          //       return this._permissionService.updatePermission(permission).subscribe(() => {
-          //         this.tableList.reload();
-          //         this._toastr.success('Changes saved', 'Success');
-          //       });
-          //     }
-          //   })
-          //   );
-          // }
+          executeAsync: item => {
+            this._modalService.showTemplateDialog(new TemplateViewModel({
+              title: 'Edit Product',
+              customSize: 'modal-lg',
+              icon: 'AppIcons.Edit',
+              template: EditProductComponent,
+              validationKey: 'EditProductComponent',
+              data: {
+                item: this._dataService.cloneItem(item)
+              },
+              acceptCallback: item => {
+                return this._productService.update(item).subscribe(() => {
+                  this.tableList.reload();
+                  this._toastr.success('Changes saved', 'Success');
+                });
+              }
+            })
+            );
+          }
         },
         {
           icon: 'AppIcons.Remove',
@@ -129,21 +137,37 @@ export class ProductListComponent implements OnInit {
       ],
      
       inlineEdit: false,
-      searchFields: ['name'],
+      searchFields: ['Name'],
       mainColumns: [
         {
           type: TableColumnType.Description,
-          title: () => 'name',
+          title: () => 'Name',
           valueRef: () => 'name',
-        
+        allowFilter:true
         },
         {
           type: TableColumnType.Description,
-          title: () =>'test',
-          allowSort: false,
+          title: () =>'Category Name',
+          allowFilter:true,
+          valueRef: () => 'catgoryName',
+        },
+        {
+          type: TableColumnType.Description,
+          title: () =>'Content',
+          allowFilter:true,
           valueRef: () => 'content',
-          width: 180,
-          inlineEdit: false
+        },
+        {
+          type: TableColumnType.Description,
+          title: () =>'Price',
+          allowFilter:true,
+          valueRef: () => 'price'
+        },
+        {
+          type: TableColumnType.Description,
+          title: () =>'Sale Price',
+          allowFilter:true,
+          valueRef: () => 'salePrice',
         },
       ],
       serviceProvider: {
