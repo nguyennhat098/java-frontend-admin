@@ -2,15 +2,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Framework4CModule } from 'ngx-fw4c';
-import { ProductListComponent } from './product-list/product-list.component';
-import { EditProductComponent } from './edit-product/edit-product.component';
 import { BrowserModule } from '@angular/platform-browser';
-import { ProductImageComponent } from './product-image/product-image.component';
+import { RolesEditComponent } from './roles-edit/roles-edit.component';
+import { RolesListComponent } from './roles-list/roles-list.component';
+import { MatrixManagementComponent } from './matrix-management/matrix-management.component';
 
 const declarations = [
-  ProductListComponent,
-  EditProductComponent,
-  ProductImageComponent
+ RolesEditComponent,
+ RolesListComponent,
+ MatrixManagementComponent
 ];
 @NgModule({
   declarations: declarations,
@@ -26,4 +26,4 @@ const declarations = [
 })
 
 
-export class ProductModule { }
+export class RoleModule { }

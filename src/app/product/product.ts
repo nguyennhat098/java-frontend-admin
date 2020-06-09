@@ -13,7 +13,9 @@ export class Products {
     modifileDate?: Date;
     status?: boolean;
     topHot?: boolean;
-    categoryID:Categories;
+    categories:Categories;
+    catgoryName:string;
+    categoryId:number;
     constructor(init?: Partial<Products>) {
         Object.assign(this, init);
     }

@@ -1,6 +1,16 @@
 <katana-card>
     <div class="row">
         <div class="col-md-12" #formRef>
+            <div>
+                <label class="button-file">More Images</label>
+                <input  type="file" (change)="updateMutilImages($event)"  multiple><br/>
+                <img style="width: 200px;" *ngFor='let url of urls'  [src]="url" height="100px" width="50px"> 
+            </div>
+            <div>
+                <label class="button-file"> Image (<span class="text-danger">*</span>)</label>
+                <input type="file" validation-name="Image"  (change)="updateImage($event)" [(ngModel)]="item.images" ><br/>
+                <img *ngIf="image" style="width: 200px;"   [src]="image" height="100px" width="50px"> 
+            </div>
             <katana-form [column]="2">
                 <div *katana-item>
         <div>
@@ -11,8 +21,10 @@
             <label>Slug (<span class="text-danger">*</span>)</label>
             <katana-textbox  [(model)]='item.slug'  [validationName]="'Slug'"  [type]="'text'"></katana-textbox>
         </div>
-       
-            <katana-editor [title]="'Content'" [(model)]="item.content"></katana-editor>
+        <label>Top hot (<span class="text-danger">*</span>)</label>
+        <katana-checkbox [title]="Tophot" [(model)]="item.topHot" ></katana-checkbox>
+        <label>Status (<span class="text-danger">*</span>)</label>
+        <katana-checkbox [title]="Status" [(model)]="item.status" ></katana-checkbox>
         </div>
         <div *katana-item>
             <div>
@@ -20,30 +32,20 @@
                 <katana-textbox  [validationName]="'Price'" [(model)]='item.price' [type]="'number'"></katana-textbox>
             </div>
             <div>
-                <label>Sale Price (<span class="text-danger">*</span>)</label>
+                <label>Sale Price</label>
                 <katana-textbox  [validationName]="'SalePrice'" [(model)]='item.salePrice' [type]="'number'"></katana-textbox>
             </div>
             <label>Category (<span class="text-danger">*</span>)</label>
-            <katana-dropdown [searchFunction]="searchCategories" [bindLabel]="'name'" 
+            <select class="form-control" (change)="categoryChange($event.target.value)" >
+              <option *ngFor="let itemCat of categories" [value]="itemCat.id" [selected]="category.id==itemCat.id">{{itemCat.name}}</option>
+            </select>
+            <!-- <katana-dropdown [searchFunction]="searchCategories" [bindLabel]="'name'" value="'id'"
             [(model)]="category.id" (modelChange)="categoryChange($event)" [validationName]="'CategoryId'"  >
-            </katana-dropdown>
-            <label>Top hot (<span class="text-danger">*</span>)</label>
-            <katana-checkbox [title]="Tophot" [(model)]="item.topHot" ></katana-checkbox>
-            <label>Status (<span class="text-danger">*</span>)</label>
-            <katana-checkbox [title]="Status" [(model)]="item.status" ></katana-checkbox>
+            </katana-dropdown> -->
         </div>
         </katana-form>
-        <div>
-            <label class="button-file">More Images (<span class="text-danger">*</span>)</label>
-            <input type="file" (change)="updateMutilImages($event)"  multiple><br/>
-            <img style="width: 200px;" *ngFor='let url of urls'  [src]="url" height="100px" width="50px"> 
+        <katana-editor [title]="'Content'" [validationName]="'Content'" [(model)]="item.content"></katana-editor>
         </div>
-        <div>
-            <label class="button-file"> Image (<span class="text-danger">*</span>)</label>
-            <input type="file" (change)="updateImage($event)"  ><br/>
-            <img *ngIf="image" style="width: 200px;"   [src]="image" height="100px" width="50px"> 
-        </div>
-        </div>
-        
+       
     </div>
 </katana-card>

@@ -1,14 +1,16 @@
+import { AppConsts } from './../../shared/AppConsts';
+import { CategoryService } from './../../categories/categories.service';
+import { Categories } from './../../categories/categories';
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
-import { EditorComponent, ValidationOption, RequiredValidationRule, CustomValidationRule, ClientValidator, ValidationService, ValidationRuleResponse, DataService } from 'ngx-fw4c';
-import { AppConsts } from 'src/app/shared/AppConsts';
+import { EditorComponent, ValidationOption, RequiredValidationRule, CustomValidationRule, ClientValidator, ValidationService, ValidationRuleResponse, DataService, ValidationRule } from 'ngx-fw4c';
+// import { AppConsts } from 'src/app/shared/AppConsts';
 import { ProductService } from '../product.service';
 import { Products } from '../product';
 import { Observable, of } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { finalize, map } from 'rxjs/operators';
-import { CategoryService } from 'src/app/categories/categories.service';
-import { Categories } from 'src/app/categories/categories';
-
+// import { CategoryService } from 'src/app/categories/categories.service';
+// import { Categories } from 'src/app/categories/categories';
 @Component({
   selector: 'app-edit-product',
   templateUrl: './edit-product.component.html',
@@ -20,20 +22,34 @@ export class EditProductComponent implements OnInit {
   @Input() item: Products;
   private urls = [];
   private downloadURL: Observable<string>;
-  private categories:Observable< Categories[]>;
-  private fb;
+  private categories: Categories[];
+  // private fb;
   private image;
-  private category=new Categories({id:7});
+  private category = new Categories();
+  private oldItem: Products;
   constructor(private _productService: ProductService,
-    private _categoryService:CategoryService,
+    private _categoryService: CategoryService,
     private _validationService: ValidationService,
     private _dataService: DataService,
     private _storage: AngularFireStorage) { }
 
   ngOnInit() {
-    this.item.content=this.item.content?this.item.content:null;
-    this.categories=this._categoryService.getAll();
-    this._categoryService.getAll().subscribe(s=>console.log(s));
+    this.item.content = this.item.content ? this.item.content : null;
+    this._categoryService.getAll().subscribe(val => {
+      this.categories = val;
+      if (!this.item.id) this.category.id = this.categories[0].id;
+    });
+
+    if (this.item.moreImages) {
+      this.urls = this.item.moreImages.split(',');
+    }
+    if (this.item.images) {
+      this.image = this.item.images;
+    }
+    if (this.item.id) {
+      this.oldItem = this.item;
+      this.category.id = this.item.categoryId;
+    }
     this.initValidations();
   }
   updateImage(event) {
@@ -43,10 +59,12 @@ export class EditProductComponent implements OnInit {
       this.image = event.target.result;
     }
     reader.readAsDataURL(event.target.files[0]);
-   this.uploadFireBase(event.target.files[0],false);
+    this.uploadFireBase(event.target.files[0], false);
   }
   updateMutilImages(event) {
     if (event.target.files && event.target.files[0]) {
+      this.urls = [];
+      this.item.moreImages = null;
       var filesAmount = event.target.files.length;
       for (let i = 0; i < filesAmount; i++) {
         var reader = new FileReader();
@@ -54,26 +72,24 @@ export class EditProductComponent implements OnInit {
           this.urls.push(event.target.result);
         }
         reader.readAsDataURL(event.target.files[i]);
-       this.uploadFireBase(event.target.files[i],true);
+        this.uploadFireBase(event.target.files[i], true);
       }
     }
 
   }
-  public categoryChange(event):void {
-    debugger
-    this.category=event;
+  public categoryChange(id): void {
+    this.category.id = id;
   }
-  public searchCategories = (searchText: string): Observable<{ items: any[] }> => {
-    return this.categories.pipe(map(val => {
-      return {
-        items: val.map(s => ({ name: s.name, value: s.id }))
-          .filter(s => !searchText || s.name.toString().toLowerCase().indexOf(searchText.toLowerCase()) > -1)
-      };
-    }));
-  }
+  // public searchCategories = (searchText: string): Observable<{ items: any[] }> => {
+  //   return this.categories.pipe(map(val => {
+  //     return {
+  //       items: val.map(s => ({ name: s.name, value: s.id }))
+  //         .filter(s => !searchText || s.name.toString().toLowerCase().indexOf(searchText.toLowerCase()) > -1)
+  //     };
+  //   }));
+  // }
   private uploadFireBase(file: any, check: boolean): void {
     var n = Date.now();
-    // const file = event.target.files[0];
     const filePath = `test/${n}`;
     const fileRef = this._storage.ref(filePath);
     const task = this._storage.upload(`test/${n}`, file);
@@ -84,10 +100,10 @@ export class EditProductComponent implements OnInit {
           this.downloadURL = fileRef.getDownloadURL();
           this.downloadURL.subscribe(url => {
             if (url) {
-              if(check)
-              this.item.moreImages=  this.item.moreImages?this.item.moreImages+= ','+ url:url;
+              if (check)
+                this.item.moreImages = this.item.moreImages ? this.item.moreImages += ',' + url : url;
               else
-              this.item.images=url
+                this.item.images = url;
             }
           });
         })
@@ -99,15 +115,12 @@ export class EditProductComponent implements OnInit {
       new ValidationOption({
         validationName: 'Name',
         dynamic: true,
-        valueResolver:()=>this.item.name,
+        valueResolver: () => this.item.name,
         rules: [
           new RequiredValidationRule(() => AppConsts.RequiredError),
           new CustomValidationRule(value => {
-          this.item.slug=  this.item.name.toString().toLowerCase()
-            .replace(/ /g,'-')
-            .replace(/[^\w-]+/g,'');
-            this.item.slug =this.item.name.toString().toLowerCase();
- 
+            this.item.slug = this.item.name.toString().toLowerCase();
+
             //Đổi ký tự có dấu thành không dấu
             this.item.slug = this.item.slug.replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a');
             this.item.slug = this.item.slug.replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e');
@@ -116,15 +129,19 @@ export class EditProductComponent implements OnInit {
             this.item.slug = this.item.slug.replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u');
             this.item.slug = this.item.slug.replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y');
             this.item.slug = this.item.slug.replace(/đ/gi, 'd');
-            this.item.slug =  this.item.slug.replace(/ /gi, "-");
-            
-						return this._productService.checkUniqueName(value);
+            this.item.slug = this.item.slug.replace(/ /gi, "-");
+            if (this.oldItem && this.oldItem.name == value) {
+              return of(new ValidationRuleResponse({
+                status: true,
+              }))
+            }
+            return this._productService.checkUniqueName(value);
           }),
         ]
       }),
       new ValidationOption({
         validationName: 'Content',
-        valueResolver:()=>this.item.content,
+        valueResolver: () => this.item.content,
         dynamic: true,
         rules: [
           new RequiredValidationRule(() => AppConsts.RequiredError),
@@ -133,38 +150,47 @@ export class EditProductComponent implements OnInit {
       new ValidationOption({
         validationName: 'Price',
         dynamic: true,
-        valueResolver:()=>this.item.price,
+        valueResolver: () => this.item.price,
         rules: [
           new RequiredValidationRule(() => AppConsts.RequiredError),
           new CustomValidationRule(value => {
-						return of(new ValidationRuleResponse({
-							message: 'sale price not greater price',
-							status: !this.item.salePrice ||this.item.salePrice<value
+            return of(new ValidationRuleResponse({
+              message: 'sale price not greater price',
+              status: !this.item.salePrice || this.item.salePrice < value
             }))
           }),
-          ]
+        ]
       }),
       new ValidationOption({
         validationName: 'SalePrice',
-        valueResolver:()=>this.item.salePrice,
+        valueResolver: () => this.item.salePrice,
         dynamic: true,
         rules: [
           new CustomValidationRule(value => {
-						return of(new ValidationRuleResponse({
-							message: 'sale price not greater price',
-							status:!this.item.price|| this.item.price>value
-						}));
-					}),
-          ]
-        }),
-        // new ValidationOption({
-        //   validationName: 'CategoryId',
-        //   valueResolver:()=>this.category.id,
-        //   dynamic: true,
-        //   rules: [
-        //     new RequiredValidationRule(() =>AppConsts.RequiredError ),
-        //     ]
-        //   })
+            return of(new ValidationRuleResponse({
+              message: 'sale price not greater price',
+              status: !this.item.price || this.item.price > value
+            }));
+          }),
+        ]
+      }),
+
+      new ValidationOption({
+        validationName: 'Image',
+        valueResolver: () => this.item.images,
+        dynamic: true,
+        rules: [
+          new RequiredValidationRule(() => AppConsts.RequiredError),
+        ]
+      })
+      // new ValidationOption({
+      //   validationName: 'CategoryId',
+      //   valueResolver:()=>this.category.id,
+      //   dynamic: true,
+      //   rules: [
+      //     new RequiredValidationRule(() =>AppConsts.RequiredError ),
+      //     ]
+      //   })
     ];
     var validator = new ClientValidator({
       formRef: this.formRef,
@@ -183,13 +209,7 @@ export class EditProductComponent implements OnInit {
   }
 
   public callback(): Observable<any> {
-    // debugger
-    // console.log(this.item);
-    // if (this.item.id > 0) {
-    //   return this._productService.update(this.item);
-    // }
-    // return this._productService.create(this.item);
-    this.item.categoryID=this.category;
+    this.item.categories = this.category;
     return of(this.item);
   }
 }

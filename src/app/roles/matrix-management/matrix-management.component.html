@@ -1,0 +1,18 @@
+<katana-card>
+    <div class="row">
+        <div class="col-md-12" >
+            
+            <katana-form [column]="2">
+                        <katana-table [option]="RoleOp"  *katana-item>
+                            <!-- <ng-template let-item="item" >
+                            </ng-template> -->
+                        </katana-table>
+                        <katana-table [option]="PermissionOp" #tablePermission *katana-item>
+                            <!-- <ng-template let-item="item" >
+                            </ng-template> -->
+                        </katana-table>
+            </katana-form>
+        </div>
+       
+    </div>
+</katana-card>

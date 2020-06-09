@@ -1,11 +1,15 @@
+import { ActionResponse } from './../../shared/action-response';
+import { AppIcons, AppConsts } from './../../shared/AppConsts';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { TableConstant, TableOption, DataService, AuthenticationService, ModalService, TableComponent, TemplateViewModel, TableColumnType, TableDatetimeFormat } from 'ngx-fw4c';
+import { TableConstant, TableOption, DataService, AuthenticationService, ModalService, TableComponent, TemplateViewModel, TableColumnType, TableDatetimeFormat, ConfirmViewModel } from 'ngx-fw4c';
 import { of } from 'rxjs';
 import { ProductService } from '../product.service';
-import { AppIcons, AppConsts } from 'src/app/shared/AppConsts';
+//  import { AppIcons, AppConsts } from 'src/app/shared/AppConsts';
 import { EditProductComponent } from '../edit-product/edit-product.component';
 import { ToastrService } from 'ngx-toastr';
 import { Products } from '../product';
+// import { ActionItem, ActionResponse, AppConsts } from 'app/shared';
+// import { ActionRequest } from 'app/shared';
 @Component({
   selector: 'product-list',
   templateUrl: './product-list.component.html',
@@ -13,7 +17,7 @@ import { Products } from '../product';
 })
 export class ProductListComponent implements OnInit {
   @ViewChild('tableList', { static: true }) tableList: TableComponent;
-  @ViewChild("list", { static: true }) public list: TemplateRef<any>;
+  @ViewChild("image", { static: true }) public image: TemplateRef<any>;
   public option: TableOption;
 
   constructor(
@@ -55,9 +59,17 @@ export class ProductListComponent implements OnInit {
                 },
                 title: "New Product",
                 acceptCallback: item => {
-                  return this._productService.create(item).subscribe(() => {
-                    this.tableList.reload;
-                    this._toastr.success('Changes saved', 'Success');
+                  return this._productService.create(item).subscribe((val : any) => {
+                    debugger
+                    if(val.errorMessage=="true"){
+                      this._toastr.success('Changes saved', 'Success');
+                      this.tableList.reload;
+                    }else{
+                      this._toastr.error('Changes fail','Error');
+                      this.tableList.reload;
+                    }
+                   
+                    
                   });
                 }
               })
@@ -91,48 +103,54 @@ export class ProductListComponent implements OnInit {
           }
         },
         {
-          icon: 'AppIcons.Remove',
+          icon: AppIcons.Remove,
           customClass: "danger",
         
-          // executeAsync: item => {
-          //   this._modalService.showConfirmDialog(
-          //     new ConfirmViewModel({
-          //       autoClose: true,
-          //       title: AppConsts.Confirm,
-          //       message: AppConsts.ConfirmDelete,
-          //       acceptCallback: () => {
-          //         this._permissionService.deletePermission(new ActionRequest<Permissions>({ deleteId: item.id })).subscribe(() => {
-          //           this.tableList.reload();
-          //           this._toastr.success('Changes saved', 'Success');
-          //         })
-          //       }
-          //     })
-          //   );
-          // }
+          executeAsync: item => {
+            this._modalService.showConfirmDialog(
+              new ConfirmViewModel({
+                autoClose: true,
+                title: AppConsts.Confirm,
+                message: AppConsts.ConfirmDelete,
+                acceptCallback: () => {
+                  this._productService.delete(item.id).subscribe(() => {
+                    this.tableList.reload();
+                    this._toastr.success('Changes saved', 'Success');
+                  })
+                }
+              })
+            );
+          }
         },
         {
 					type: TableConstant.ActionType.Toolbar,
-					icon: 'AppIcons.Remove',
+					icon: AppIcons.Remove,
 					title: () => 'Delete',
 					customClass: 'danger',
 				
-					// executeAsync: () => {
-					// 	this._modalService.showConfirmDialog(new ConfirmViewModel({
-					// 		title: AppConsts.Confirm,
-					// 		message:  AppConsts.ConfirmDelete,
-					// 		acceptCallback: () => {
-          //       var data = this.tableList.selectedItems;
-          //       var listId=[];
-          //       for (let index = 0; index < data.length; index++) {
-          //         listId.push(data[index].id);
-          //       }
-          //       this._permissionService.deletePermission(new ActionRequest<Permissions>({ deleteId: listId })).subscribe(() => {
-          //           this.tableList.reload();
-          //           this._toastr.success('Changes saved', 'Success');
-          //       })
-					// 		}
-					// 	}))
-					// }
+					executeAsync: () => {
+						this._modalService.showConfirmDialog(new ConfirmViewModel({
+							title: AppConsts.Confirm,
+							message:  AppConsts.ConfirmDelete,
+							acceptCallback: () => {
+                var data = this.tableList.selectedItems;
+                var listId=[];
+                for (let index = 0; index < data.length; index++) {
+                  listId.push(data[index].id);
+                }
+                this._productService.deleteMutiple(data).subscribe((val:ActionResponse<Products>) => {
+                  if(val.failureItems.length==0){
+                    this.tableList.reload();
+                    this._toastr.success('Changes saved', 'Success');
+                  }else{
+                    this.tableList.reload();
+                    this._toastr.success(`Total fail ${val.failureItems}\n ToTal succes:${val.successItems}`, 'Success');
+                  }
+                   
+                })
+							}
+						}))
+					}
 				},
       ],
      
@@ -148,8 +166,16 @@ export class ProductListComponent implements OnInit {
         {
           type: TableColumnType.Description,
           title: () =>'Category Name',
-          allowFilter:true,
+          allowFilter:false,
+          
           valueRef: () => 'catgoryName',
+        },
+        {
+          type: TableColumnType.Description,
+          title: () =>'Image',
+          allowFilter:false,
+          valueRef:()=>'',
+          customTemplate: () => this.image,
         },
         {
           type: TableColumnType.Description,
@@ -160,13 +186,13 @@ export class ProductListComponent implements OnInit {
         {
           type: TableColumnType.Description,
           title: () =>'Price',
-          allowFilter:true,
+          allowFilter:false,
           valueRef: () => 'price'
         },
         {
           type: TableColumnType.Description,
           title: () =>'Sale Price',
-          allowFilter:true,
+          allowFilter:false,
           valueRef: () => 'salePrice',
         },
       ],

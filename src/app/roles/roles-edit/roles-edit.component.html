@@ -1,0 +1,15 @@
+<katana-card>
+    <div class="row">
+        <div class="col-md-12" #formRef>
+            <div>
+                <label>Name (<span class="text-danger">*</span>)</label>
+                <katana-textbox  [validationName]="'Name'" [(model)]='item.roleName' [type]="'text'"></katana-textbox>
+            </div>
+            <div>
+                <label>Decription</label>
+                <katana-textbox  [validationName]="'Decription'" [(model)]='item.description' [type]="'text'"></katana-textbox>
+            </div>
+        </div>
+       
+    </div>
+</katana-card>

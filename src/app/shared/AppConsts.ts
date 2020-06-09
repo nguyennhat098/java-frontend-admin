@@ -66,7 +66,7 @@ export const AppIcons = {
     Add: "fa fa-plus",
     Save: "fa fa-plus",
     Edit: 'fa fa-edit',
-    Remove: 'fa fa-remove',
+    Remove: 'fa fa-trash',
     Clone: "fa fa-clone",
     Email: 'fa fa-envelope',
     Key: 'fa fa-key',
