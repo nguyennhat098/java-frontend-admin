@@ -1,1 +1,8 @@
-<p>user-list works!</p>
+<katana-card>
+    <katana-table [option]="option" #tableList>
+        <ng-template let-item="item" #image>
+            <app-user-image [image]="item.image"></app-user-image>
+        </ng-template>
+    </katana-table>
+</katana-card>
+

@@ -3,14 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Framework4CModule } from 'ngx-fw4c';
 import { BrowserModule } from '@angular/platform-browser';
-import { UserEditComponent } from './user-edit/user-edit.component';
-import { UserListComponent } from './user-list/user-list.component';
-import { UserImageComponent } from './user-image/user-image.component';
+import { OrdersEditComponent } from './orders-edit/orders-edit.component';
+import { OrdersListComponent } from './orders-list/orders-list.component';
 
 const declarations = [
-UserEditComponent,
-UserListComponent,
-UserImageComponent
+OrdersEditComponent,
+OrdersListComponent
 ];
 @NgModule({
   declarations: declarations,
@@ -26,4 +24,4 @@ UserImageComponent
 })
 
 
-export class UserModule { }
+export class OrdersModule { }

@@ -13,9 +13,20 @@
 <app-root></app-root>
 
 </body>
-<script src="assets/plugins/jquery/jquery.min.js"></script>
+<!-- <script src="assets/plugins/jquery/jquery.min.js"></script>
 <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="assets/dist/js/adminlte.min.js"></script>
+<script src="assets/dist/js/adminlte.min.js"></script> -->
 <!-- AdminLTE for demo purposes -->
 <!-- <script src="assets/dist/js/demo.js"></script> -->
+<script>
+ function changeMenu(){
+    var element = document.querySelector(".sidebar-mini");
+    if(element.classList.contains("sidebar-collapse")){
+      element.classList.remove("sidebar-collapse");
+    } else{
+      element.classList.add("sidebar-collapse");
+    }
+  }
+ 
+</script>
 </html>

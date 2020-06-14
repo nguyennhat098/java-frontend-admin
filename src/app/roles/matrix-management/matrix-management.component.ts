@@ -1,3 +1,4 @@
+import { SearchRequest } from './../../shared/search-request';
 import { ActionResponse } from './../../shared/action-response';
 // import { ActionResponse } from 'app/shared/action-response';
 import { AppConsts } from './../../shared/AppConsts';
@@ -60,15 +61,16 @@ export class MatrixManagementComponent implements OnInit {
 				}));
       },
       selectedChange:(item)=>{
-        if(this.SelectedRoles.find(x=>x.actionId==item.id)){
-          this.SelectedRoles= this.SelectedRoles.filter(x=>x.actionId!=item.id);
+        if(this.SelectedRoles.find(x=>x.actionId.id==item.id)){
+          this.SelectedRoles= this.SelectedRoles.filter(x=>x.actionId.id!=item.id);
         }else{
-          this.SelectedRoles.push(new RoleActions({actionId:item.id,roleId:this.item.id}));
+          this.SelectedRoles.push(new RoleActions({actionId:new Actions({id:item.id,actionName:item.actionName}),roleId:new Roles({id:this.item.id})}));
         }
+        console.log(this.SelectedRoles)
       },
       inlineEdit: false,
       mode: TableMode.full,
-      searchFields: ['Name'],
+      searchFields: ['actionName','description'],
       actions: [
         {
 					type: TableConstant.ActionType.Toolbar,
@@ -89,9 +91,9 @@ export class MatrixManagementComponent implements OnInit {
                     // this.tableList.reload();
                     this._toastr.success(`Total fail ${val.failureItems}\n ToTal succes:${val.successItems}`, 'Success');
                   }
-                  removeElements( document.querySelectorAll(".modal") );
-                  removeElements( document.querySelectorAll(".modal-backdrop") );
-                })
+                });
+                removeElements( document.querySelectorAll(".modal") );
+                removeElements( document.querySelectorAll(".modal-backdrop") );
 							}
 						}))
 					}
@@ -115,12 +117,12 @@ export class MatrixManagementComponent implements OnInit {
 
 
     this.PermissionOp = new TableOption({
-      paging: true,
       title:'List Roles',
+      
       localData:()=>
       {
 				var actionsList = [];
-				return this._roleService.getActionByRoleAction(this.item.id).pipe(map(val => {
+				return this._roleService.getActionByRoleAction(new SearchRequest({id:this.item.id})).pipe(map(val => {
 					for (let index = 0; index < val.length; index++) {
             let actions = new Actions();
             actions.id=val[index][0];
@@ -132,10 +134,10 @@ export class MatrixManagementComponent implements OnInit {
 				}));
       },
       selectedChange:(item)=>{
-        if(this.SelectedPermission.find(x=>x.actionId==item.id)){
-          this.SelectedPermission= this.SelectedPermission.filter(x=>x.actionId!=item.id);
+        if(this.SelectedPermission.find(x=>x.actionId.id==item.id)){
+          this.SelectedPermission= this.SelectedPermission.filter(x=>x.actionId.id!=item.id);
         }else{
-          this.SelectedPermission.push(new RoleActions({actionId:item.id,roleId:this.item.id}));
+          this.SelectedPermission.push(new RoleActions({actionId:new Actions({id:item.id,actionName:item.actionName}),roleId:new Roles({id: this.item.id})}));
         }
       },
       actions: [
@@ -154,12 +156,11 @@ export class MatrixManagementComponent implements OnInit {
                   if(val.failureItems.length==0){
                     this._toastr.success('Changes saved', 'Success');
                   }else{
-                    this._toastr.success(`Total fail ${val.failureItems}\n ToTal succes:${val.successItems}`, 'Success');
+                    this._toastr.success(`Total fail ${val.failureItems.length}\n ToTal succes:${val.successItems.length}`, 'Success');
                   }
-                  removeElements( document.querySelectorAll(".modal") );
-                  removeElements( document.querySelectorAll(".modal-backdrop") );
-                  
-                })
+                });
+                removeElements( document.querySelectorAll(".modal") );
+                removeElements( document.querySelectorAll(".modal-backdrop") );
 							}
 						}))
 					}
@@ -167,7 +168,7 @@ export class MatrixManagementComponent implements OnInit {
       ],
      
       inlineEdit: false,
-      searchFields: ['Name'],
+      searchFields: ['actionName','decription'],
       mainColumns: [
         {
           type: TableColumnType.Description,
@@ -180,6 +181,7 @@ export class MatrixManagementComponent implements OnInit {
           title: () =>'Decription',
           allowFilter:true,
           valueRef: () => 'description',
+          
         },
        
       ],

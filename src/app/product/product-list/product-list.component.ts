@@ -1,7 +1,8 @@
+import { AuthenticationServices } from './../../helpers/authentication.service';
 import { ActionResponse } from './../../shared/action-response';
 import { AppIcons, AppConsts } from './../../shared/AppConsts';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { TableConstant, TableOption, DataService, AuthenticationService, ModalService, TableComponent, TemplateViewModel, TableColumnType, TableDatetimeFormat, ConfirmViewModel } from 'ngx-fw4c';
+import { TableConstant, TableOption, DataService, AuthenticationService, ModalService, TableComponent, TemplateViewModel, TableColumnType, TableDatetimeFormat, ConfirmViewModel, PermisisonProvider, CheckboxComponent } from 'ngx-fw4c';
 import { of } from 'rxjs';
 import { ProductService } from '../product.service';
 //  import { AppIcons, AppConsts } from 'src/app/shared/AppConsts';
@@ -19,17 +20,17 @@ export class ProductListComponent implements OnInit {
   @ViewChild('tableList', { static: true }) tableList: TableComponent;
   @ViewChild("image", { static: true }) public image: TemplateRef<any>;
   public option: TableOption;
-
   constructor(
     private _modalService: ModalService,
-    private _authenticationService: AuthenticationService,
-    // private _permissionprovider: PermisisonProvider,
+    private _authenticationService: AuthenticationServices,
     private _dataService: DataService,
     private _productService:ProductService,
     private _toastr: ToastrService,
   ) { }
 
   public ngOnInit(): void {
+    // this._authenticationService.checkAuthenticate('ADD PRODUCT').subscribe(val=>this.checkCreate= val);
+
     this.initList();
   }
 
@@ -43,9 +44,9 @@ export class ProductListComponent implements OnInit {
           icon: AppIcons.Add,
           customClass: 'primary',
           title: () => AppConsts.New,
-          // hide: () => {
-          //   return !this._permissionprovider.hasPermisison(this._authenticationService.currentUser, 'system', 'create');
-          // },
+          hide: () => {            
+          return !this._authenticationService.checkAuthenticate('ADD PRODUCT');
+          },
 
           executeAsync: item => {
             this._modalService.showTemplateDialog(
@@ -60,7 +61,6 @@ export class ProductListComponent implements OnInit {
                 title: "New Product",
                 acceptCallback: item => {
                   return this._productService.create(item).subscribe((val : any) => {
-                    debugger
                     if(val.errorMessage=="true"){
                       this._toastr.success('Changes saved', 'Success');
                       this.tableList.reload;
@@ -68,8 +68,6 @@ export class ProductListComponent implements OnInit {
                       this._toastr.error('Changes fail','Error');
                       this.tableList.reload;
                     }
-                   
-                    
                   });
                 }
               })
@@ -81,7 +79,7 @@ export class ProductListComponent implements OnInit {
         {
           icon: AppIcons.Edit,
           customClass: 'primary',
-         
+         hide:()=>  !this._authenticationService.checkAuthenticate('EDIT PRODUCT'),
           executeAsync: item => {
             this._modalService.showTemplateDialog(new TemplateViewModel({
               title: 'Edit Product',
@@ -105,7 +103,7 @@ export class ProductListComponent implements OnInit {
         {
           icon: AppIcons.Remove,
           customClass: "danger",
-        
+          hide:()=>  !this._authenticationService.checkAuthenticate('DELETE PRODUCT'),
           executeAsync: item => {
             this._modalService.showConfirmDialog(
               new ConfirmViewModel({
@@ -127,7 +125,7 @@ export class ProductListComponent implements OnInit {
 					icon: AppIcons.Remove,
 					title: () => 'Delete',
 					customClass: 'danger',
-				
+          
 					executeAsync: () => {
 						this._modalService.showConfirmDialog(new ConfirmViewModel({
 							title: AppConsts.Confirm,
@@ -144,7 +142,7 @@ export class ProductListComponent implements OnInit {
                     this._toastr.success('Changes saved', 'Success');
                   }else{
                     this.tableList.reload();
-                    this._toastr.success(`Total fail ${val.failureItems}\n ToTal succes:${val.successItems}`, 'Success');
+                    this._toastr.success(`Total fail ${val.failureItems.length}\n ToTal succes:${val.successItems.length}`, 'Success');
                   }
                    
                 })
@@ -184,7 +182,7 @@ export class ProductListComponent implements OnInit {
           valueRef: () => 'content',
         },
         {
-          type: TableColumnType.Description,
+          type: TableColumnType.Number,
           title: () =>'Price',
           allowFilter:false,
           valueRef: () => 'price'
@@ -195,11 +193,21 @@ export class ProductListComponent implements OnInit {
           allowFilter:false,
           valueRef: () => 'salePrice',
         },
+        {
+          type: TableColumnType.Date,
+          title: () =>'Created Date',
+          allowFilter:false,
+          valueRef: () => 'created',
+        },
+        {
+          type: TableColumnType.Date,
+          title: () =>'Edited Date',
+          allowFilter:false,
+          valueRef: () => 'modifileDate',
+        },
       ],
       serviceProvider: {
         searchAsync: request => {
-          this._productService.search(request).subscribe(s=>console.log(s))
-        
           return this._productService.search(request);
         }
       }

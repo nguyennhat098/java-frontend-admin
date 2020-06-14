@@ -6,6 +6,7 @@ export class SearchRequest<TViewModel>{
     searchText?: string;
     itemFilter?: TViewModel;
     token?: string; 
+    id?:number;
     constructor(init?: Partial<SearchRequest<TViewModel>>) {
         Object.assign(this, init);
     }

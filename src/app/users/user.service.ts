@@ -29,32 +29,25 @@ export class UserService extends MockService {
 
     public create(request: Users)
         : Observable<ActionItem<Users>> {
-        return this._httpClient.post<ActionItem<Users>>(`${this.href}/role/create`, request);
+        return this._httpClient.post<ActionItem<Users>>(`${this.href}/user/create`, request);
     }
 
     public update(request: Users)
         : Observable<ActionItem<Users>> {
-        return this._httpClient.put<ActionItem<Users>>(`${this.href}/role/update`, request);
+        return this._httpClient.put<ActionItem<Users>>(`${this.href}/user/update`, request);
     }
 
     public delete(request: ActionRequest<Users>)
         : Observable<ActionResponse<Users>> {
-        return this._httpClient.delete<ActionResponse<Users>>(`${this.href}/role/delete?id=${request}`, { params: request as any });
+        return this._httpClient.delete<ActionResponse<Users>>(`${this.href}/user/delete?id=${request}`, { params: request as any });
     }
 
 
     public search(request: any): Observable<SearchResponse<Users>> {
-        return this._httpClient.get<SearchResponse<Users>>(`${this.href}/role/search`, { params: request as any }).pipe(retry(2));
+        return this._httpClient.get<SearchResponse<Users>>(`${this.href}/user/search`, { params: request as any }).pipe(retry(2));
     }
-
-    public getActionByRole(roleId: any): Observable<any> {
-        return this._httpClient.get<any>(`${this.href}/role/getActionByRole?roleId=${roleId}`, {}).pipe(retry(2));
-    }
-    public getActionByRoleAction(roleId: any): Observable<Actions[]> {
-        return this._httpClient.get<Actions[]>(`${this.href}/role/getActionByRoleAction?roleId=${roleId}`, {}).pipe(retry(2));
-    }
-    public deleteMutiple( request: Users[]): Observable<Users> {
-        return this._httpClient.post<Users>(`${this.href}/product/deleteMutiple`, request);
+    public deleteMutiple( request: Users[]): Observable<ActionResponse<Users>> {
+        return this._httpClient.post<ActionResponse<Users>>(`${this.href}/user/deleteMutiple`, request);
     }
 
     public checkUniqueName(request: string): Observable<ValidationRuleResponse> {

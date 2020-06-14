@@ -1,1 +1,62 @@
-<p>user-edit works!</p>
+<katana-card>
+    <div class="row">
+        <div class="col-md-12" #formRef>
+            <div>
+                <label class="button-file"> Image</label>
+                <input type="file" validation-name="Image" (change)="updateImage($event)"
+                    [(ngModel)]="item.images"><br />
+                <img *ngIf="item.image" style="width: 200px;" [src]="item.image" height="100px" width="50px">
+            </div>
+            <katana-form [column]="2">
+                <div *katana-item>
+                    <div>
+                        <label>User Name (<span class="text-danger">*</span>)</label>
+                        <katana-textbox [validationName]="'UserName'" [(model)]='item.userName' [type]="'text'">
+                        </katana-textbox>
+                    </div>
+                    <div>
+                        <label>Password (<span class="text-danger">*</span>)</label>
+                        <katana-textbox [(model)]='item.password' [validationName]="'Password'" [type]="'text'">
+                        </katana-textbox>
+                    </div>
+                    <div>
+                        <label>Confirm Password (<span class="text-danger">*</span>)</label>
+                        <katana-textbox [(model)]='item.password2' [validationName]="'Password2'" [type]="'text'">
+                        </katana-textbox>
+                    </div>
+                    <label>Full Name (<span class="text-danger">*</span>)</label>
+                    <katana-textbox [title]="FullName" [(model)]="item.fullName"></katana-textbox>
+
+                    <div>
+                        <label>Gender</label>
+                        <katana-checkbox [validationName]="'Gender'" [(model)]='item.gender'></katana-checkbox>
+                    </div>
+                </div>
+                <div *katana-item>
+                    <div>
+                        <label>Email (<span class="text-danger">*</span>)</label>
+                        <katana-textbox [validationName]="'Email'" [(model)]='item.email' [type]="'text'">
+                        </katana-textbox>
+                    </div>
+                    <div>
+                        <label>Address</label>
+                        <katana-textbox [validationName]="'Address'" [(model)]='item.address' [type]="'text'">
+                        </katana-textbox>
+                    </div>
+                    <label>Role Name (<span class="text-danger">*</span>)</label>
+                    <select style="margin-bottom: 20px;padding: 17px;" class="form-control" (change)="roleChange($event.target.value)">
+                        <option *ngFor="let itemRole of roles" [value]="itemRole.id"
+                            [selected]="role.id==itemRole.id">{{itemRole.roleName}}</option>
+                    </select>
+                    <label>Phone (<span class="text-danger">*</span>)</label>
+                    <katana-textbox [title]="Phone" [(model)]="item.phone"></katana-textbox>
+                    <div>
+                        <label>Status</label>
+                        <katana-checkbox [validationName]="'Status'" [(model)]='item.status'></katana-checkbox>
+                    </div>
+                </div>
+            </katana-form>
+        </div>
+
+    </div>
+</katana-card>

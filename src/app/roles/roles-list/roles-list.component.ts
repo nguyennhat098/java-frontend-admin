@@ -29,7 +29,8 @@ export class RolesListComponent implements OnInit {
   private initList(): void { 
     this.option = new TableOption({
       paging: true,
-      title:'Products Management',
+      title:'Roles Management',
+      hideCheckboxColumn:true,
       topButtons: [
         {
           icon: AppIcons.Add,

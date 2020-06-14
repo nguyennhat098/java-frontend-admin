@@ -1,3 +1,4 @@
+import { UserListComponent } from './users/user-list/user-list.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ProductListComponent } from './product/product-list/product-list.component';
@@ -6,6 +7,7 @@ import { NotFoundComponent } from 'ngx-fw4c';
 import { RolesListComponent } from './roles';
 import { AuthGuard } from './helpers/auth.guard';
 import { LoginAdminComponent } from './login-admin/login-admin.component';
+import { OrdersListComponent } from './orders/orders-list/orders-list.component';
 
 
 const routes: Routes = [
@@ -14,6 +16,12 @@ const routes: Routes = [
       },
       {
         path:'role',component:RolesListComponent, canActivate: [AuthGuard],
+      },
+      {
+        path:'user',component:UserListComponent, canActivate: [AuthGuard],
+      },
+      {
+        path:'order',component:OrdersListComponent, canActivate: [AuthGuard],
       },
       {
         path:'login',component:LoginAdminComponent,

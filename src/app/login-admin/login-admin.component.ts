@@ -1,3 +1,4 @@
+import { CommonService } from './../shared/common.service';
 import { AuthenticationServices } from './../helpers/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Users } from './../users/user';
@@ -17,7 +18,8 @@ export class LoginAdminComponent implements OnInit {
   constructor(  private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private authenticationService: AuthenticationServices) { }
+    private authenticationService: AuthenticationServices,
+    private _commonService:CommonService) { }
 
   ngOnInit() {
     this.user = this.formBuilder.group({
@@ -27,8 +29,7 @@ export class LoginAdminComponent implements OnInit {
   this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
   onSubmit() {
-    // Do something awesome
-    console.log(this.user.value);
+
     this.authenticationService.login(this.user.value)
     .pipe(first())
     .subscribe(
