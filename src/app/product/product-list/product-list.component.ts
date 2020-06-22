@@ -208,6 +208,7 @@ export class ProductListComponent implements OnInit {
       ],
       serviceProvider: {
         searchAsync: request => {
+          this._productService.search(request).subscribe(s=>console.log(s.items))
           return this._productService.search(request);
         }
       }

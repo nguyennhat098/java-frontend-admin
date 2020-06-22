@@ -1,3 +1,4 @@
+import { CategoriesListComponent } from './categories/categories-list/categories-list.component';
 import { UserListComponent } from './users/user-list/user-list.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -16,6 +17,9 @@ const routes: Routes = [
       },
       {
         path:'role',component:RolesListComponent, canActivate: [AuthGuard],
+      },
+      {
+        path:'category',component:CategoriesListComponent, canActivate: [AuthGuard],
       },
       {
         path:'user',component:UserListComponent, canActivate: [AuthGuard],

@@ -1,3 +1,4 @@
+import { CategoryModule } from './categories/categories.module';
 import { environment } from './../environments/environment';
 import { LoginAdminComponent } from './login-admin/login-admin.component';
 import { BrowserModule } from '@angular/platform-browser';
@@ -21,7 +22,8 @@ const ListModule = [
   ProductModule,
   RoleModule,
   UserModule,
-  OrdersModule
+  OrdersModule,
+  CategoryModule
 ];
 
 @NgModule({

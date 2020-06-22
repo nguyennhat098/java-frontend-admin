@@ -1,1 +1,17 @@
-<p>categories-edit works!</p>
+<katana-card>
+    <div class="row">
+        <div class="col-md-12" #formRef>
+            <div>
+                <label>Name (<span class="text-danger">*</span>)</label>
+                <katana-textbox  [validationName]="'Name'" [(model)]='item.name' [type]="'text'"></katana-textbox>
+            </div>
+            <div>
+                <label>Decription</label>
+                <katana-textbox  [validationName]="'Slug'" [(model)]='item.slug' [type]="'text'"></katana-textbox>
+            </div>
+            <katana-checkbox [title]="Status" [(model)]="item.status" ></katana-checkbox>
+
+        </div>
+       
+    </div>
+</katana-card>

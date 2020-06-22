@@ -34,7 +34,7 @@ export class UserListComponent implements OnInit {
   
     this.option = new TableOption({
       paging: true,
-      title:'Products Management',
+      title:'User Management',
       topButtons: [
         {
           icon: AppIcons.Add,

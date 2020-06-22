@@ -28,7 +28,7 @@ export class OrdersListComponent implements OnInit {
 
     this.option = new TableOption({
       paging: true,
-      title: 'Products Management',
+      title: 'Orders Management',
       actions: [
         {
           icon: AppIcons.Edit,
@@ -86,8 +86,6 @@ export class OrdersListComponent implements OnInit {
         {
           type: TableColumnType.Description,
           title: () => 'Status',
-          allowFilter: false,
-          allowSort:false,
           valueRef: () => 'statusName'
         },
         {
