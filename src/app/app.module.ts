@@ -18,6 +18,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { OrdersModule } from './orders/orders.module';
+import { ChatComponent } from './chat/chat.component';
 const ListModule = [
   ProductModule,
   RoleModule,
@@ -30,6 +31,7 @@ const ListModule = [
   declarations: [
     AppComponent,
     LoginAdminComponent,
+    ChatComponent,
   ],
   imports: [
     BrowserModule,

@@ -9,6 +9,7 @@ import { RolesListComponent } from './roles';
 import { AuthGuard } from './helpers/auth.guard';
 import { LoginAdminComponent } from './login-admin/login-admin.component';
 import { OrdersListComponent } from './orders/orders-list/orders-list.component';
+import { ChatComponent } from './chat/chat.component';
 
 
 const routes: Routes = [
@@ -29,6 +30,9 @@ const routes: Routes = [
       },
       {
         path:'login',component:LoginAdminComponent,
+      },
+      {
+        path:'chat',component:ChatComponent,
       },
       {
         path: 'not-found',

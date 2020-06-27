@@ -15,6 +15,7 @@ export class LoginAdminComponent implements OnInit {
   user: FormGroup;
   returnUrl: string;
   error = '';
+  submitted:boolean=false;
   constructor(  private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
@@ -28,8 +29,9 @@ export class LoginAdminComponent implements OnInit {
   });
   this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
+  get f() { return this.user.controls; }
   onSubmit() {
-
+this.submitted=true;
     this.authenticationService.login(this.user.value)
     .pipe(first())
     .subscribe(
