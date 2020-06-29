@@ -19,7 +19,6 @@ export class CategoryService extends MockService {
 
     public create(request: Categories)
         : Observable<ActionItem<Categories>> {
-            console.log(request)
         return this._httpClient.post<ActionItem<Categories>>(`${this.href}/create`, request);
     }
 

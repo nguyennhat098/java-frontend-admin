@@ -32,7 +32,7 @@ const routes: Routes = [
         path:'login',component:LoginAdminComponent,
       },
       {
-        path:'chat',component:ChatComponent,
+        path:'chat',component:ChatComponent,canActivate:[AuthGuard],
       },
       {
         path: 'not-found',

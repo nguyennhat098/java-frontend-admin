@@ -1,4 +1,5 @@
 import { Users } from './../users/user';
+import { OrderDetail } from './order-detail';
 export class Orders {
     id: number;
     name: string;
@@ -11,6 +12,7 @@ export class Orders {
     userId: Users;
     userName:string;
     statusName:string;
+    orderDetailsCollection:OrderDetail[];
     constructor(init?: Partial<Orders>) {
         Object.assign(this, init);
     }

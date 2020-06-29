@@ -37,19 +37,15 @@ export class OrdersListComponent implements OnInit {
           executeAsync: item => {
             this._modalService.showTemplateDialog(new TemplateViewModel({
               title: 'Edit Product',
-              customSize: 'modal-lg',
+              customSize: 'modal-xlg',
               icon: AppIcons.Edit,
               template: OrdersEditComponent,
               validationKey: 'OrdersEditComponent',
               data: {
                 item: this._dataService.cloneItem(item)
               },
-              acceptCallback: item => {
-                return this._orderService.update(item).subscribe(() => {
-                  this.tableList.reload();
-                  this._toastr.success('Changes saved', 'Success');
-                });
-              }
+              cancelCallback:()=>this.tableList.reload(),
+              hideAcceptBtn:true
             })
             );
           }

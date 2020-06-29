@@ -16,6 +16,13 @@ getMessages(user) {
   })
   .valueChanges();
 }
+getRoomsChat(){
+  return this.db
+  .list('/', ref => {
+  return ref.orderByChild('timeStamp');
+  })
+  .valueChanges();
+}
 sendMessage(user, message, chatID) {
   const messageData = {
       senderID: user.id,

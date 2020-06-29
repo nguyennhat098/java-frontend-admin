@@ -1,1 +1,85 @@
-<p>orders-edit works!</p>
+<div class="row">
+    <div class="col-md-3">
+
+      <!-- Profile Image -->
+      <div class="box box-primary">
+        <div class="box-body box-profile">
+          <img class="profile-user-img img-responsive img-circle" src="{{item.userId.image}}" alt="User profile picture">
+
+          <h3 class="profile-username text-center">{{item.userName}}</h3>
+
+          <p class="text-muted text-center">{{item.userId.email}}</p>
+
+         
+
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+
+      <!-- About Me Box -->
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">About Me</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <strong><i class="fa fa-book margin-r-5"></i> Full Name</strong>
+
+          <p class="text-muted">
+            {{item.name}}
+          </p>
+          <strong><i class="fa fa-book margin-r-5"></i> Email</strong>
+
+          <p class="text-muted">
+            {{item.email}}
+          </p>
+          <strong><i class="fa fa-book margin-r-5"></i> Phone</strong>
+
+          <p class="text-muted">
+            {{item.phone}}
+          </p>
+          <strong><i class="fa fa-map-marker margin-r-5"></i> Address</strong>
+
+          <p class="text-muted">{{item.address}}</p>
+
+
+          <strong><i class="fa fa-pencil margin-r-5"></i> Status</strong>
+
+          <p>
+           {{item.statusName}}
+          </p>
+          <strong *ngIf="actionStatus"><i class="fa fa-pencil margin-r-5"></i> Change Status</strong>
+          <a *ngIf="actionStatus" href="javscript:void(0)" (click)="changeStatus()" class="btn btn-primary btn-block"><b>{{actionStatus}}</b></a>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-md-9">
+      <div class="nav-tabs-custom">
+       
+        <div class="tab-content">
+          <div class="active tab-pane" id="activity">
+           
+            <div class="post clearfix">
+              <katana-table [option]="option" #tableList>
+                <ng-template let-item="item" #image>
+                  <app-orders-info [image]="item.images"></app-orders-info>
+              </ng-template>
+              </katana-table>
+            </div>
+           
+          </div>
+
+        
+          <!-- /.tab-pane -->
+        </div>
+        <!-- /.tab-content -->
+      </div>
+      <!-- /.nav-tabs-custom -->
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->

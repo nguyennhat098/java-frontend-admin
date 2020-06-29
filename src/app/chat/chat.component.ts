@@ -1,3 +1,4 @@
+import { Users } from './../users/user';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Component, OnInit } from '@angular/core';
@@ -10,45 +11,45 @@ import { ChatService } from './chat.service';
   styleUrls: ['./chat.component.scss']
 })
 export class ChatComponent implements OnInit {
-  chatMessage: string;
-  roomChat: string;
+  roomName: string;
   messagesList;
-  roomList: string[];
-  keyArr: string[];
-  activeChat: boolean = true;
+  // roomList: string[];
+  properties: string[];
   formRef: FormGroup;
   submitted = false;
+  dataListRoomProperties:string[];
+  user:Users;
   constructor(private chatService: ChatService,private formBuilder: FormBuilder) { }
   ngOnInit(): void {
-    this.roomChat = 'de';
-    this.chatService.getMessagesList().subscribe((messagesList: any) => {
-      this.messagesList = messagesList.de.messages;
-      this.roomList = Object.keys(messagesList).map((val: any) => {
-        return val;
-      });
-      this.keyArr = Object.keys(messagesList.de.messages).map((val: any) => {
-        return val;
-      });
-    });
+    this.user=JSON.parse(localStorage.getItem('currentUser')).user;
+    this.getListRoom();
     this.formRef = this.formBuilder.group({
-      message: ['', Validators.required],
+      chatMessage: ['', Validators.required],
     })
   }
-  get f() { return this.formRef.controls; }
+  selectedMessage(roomName:string){
+    this.roomName=roomName;
+     this.chatService.getMessages(roomName).subscribe(messages=>{
+      this.messagesList=messages;
+      this.properties = Object.keys(this.messagesList).map(val=>val);
+     });
+  }
+  getListRoom(){
+    this.chatService.getRoomsChat().subscribe(roomData=>{
+      this.dataListRoomProperties = Object.keys(roomData[0]).map(val=>val);
+    })
+  }
   postMessage() {
     this.submitted=true;
-    // const user = {
-    //   id: 'ab',
-    //   name: 'nhat'
-    // };
-    // this.chatService.sendMessage(user, this.chatMessage, this.roomChat);
-  }
-  showChat() {
-    if (this.activeChat) {
-      this.activeChat = false;
-    } else {
-      this.activeChat = true;
+    if(this.formRef.invalid){
+      return;
     }
+    const user = {
+      id: this.user.id,
+      name: this.user.userName
+    };
+    this.chatService.sendMessage(user, this.formRef.value.chatMessage, this.roomName);
+    this.formRef.reset();
   }
   endConversation() {
     this.chatService.endConversation('this.agent._id');

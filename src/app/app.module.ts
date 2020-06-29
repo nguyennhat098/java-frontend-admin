@@ -19,6 +19,7 @@ import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { OrdersModule } from './orders/orders.module';
 import { ChatComponent } from './chat/chat.component';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
 const ListModule = [
   ProductModule,
   RoleModule,
@@ -40,6 +41,8 @@ const ListModule = [
     FormsModule,
     ReactiveFormsModule,
     AngularFireStorageModule,
+    // AngularFireModule.initializeApp(environment.firebaseConfig), 
+    AngularFireDatabaseModule,
     AngularFireModule.initializeApp(environment.firebaseConfig, "cloud"),
     ToastrModule.forRoot({
       timeOut: 3000,

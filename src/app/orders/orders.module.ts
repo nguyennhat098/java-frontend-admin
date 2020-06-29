@@ -5,10 +5,12 @@ import { Framework4CModule } from 'ngx-fw4c';
 import { BrowserModule } from '@angular/platform-browser';
 import { OrdersEditComponent } from './orders-edit/orders-edit.component';
 import { OrdersListComponent } from './orders-list/orders-list.component';
+import { OrdersInfoComponent } from './orders-info/orders-info.component';
 
 const declarations = [
 OrdersEditComponent,
-OrdersListComponent
+OrdersListComponent,
+OrdersInfoComponent
 ];
 @NgModule({
   declarations: declarations,
