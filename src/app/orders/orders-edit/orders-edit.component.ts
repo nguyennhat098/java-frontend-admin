@@ -47,20 +47,27 @@ export class OrdersEditComponent implements OnInit {
     }
   }
   changeStatus(){
-    switch (this.item.status) {
-      case 0:
-        this.item.status=1;
-        break;
-        case 1:
-          this.item.status=2;
-          break;
-          case 2:
-            this.item.status=3;
-          break;
-      default:
-        break;
-    }
-    this._orderService.update(this.item).subscribe(val=>this._toastr.success('change status success','sucess'));
+    // switch (this.item.status) {
+    //   case 0:
+    //     this.item.status=1;
+    //     break;
+    //     case 1:
+    //       this.item.status=2;
+    //       break;
+    //       case 2:
+    //         this.item.status=3;
+    //       break;
+    //   default:
+    //     break;
+    // }
+    this.item.status+=1;
+    this._orderService.update(this.item).subscribe(val=>{
+      if(val.errorMessage=='true'){
+        this._toastr.success('change status success','sucess')
+      }else{
+        this.item.status-=1
+      }
+    });
     this.getStatus();
   }
   private initList(): void {
