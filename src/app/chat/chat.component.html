@@ -29,8 +29,8 @@
     </header>
     <div class="message-wrap">
       <div *ngFor="let item of properties">
-          <div *ngIf="user.id!=messagesList[item].senderID; else elseBlock" class="message-list clearfix">
-            <div class="msg">
+          <div *ngIf="user.id!=messagesList[item].senderID; else elseBlock" class="message-list clearfix" style="width: 50%;">
+            <div class="msg" style="width:100%">
               <p >
                 {{messagesList[item].messageBody}}
             </p>
@@ -38,8 +38,8 @@
             <div class="time">now</div>
           </div>
           <ng-template #elseBlock>
-            <div  class="message-list me">
-              <div class="msg" style="float: right;">
+            <div  class="message-list me " style="float: right;">
+              <div class="msg" >
                   <p>
                     {{messagesList[item].messageBody}}
                   </p>
