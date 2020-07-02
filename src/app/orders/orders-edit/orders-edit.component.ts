@@ -1,3 +1,4 @@
+import { Users } from './../../users/user';
 import { OrdersService } from './../orders.service';
 import { AuthenticationServices } from './../../helpers/authentication.service';
 import { Component, OnInit, Input, ViewChild, TemplateRef } from '@angular/core';
@@ -21,7 +22,9 @@ export class OrdersEditComponent implements OnInit {
     private _orderService: OrdersService,
     private _toastr: ToastrService,) { }
   ngOnInit() {
-    console.log(this.item)
+    this._orderService.getOrderDetails(this.item.id).subscribe((val:any)=>{
+      this.item.orderDetailsCollection=val;
+    })
     this.getStatus();
     this.initList();
   }
@@ -47,19 +50,6 @@ export class OrdersEditComponent implements OnInit {
     }
   }
   changeStatus(){
-    // switch (this.item.status) {
-    //   case 0:
-    //     this.item.status=1;
-    //     break;
-    //     case 1:
-    //       this.item.status=2;
-    //       break;
-    //       case 2:
-    //         this.item.status=3;
-    //       break;
-    //   default:
-    //     break;
-    // }
     this.item.status+=1;
     this._orderService.update(this.item).subscribe(val=>{
       if(val.errorMessage=='true'){
@@ -67,13 +57,13 @@ export class OrdersEditComponent implements OnInit {
       }else{
         this.item.status-=1
       }
+      this.getStatus();
     });
-    this.getStatus();
   }
   private initList(): void {
     
     this.option = new TableOption({
-      localData:()=>of(this.item.orderDetailsCollection),
+      localData:()=>this._orderService.getOrderDetails(this.item.id),
       paging: true,
       title: 'Orders Management',
     
@@ -110,8 +100,7 @@ export class OrdersEditComponent implements OnInit {
           allowFilter: true,
           valueRef: () => 'quantity'
         },
-      ],
-     
+      ]
     });
   }
 }

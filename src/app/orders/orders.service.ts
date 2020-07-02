@@ -1,3 +1,4 @@
+import { OrderDetail } from './order-detail';
 import { Orders } from './orders';
 import { ActionItem } from './../shared/action-item';
 import { MockService, ValidationRuleResponse } from 'ngx-fw4c';
@@ -31,4 +32,7 @@ export class OrdersService extends MockService {
     public search(request: any): Observable<SearchResponse<Orders>> {
     return this._httpClient.get<SearchResponse<Orders>>(`${this.href}/order/search`, {params: request as any}).pipe(retry(2));
     }
+    public getOrderDetails(request: any): Observable<OrderDetail[]> {
+        return this._httpClient.get<OrderDetail[]>(`${this.href}/order/getOrderDetailById?id=${request}`, {params: request as any}).pipe(retry(2));
+        }
 }
