@@ -3,13 +3,13 @@
         <div class="col-md-12" #formRef>
             <div>
                 <label class="button-file">More Images</label>
-                <input  type="file" (change)="updateMutilImages($event)"  multiple><br/>
+                <input class="form-control-file"  type="file" (change)="updateMutilImages($event)"  multiple><br/>
                 <img style="width: 200px;" *ngFor='let url of urls'  [src]="url" height="100px" width="50px"> 
             </div>
             <div>
                 <label class="button-file"> Image (<span class="text-danger">*</span>)</label>
-                <input type="file" validation-name="Image"  (change)="updateImage($event)" [(ngModel)]="item.images" ><br/>
-                <img *ngIf="image" style="width: 200px;"   [src]="image" height="100px" width="50px"> 
+                <input class="form-control-file" type="file" validation-name="Image"  (change)="updateImage($event)" [(ngModel)]="item.images" ><br/>
+                <img *ngIf="item.images" style="width: 200px;"   [src]="item.images" height="100px" width="50px"> 
             </div>
             <katana-form [column]="2">
                 <div *katana-item>
@@ -36,7 +36,7 @@
                 <katana-textbox  [validationName]="'SalePrice'" [(model)]='item.salePrice' [type]="'number'"></katana-textbox>
             </div>
             <label>Category (<span class="text-danger">*</span>)</label>
-            <select class="form-control" (change)="categoryChange($event.target.value)" >
+            <select class="form-control" validation-name="category" style="height: 38px;" (change)="categoryChange($event.target.value)" >
               <option *ngFor="let itemCat of categories" [value]="itemCat.id" [selected]="category.id==itemCat.id">{{itemCat.name}}</option>
             </select>
             <!-- <katana-dropdown [searchFunction]="searchCategories" [bindLabel]="'name'" value="'id'"

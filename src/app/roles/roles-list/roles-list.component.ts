@@ -1,6 +1,7 @@
+import { AuthenticationServices } from './../../helpers/authentication.service';
 import { AppIcons, AppConsts } from './../../shared/AppConsts';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { TableColumnType, TableComponent, TableOption, ModalService, TemplateViewModel, DataService, ConfirmViewModel, TableConstant } from 'ngx-fw4c';
+import { TableColumnType, TableComponent, TableOption, ModalService, TemplateViewModel, DataService, ConfirmViewModel, TableConstant, TableText, TableMessage } from 'ngx-fw4c';
 // import { AppIcons, AppConsts } from 'src/app/shared/AppConsts';
 import { RoleService } from '../role.service';
 import { ToastrService } from 'ngx-toastr';
@@ -15,18 +16,29 @@ import { MatrixManagementComponent } from '../matrix-management/matrix-managemen
 })
 export class RolesListComponent implements OnInit {
   @ViewChild('tableList', { static: true }) tableList: TableComponent;
-  // @ViewChild("list", { static: true }) public list: TemplateRef<any>;
   public option: TableOption;
   constructor( private _modalService: ModalService,
-    // private _permissionprovider: PermisisonProvider,
     private _roleService:RoleService,
     private _dataService: DataService,
+    private _authenticationService: AuthenticationServices,
     private _toastr: ToastrService) { }
 
   ngOnInit() {
     this.initList();
   }
   private initList(): void { 
+    var tableText=new TableText();
+    tableText.action='Action';
+    tableText.advancedSearchTitle='Search advance';
+    tableText.placeholderSearch='Enter search keywords';
+    tableText.allTitle='All';
+    tableText.advancedBtnCancelTitle='cancel';
+    tableText.filterTitle='Search By'
+    tableText.advancedBtnTitle='search';
+    tableText.selectPageSize='Display';
+    var tableMessage=new TableMessage();
+    tableMessage.loadingMessage='Loading',
+    tableMessage.notFoundMessage='No data found';
     this.option = new TableOption({
       paging: true,
       title:'Roles Management',
@@ -36,9 +48,7 @@ export class RolesListComponent implements OnInit {
           icon: AppIcons.Add,
           customClass: 'primary',
           title: () => AppConsts.New,
-          // hide: () => {
-          //   return !this._permissionprovider.hasPermisison(this._authenticationService.currentUser, 'system', 'create');
-          // },
+          hide:()=>  !this._authenticationService.checkAuthenticate('ADD ROLE'),
 
           executeAsync: item => {
             this._modalService.showTemplateDialog(
@@ -71,6 +81,7 @@ export class RolesListComponent implements OnInit {
         {
           icon: AppIcons.Edit,
           customClass: 'primary',
+          hide:()=>  !this._authenticationService.checkAuthenticate('EDIT ROLE'),
           executeAsync: item => {
             this._modalService.showTemplateDialog(new TemplateViewModel({
               title: 'Edit Role',
@@ -94,6 +105,9 @@ export class RolesListComponent implements OnInit {
         {
           icon: AppIcons.Key,
           customClass: 'primary',
+          hide: () => {
+            return !this._authenticationService.checkAuthenticate('VIEW PERMISSION');
+          },
           executeAsync: item => {
             this._modalService.showTemplateDialog(new TemplateViewModel({
               title: 'Assign Permission',
@@ -104,12 +118,6 @@ export class RolesListComponent implements OnInit {
               data: {
                 item: this._dataService.cloneItem(item)
               },
-              acceptCallback: item => {
-                // return this._roleService.update(item).subscribe(() => {
-                //   this.tableList.reload();
-                //   this._toastr.success('Changes saved', 'Success');
-                // });
-              }
             })
             );
           }
@@ -117,7 +125,9 @@ export class RolesListComponent implements OnInit {
         {
           icon: AppIcons.Remove,
           customClass: "danger",
-        
+          hide: () => {
+            return !this._authenticationService.checkAuthenticate('DELETE ROLE');
+          },
           executeAsync: item => {
             this._modalService.showConfirmDialog(
               new ConfirmViewModel({
@@ -125,17 +135,18 @@ export class RolesListComponent implements OnInit {
                 title: AppConsts.Confirm,
                 message: AppConsts.ConfirmDelete,
                 acceptCallback: () => {
-                  // this._productService.delete(item.id).subscribe(() => {
-                  //   this.tableList.reload();
-                  //   this._toastr.success('Changes saved', 'Success');
-                  // })
+                  this._roleService.delete(item.id).subscribe(() => {
+                    this.tableList.reload();
+                    this._toastr.success('Changes saved', 'Success');
+                  })
                 }
               })
             );
           }
         },
       ],
-     
+     displayText:tableText,
+     message:tableMessage,
       inlineEdit: false,
       searchFields: ['Name'],
       mainColumns: [

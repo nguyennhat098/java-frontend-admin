@@ -2,17 +2,12 @@ import { RoleActions } from './RoleActions';
 import { Actions } from './Actions';
 import { ActionItem } from './../shared/action-item';
 import { MockService, ValidationRuleResponse } from 'ngx-fw4c';
-import { AppConsts } from '../shared/AppConsts';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { ActionRequest, ActionResponse, SearchResponse } from '../shared';
 import { Injectable } from '@angular/core';
 import { retry } from 'rxjs/operators';
 import { Roles } from './Role';
-// import { ActionItem } from 'app/shared/action-item';
-// import { ActionItem, ActionResponse } from 'app/shared/action-response';
-// import { ActionRequest } from 'app/shared/action-request';
-// import { SearchResponse } from 'app/shared/search-response';
 
 @Injectable({
     providedIn: 'root',
@@ -46,8 +41,8 @@ export class RoleService extends MockService {
         return this._httpClient.get<Roles[]>(`${this.href}/role/getAll`, { }).pipe(retry(2));
     }
 
-    public checkUniqueName(request: string): Observable<ValidationRuleResponse> {
-        return this._httpClient.get(`${this.href}/role/checkUniqueName?params=${request}`, { params: request as any });
+    public checkUniqueRoleName(request: string): Observable<ValidationRuleResponse> {
+        return this._httpClient.get(`${this.href}/role/checkUniqueRoleName?name=${request}`, { params: request as any });
     }
     public getActionByRole(roleId: any): Observable<any> {
         return this._httpClient.get<any>(`${this.href}/role/getActionByRole?roleId=${roleId}`, {}).pipe(retry(2));

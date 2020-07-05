@@ -3,14 +3,11 @@ import { CategoryService } from './../../categories/categories.service';
 import { Categories } from './../../categories/categories';
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { EditorComponent, ValidationOption, RequiredValidationRule, CustomValidationRule, ClientValidator, ValidationService, ValidationRuleResponse, DataService, ValidationRule } from 'ngx-fw4c';
-// import { AppConsts } from 'src/app/shared/AppConsts';
 import { ProductService } from '../product.service';
 import { Products } from '../product';
 import { Observable, of } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { finalize, map } from 'rxjs/operators';
-// import { CategoryService } from 'src/app/categories/categories.service';
-// import { Categories } from 'src/app/categories/categories';
 @Component({
   selector: 'app-edit-product',
   templateUrl: './edit-product.component.html',
@@ -21,10 +18,7 @@ export class EditProductComponent implements OnInit {
   @ViewChild('formRef', { static: true }) public formRef: ElementRef;
   @Input() item: Products;
   private urls = [];
-  private downloadURL: Observable<string>;
   private categories: Categories[];
-  // private fb;
-  private image;
   private category = new Categories();
   private oldItem: Products;
   constructor(private _productService: ProductService,
@@ -43,9 +37,6 @@ export class EditProductComponent implements OnInit {
     if (this.item.moreImages) {
       this.urls = this.item.moreImages.split(',');
     }
-    if (this.item.images) {
-      this.image = this.item.images;
-    }
     if (this.item.id) {
       this.oldItem = this.item;
       this.category.id = this.item.categoryId;
@@ -54,11 +45,6 @@ export class EditProductComponent implements OnInit {
   }
   updateImage(event) {
     if (!event.target.files[0]) return;
-    var reader = new FileReader();
-    reader.onload = (event: any) => {
-      this.image = event.target.result;
-    }
-    reader.readAsDataURL(event.target.files[0]);
     this.uploadFireBase(event.target.files[0], false);
   }
   updateMutilImages(event) {
@@ -97,8 +83,8 @@ export class EditProductComponent implements OnInit {
       .snapshotChanges()
       .pipe(
         finalize(() => {
-          this.downloadURL = fileRef.getDownloadURL();
-          this.downloadURL.subscribe(url => {
+          var downloadURL = fileRef.getDownloadURL();
+          downloadURL.subscribe(url => {
             if (url) {
               if (check)
                 this.item.moreImages = this.item.moreImages ? this.item.moreImages += ',' + url : url;
@@ -182,15 +168,15 @@ export class EditProductComponent implements OnInit {
         rules: [
           new RequiredValidationRule(() => AppConsts.RequiredError),
         ]
+      }),
+      new ValidationOption({
+        validationName: 'category',
+        valueResolver: () => this.category.id,
+        dynamic: true,
+        rules: [
+          new RequiredValidationRule(() => AppConsts.RequiredError),
+        ]
       })
-      // new ValidationOption({
-      //   validationName: 'CategoryId',
-      //   valueResolver:()=>this.category.id,
-      //   dynamic: true,
-      //   rules: [
-      //     new RequiredValidationRule(() =>AppConsts.RequiredError ),
-      //     ]
-      //   })
     ];
     var validator = new ClientValidator({
       formRef: this.formRef,
@@ -210,6 +196,11 @@ export class EditProductComponent implements OnInit {
 
   public callback(): Observable<any> {
     this.item.categories = this.category;
+    if (this.item.id) {
+      this.item.modifileDate = new Date;
+    } else {
+      this.item.created = new Date;
+    }
     return of(this.item);
   }
 }

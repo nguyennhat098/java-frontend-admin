@@ -3,7 +3,7 @@
         <div class="col-md-12" #formRef>
             <div>
                 <label class="button-file"> Image</label>
-                <input type="file" validation-name="Image" (change)="updateImage($event)"
+                <input class="form-control-file"  type="file" validation-name="Image" (change)="updateImage($event)"
                     [(ngModel)]="item.images"><br />
                 <img *ngIf="item.image" style="width: 200px;" [src]="item.image" height="100px" width="50px">
             </div>
@@ -16,12 +16,12 @@
                     </div>
                     <div>
                         <label>Password (<span class="text-danger">*</span>)</label>
-                        <katana-textbox [(model)]='item.password' [validationName]="'Password'" [type]="'text'">
+                        <katana-textbox [(model)]='item.password' [validationName]="'Password'" [type]="'password'">
                         </katana-textbox>
                     </div>
                     <div>
                         <label>Confirm Password (<span class="text-danger">*</span>)</label>
-                        <katana-textbox [(model)]='item.password2' [validationName]="'Password2'" [type]="'text'">
+                        <katana-textbox [(model)]='item.password2' [validationName]="'Password2'" [type]="'password'">
                         </katana-textbox>
                     </div>
                     <label>Full Name (<span class="text-danger">*</span>)</label>
@@ -43,11 +43,14 @@
                         <katana-textbox [validationName]="'Address'" [(model)]='item.address' [type]="'text'">
                         </katana-textbox>
                     </div>
+                    <div class="form-group">
                     <label>Role Name (<span class="text-danger">*</span>)</label>
-                    <select style="margin-bottom: 20px;padding: 17px;" class="form-control" (change)="roleChange($event.target.value)">
+                    <select style="height: 38px;"  class="form-control" (change)="roleChange($event.target.value)">
                         <option *ngFor="let itemRole of roles" [value]="itemRole.id"
                             [selected]="role.id==itemRole.id">{{itemRole.roleName}}</option>
+                            <option>sss</option>
                     </select>
+                    </div>
                     <label>Phone (<span class="text-danger">*</span>)</label>
                     <katana-textbox [title]="Phone" [(model)]="item.phone"></katana-textbox>
                     <div>

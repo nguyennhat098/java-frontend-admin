@@ -29,7 +29,7 @@ export class CategoryService extends MockService {
 
     public delete(request: ActionRequest<Categories>)
         : Observable<ActionResponse<Categories>> {
-        return this._httpClient.delete<ActionResponse<Categories>>(`${this.href}?id=${request}`, { params: request as any });
+        return this._httpClient.delete<ActionResponse<Categories>>(`${this.href}/delete?id=${request}`, { params: request as any });
     }
 
 
@@ -40,8 +40,7 @@ export class CategoryService extends MockService {
     public getAll(): Observable<Categories[]> {
         return this._httpClient.get<Categories[]>(`${this.href}` + '/getAll', {}).pipe(retry(2));
     }
-    // public checkUnique(name: string, id: string): Observable<any> {
-    //     var checkunique = `${this.href}` + '/CheckUnique';
-    //     return this._httpClient.get(checkunique, { params: { name: name, id : id } });
-    // }
+    public deleteMutiple( request: Categories[]): Observable<Categories> {
+        return this._httpClient.post<Categories>(`${this.href}/deleteMutiple`, request);
+    }
 }

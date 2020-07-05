@@ -2,10 +2,8 @@ import { AppConsts } from './../../shared/AppConsts';
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { Roles } from '../Role';
 import { ValidationOption, RequiredValidationRule, ValidationRuleResponse, CustomValidationRule, ValidationService, ClientValidator } from 'ngx-fw4c';
-// import { AppConsts } from 'app/shared';
 import { of, Observable } from 'rxjs';
 import { RoleService } from '../role.service';
-// import { AppConsts } from 'src/app/shared/AppConsts';
 
 @Component({
   selector: 'app-roles-edit',
@@ -30,14 +28,14 @@ export class RolesEditComponent implements OnInit {
         valueResolver: () => this.item.roleName,
         rules: [
           new RequiredValidationRule(() => AppConsts.RequiredError),
-          // new CustomValidationRule(value => {
-          //   // if (this.oldItem && this.oldItem.name == value) {
-          //   //   return of(new ValidationRuleResponse({
-          //   //     status: true,
-          //   //   }))
-          //   // }
-          //   return this._roleService.checkUniqueName(value);
-          // }),
+          new CustomValidationRule(value => {
+            if (this.oldItem && this.oldItem.roleName == value) {
+              return of(new ValidationRuleResponse({
+                status: true,
+              }))
+            }
+            return this._roleService.checkUniqueRoleName(value);
+          }),
         ]
       }),
       new ValidationOption({

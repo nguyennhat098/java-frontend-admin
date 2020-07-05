@@ -1,12 +1,10 @@
 import { UserService } from './../user.service';
 import { ActionResponse } from './../../shared/action-response';
-// import { ActionResponse } from 'app/shared/action-response';
 import { UserEditComponent } from './../user-edit/user-edit.component';
 import { AppIcons,AppConsts } from './../../shared/AppConsts';
-import { ProductService } from './../../product/product.service';
 import { AuthenticationServices } from './../../helpers/authentication.service';
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { TableComponent, TableOption, ModalService, DataService, TemplateViewModel, ConfirmViewModel, TableConstant, TableColumnType } from 'ngx-fw4c';
+import { TableComponent, TableOption, ModalService, DataService, TemplateViewModel, ConfirmViewModel, TableConstant, TableColumnType, TableText, TableMessage } from 'ngx-fw4c';
 import { ToastrService } from 'ngx-toastr';
 import { Users } from '../user';
 
@@ -31,7 +29,18 @@ export class UserListComponent implements OnInit {
     this.initList();
   }
   private initList(): void {
-  
+    var tableText=new TableText();
+    tableText.action='Action';
+    tableText.advancedSearchTitle='Search advance';
+    tableText.placeholderSearch='Enter search keywords';
+    tableText.allTitle='All';
+    tableText.advancedBtnCancelTitle='cancel';
+    tableText.filterTitle='Search By'
+    tableText.advancedBtnTitle='search';
+    tableText.selectPageSize='Display';
+    var tableMessage=new TableMessage();
+    tableMessage.loadingMessage='Loading',
+    tableMessage.notFoundMessage='No data found';
     this.option = new TableOption({
       paging: true,
       title:'User Management',
@@ -41,7 +50,7 @@ export class UserListComponent implements OnInit {
           customClass: 'primary',
           title: () => AppConsts.New,
           hide: () => {            
-          return !this._authenticationService.checkAuthenticate('ADD PRODUCT');
+          return !this._authenticationService.checkAuthenticate('ADD USER');
           },
 
           executeAsync: item => {
@@ -75,10 +84,10 @@ export class UserListComponent implements OnInit {
         {
           icon: AppIcons.Edit,
           customClass: 'primary',
-         hide:()=>  !this._authenticationService.checkAuthenticate('EDIT PRODUCT'),
+         hide:()=>  !this._authenticationService.checkAuthenticate('EDIT USER'),
           executeAsync: item => {
             this._modalService.showTemplateDialog(new TemplateViewModel({
-              title: 'Edit Product',
+              title: 'Edit User',
               customSize: 'modal-lg',
               icon: AppIcons.Edit,
               template: UserEditComponent,
@@ -99,7 +108,7 @@ export class UserListComponent implements OnInit {
         {
           icon: AppIcons.Remove,
           customClass: "danger",
-          hide:()=>  !this._authenticationService.checkAuthenticate('DELETE PRODUCT'),
+          hide:()=>  !this._authenticationService.checkAuthenticate('DELETE USER'),
           executeAsync: item => {
             this._modalService.showConfirmDialog(
               new ConfirmViewModel({
@@ -121,7 +130,7 @@ export class UserListComponent implements OnInit {
 					icon: AppIcons.Remove,
 					title: () => 'Delete',
 					customClass: 'danger',
-          
+          hide:()=>  !this._authenticationService.checkAuthenticate('DELETE USER'),
 					executeAsync: () => {
 						this._modalService.showConfirmDialog(new ConfirmViewModel({
 							title: AppConsts.Confirm,
@@ -140,14 +149,14 @@ export class UserListComponent implements OnInit {
                     this.tableList.reload();
                     this._toastr.success(`Total fail ${val.failureItems.length}\n ToTal succes:${val.successItems.length}`, 'Success');
                   }
-                   
                 })
 							}
 						}))
 					}
 				},
       ],
-     
+     displayText:tableText,
+     message:tableMessage,
       inlineEdit: false,
       searchFields: ['Name'],
       mainColumns: [
@@ -193,8 +202,6 @@ export class UserListComponent implements OnInit {
       ],
       serviceProvider: {
         searchAsync: request => {
-          this._userService.search(request).subscribe(s=>console.log(s))
-        
           return this._userService.search(request);
         }
       }

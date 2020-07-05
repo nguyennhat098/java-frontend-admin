@@ -1,8 +1,9 @@
+import { ActionResponse } from './../../shared/action-response';
 import { AppIcons, AppConsts } from './../../shared/AppConsts';
 import { CategoriesEditComponent } from './../categories-edit/categories-edit.component';
 import { ToastrService } from 'ngx-toastr';
 import { AuthenticationServices } from './../../helpers/authentication.service';
-import { ModalService, TableOption, TableComponent, DataService, TemplateViewModel, TableColumnType } from 'ngx-fw4c';
+import { ModalService, TableOption, TableComponent, DataService, TemplateViewModel, TableColumnType, ConfirmViewModel, TableConstant, TableText, TableMessage } from 'ngx-fw4c';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CategoryService } from '../categories.service';
 import { Categories } from '../categories';
@@ -25,7 +26,18 @@ export class CategoriesListComponent implements OnInit {
     this.initList();
   }
   private initList(): void {
-
+    var tableText=new TableText();
+    tableText.action='Action';
+    tableText.advancedSearchTitle='Search advance';
+    tableText.placeholderSearch='Enter search keywords';
+    tableText.allTitle='All';
+    tableText.advancedBtnCancelTitle='cancel';
+    tableText.filterTitle='Search By'
+    tableText.advancedBtnTitle='search';
+    tableText.selectPageSize='Display';
+    var tableMessage=new TableMessage();
+    tableMessage.loadingMessage='Loading',
+    tableMessage.notFoundMessage='No data found';
     this.option = new TableOption({
       paging: true,
       title: 'Category Management',
@@ -34,28 +46,28 @@ export class CategoriesListComponent implements OnInit {
           icon: AppIcons.Add,
           customClass: 'primary',
           title: () => AppConsts.New,
-          hide: () => {            
-          return !this._authenticationService.checkAuthenticate('ADD CATEGORY');
+          hide: () => {
+            return !this._authenticationService.checkAuthenticate('ADD CATEGORY');
           },
 
           executeAsync: item => {
             this._modalService.showTemplateDialog(
               new TemplateViewModel({
-                 template: CategoriesEditComponent,
+                template: CategoriesEditComponent,
                 customSize: 'modal-lg',
-                validationKey: 'NewUserComponent',
+                validationKey: 'CategoriesEditComponent',
                 icon: AppIcons.Add,
                 data: {
                   item: new Categories()
                 },
-                title: "New User",
+                title: "New Category",
                 acceptCallback: item => {
-                  return this._categoryService.create(item).subscribe((val : any) => {
-                    if(val.errorMessage=="true"){
+                  return this._categoryService.create(item).subscribe((val: any) => {
+                    if (val.errorMessage == "true") {
                       this._toastr.success('Changes saved', 'Success');
                       this.tableList.reload;
-                    }else{
-                      this._toastr.error('Changes fail','Error');
+                    } else {
+                      this._toastr.error('Changes fail', 'Error');
                       this.tableList.reload;
                     }
                   });
@@ -69,10 +81,10 @@ export class CategoriesListComponent implements OnInit {
         {
           icon: AppIcons.Edit,
           customClass: 'primary',
-          hide: () => !this._authenticationService.checkAuthenticate('EDIT PRODUCT'),
+          hide: () => !this._authenticationService.checkAuthenticate('EDIT CATEGORY'),
           executeAsync: item => {
             this._modalService.showTemplateDialog(new TemplateViewModel({
-              title: 'Edit Product',
+              title: 'Edit Category',
               customSize: 'modal-lg',
               icon: AppIcons.Edit,
               template: CategoriesEditComponent,
@@ -89,9 +101,61 @@ export class CategoriesListComponent implements OnInit {
             })
             );
           }
-        }
+        },
+        {
+          icon: AppIcons.Remove,
+          customClass: "danger",
+          hide: () => !this._authenticationService.checkAuthenticate('DELETE CATEGORY'),
+          executeAsync: item => {
+            this._modalService.showConfirmDialog(
+              new ConfirmViewModel({
+                autoClose: true,
+                title: AppConsts.Confirm,
+                message: AppConsts.ConfirmDelete,
+                acceptCallback: () => {
+                  this._categoryService.delete(item.id).subscribe(() => {
+                    this.tableList.reload();
+                    this._toastr.success('Changes saved', 'Success');
+                  })
+                }
+              })
+            );
+          }
+        },
+        
+        {
+					type: TableConstant.ActionType.Toolbar,
+					icon: AppIcons.Remove,
+					title: () => 'Delete',
+					customClass: 'danger',
+          hide: () => !this._authenticationService.checkAuthenticate('DELETE CATEGORY'),
+					executeAsync: () => {
+						this._modalService.showConfirmDialog(new ConfirmViewModel({
+							title: AppConsts.Confirm,
+							message:  AppConsts.ConfirmDelete,
+							acceptCallback: () => {
+                var data = this.tableList.selectedItems;
+                var listId=[];
+                for (let index = 0; index < data.length; index++) {
+                  listId.push(data[index].id);
+                }
+                this._categoryService.deleteMutiple(data).subscribe((val:ActionResponse<Categories>) => {
+                  if(val.failureItems.length==0){
+                    this.tableList.reload();
+                    this._toastr.success('Changes saved', 'Success');
+                  }else{
+                    this.tableList.reload();
+                    this._toastr.success(`Total fail ${val.failureItems.length}\n ToTal succes:${val.successItems.length}`, 'Success');
+                  }
+                   
+                })
+							}
+						}))
+					}
+				},
       ],
-
+      displayText:tableText,
+      message:tableMessage,
       inlineEdit: false,
       searchFields: ['Name'],
       mainColumns: [
@@ -99,7 +163,7 @@ export class CategoriesListComponent implements OnInit {
           type: TableColumnType.Description,
           title: () => 'Name',
           valueRef: () => 'name',
-          allowFilter:true
+          allowFilter: true
         },
         {
           type: TableColumnType.Description,
@@ -124,8 +188,8 @@ export class CategoriesListComponent implements OnInit {
           this._categoryService.search(request).subscribe(s => console.log(s))
 
           return this._categoryService.search(request)
-          
-         
+
+
         }
       }
     });

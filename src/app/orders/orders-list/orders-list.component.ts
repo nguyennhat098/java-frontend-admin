@@ -3,7 +3,7 @@ import { OrdersEditComponent } from './../orders-edit/orders-edit.component';
 import { AppIcons, AppConsts } from './../../shared/AppConsts';
 import { ToastrService } from 'ngx-toastr';
 import { AuthenticationServices } from './../../helpers/authentication.service';
-import { TableComponent, TableOption, ModalService, DataService, TemplateViewModel, TableColumnType } from 'ngx-fw4c';
+import { TableComponent, TableOption, ModalService, DataService, TemplateViewModel, TableColumnType, TableText, TableMessage } from 'ngx-fw4c';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { map } from 'rxjs/operators';
 
@@ -18,14 +18,24 @@ export class OrdersListComponent implements OnInit {
   constructor(private _modalService: ModalService,
     private _authenticationService: AuthenticationServices,
     private _dataService: DataService,
-    private _orderService: OrdersService,
-    private _toastr: ToastrService,) { }
+    private _orderService: OrdersService) { }
 
   ngOnInit() {
     this.initList();
   }
   private initList(): void {
-
+    var tableText=new TableText();
+    tableText.action='Action';
+    tableText.advancedSearchTitle='Search advance';
+    tableText.placeholderSearch='Enter search keywords';
+    tableText.allTitle='All';
+    tableText.advancedBtnCancelTitle='cancel';
+    tableText.filterTitle='Search By'
+    tableText.advancedBtnTitle='search';
+    tableText.selectPageSize='Display';
+    var tableMessage=new TableMessage();
+    tableMessage.loadingMessage='Loading',
+    tableMessage.notFoundMessage='No data found';
     this.option = new TableOption({
       paging: true,
       title: 'Orders Management',
@@ -33,10 +43,10 @@ export class OrdersListComponent implements OnInit {
         {
           icon: AppIcons.Edit,
           customClass: 'primary',
-          hide: () => !this._authenticationService.checkAuthenticate('EDIT PRODUCT'),
+          hide: () => !this._authenticationService.checkAuthenticate('EDIT ORDERS'),
           executeAsync: item => {
             this._modalService.showTemplateDialog(new TemplateViewModel({
-              title: 'Edit Product',
+              title: 'Edit Orders',
               customSize: 'modal-xlg',
               icon: AppIcons.Edit,
               template: OrdersEditComponent,
@@ -51,8 +61,10 @@ export class OrdersListComponent implements OnInit {
           }
         }
       ],
-
+      message:tableMessage,
+      displayText:tableText,
       inlineEdit: false,
+      hideCheckboxColumn:true,
       searchFields: ['Name'],
       mainColumns: [
         {

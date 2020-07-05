@@ -1,3 +1,5 @@
+import { finalize } from 'rxjs/operators';
+import { AngularFireStorage } from '@angular/fire/storage';
 import { AppConsts } from './../../shared/AppConsts';
 import { ValidationOption, RequiredValidationRule, ClientValidator, ValidationService } from 'ngx-fw4c';
 import { Component, OnInit, ViewChild, Input, ElementRef } from '@angular/core';
@@ -13,13 +15,36 @@ export class CategoriesEditComponent implements OnInit {
   @ViewChild('formRef', { static: true }) public formRef: ElementRef;
   @Input() item: Categories;
   private oldItem: Categories;
-  constructor(private _validationService: ValidationService,) { }
+  constructor(private _validationService: ValidationService,
+    private _storage: AngularFireStorage) { }
 
   ngOnInit() {
     console.log(this.item)
     this.initValidations();
   }
-
+  updateImage(event) {
+    if (!event.target.files[0]) return;
+    this.uploadFireBase(event.target.files[0]);
+  }
+  private uploadFireBase(file: any): void {
+    var n = Date.now();
+    const filePath = `test/${n}`;
+    const fileRef = this._storage.ref(filePath);
+    const task = this._storage.upload(`test/${n}`, file);
+    task
+      .snapshotChanges()
+      .pipe(
+        finalize(() => {
+          var downloadURL = fileRef.getDownloadURL();
+          downloadURL.subscribe(url => {
+            if (url) {
+             this.item.images=url;
+            }
+          });
+        })
+      )
+      .subscribe();
+  }
   private initValidations(): void {
     var options = [
       new ValidationOption({
@@ -41,6 +66,14 @@ export class CategoriesEditComponent implements OnInit {
       new ValidationOption({
         validationName: 'Slug',
         valueResolver: () => this.item.slug,
+        dynamic: true,
+        rules: [
+          new RequiredValidationRule(() => AppConsts.RequiredError),
+        ]
+      }),
+      new ValidationOption({
+        validationName: 'Image',
+        valueResolver: () => this.item.images,
         dynamic: true,
         rules: [
           new RequiredValidationRule(() => AppConsts.RequiredError),

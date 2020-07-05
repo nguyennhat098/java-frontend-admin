@@ -66,7 +66,7 @@ export class OrdersEditComponent implements OnInit {
       localData:()=>this._orderService.getOrderDetails(this.item.id),
       paging: true,
       title: 'Orders Management',
-    
+    hideCheckboxColumn:true,
       inlineEdit: false,
       searchFields: ['Name'],
       mainColumns: [

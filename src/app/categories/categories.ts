@@ -5,6 +5,7 @@ export class Categories {
     status?: boolean;
     createdDate?: Date;
     modifileDate?: Date;
+    images?:string;
     constructor(init?: Partial<Categories>) {
         Object.assign(this, init);
     }

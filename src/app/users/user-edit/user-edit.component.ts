@@ -2,14 +2,12 @@ import { RoleService } from './../../roles/role.service';
 import { AppConsts } from './../../shared/AppConsts';
 import { Roles } from './../../roles/Role';
 import { UserService } from './../user.service';
-// import { AppConsts } from 'app/shared';
 import { finalize } from 'rxjs/operators';
 import { AngularFireStorage } from '@angular/fire/storage';
-// import { Roles } from 'app/roles';
 import { Users } from './../user';
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { ValidationOption, RequiredValidationRule, CustomValidationRule, ValidationRuleResponse, ClientValidator, ValidationService } from 'ngx-fw4c';
+import { ValidationOption, RequiredValidationRule, CustomValidationRule, ValidationRuleResponse, ClientValidator, ValidationService, DataService } from 'ngx-fw4c';
 
 @Component({
   selector: 'app-user-edit',
@@ -19,17 +17,18 @@ import { ValidationOption, RequiredValidationRule, CustomValidationRule, Validat
 export class UserEditComponent implements OnInit {
   @ViewChild('formRef', { static: true }) public formRef: ElementRef;
   @Input() item: Users;
-  private urls = [];
-  private downloadURL: Observable<string>;
+  // private urls = [];
+  // private downloadURL: Observable<string>;
   private roles: Roles[];
   // private fb;
-  private image;
+  // private image;
   private role = new Roles();
   private oldItem: Users;
   constructor(private _storage: AngularFireStorage,
     private _userService:UserService,
     private _validationService: ValidationService,
-    private _roleService:RoleService,) { }
+    private _roleService:RoleService,
+    private _dataService:DataService) { }
 
   ngOnInit() {
     this._roleService.getAll().subscribe(val=>{
@@ -37,25 +36,18 @@ export class UserEditComponent implements OnInit {
       if (!this.item.id) this.role.id = this.roles[0].id;
     });
     if (this.item.id) {
-      this.oldItem = this.item;
+      this.oldItem =this._dataService.cloneItem(this.item);
       this.role.id = this.item.roleId.id;
       this.item.password2=this.item.password;
     }
     this.initValidations();
-    console.log(this.role)
   }
   updateImage(event) {
     if (!event.target.files[0]) return;
-    var reader = new FileReader();
-    reader.onload = (event: any) => {
-      this.image = event.target.result;
-    }
-    reader.readAsDataURL(event.target.files[0]);
     this.uploadFireBase(event.target.files[0]);
   }
-  public roleChange(id): void {
+  public roleChange(id :number): void {
     this.role.id = id;
-    debugger
   }
   private uploadFireBase(file: any): void {
     var n = Date.now();
@@ -66,8 +58,8 @@ export class UserEditComponent implements OnInit {
       .snapshotChanges()
       .pipe(
         finalize(() => {
-          this.downloadURL = fileRef.getDownloadURL();
-          this.downloadURL.subscribe(url => {
+          var downloadURL = fileRef.getDownloadURL();
+          downloadURL.subscribe(url => {
             if (url) {
              this.item.image=url;
             }
@@ -84,14 +76,38 @@ export class UserEditComponent implements OnInit {
         valueResolver: () => this.item.userName,
         rules: [
           new RequiredValidationRule(() => AppConsts.RequiredError),
-          // new CustomValidationRule(value => {
-          //   if (this.oldItem && this.oldItem.userName == value) {
-          //     return of(new ValidationRuleResponse({
-          //       status: true,
-          //     }))
-          //   }
-          //   return this._userService.checkUniqueName(value);
-          // }),
+          new CustomValidationRule(value => {
+            if (this.oldItem && this.oldItem.userName == value) {
+              return of(new ValidationRuleResponse({
+                status: true,
+              }))
+            }
+            
+            return this._userService.checkUniqueUserName(value);
+          }),
+          new CustomValidationRule(value => {
+            var regexp = /^\S+$/;
+            return of(new ValidationRuleResponse({
+              status: regexp.test(value),
+              message:'User Name is not contain space'
+            }))
+        }),
+        ]
+      }),
+      new ValidationOption({
+        validationName: 'Email',
+        dynamic: true,
+        valueResolver: () => this.item.email,
+        rules: [
+          new RequiredValidationRule(() => AppConsts.RequiredError),
+          new CustomValidationRule(value => {
+            if (this.oldItem && this.oldItem.email == value) {
+              return of(new ValidationRuleResponse({
+                status: true,
+              }))
+            }
+            return this._userService.checkUniqueEmail(value);
+          }),
         ]
       }),
       new ValidationOption({
@@ -100,6 +116,12 @@ export class UserEditComponent implements OnInit {
         dynamic: true,
         rules: [
           new RequiredValidationRule(() => AppConsts.RequiredError),
+          new CustomValidationRule(value => {
+              return of(new ValidationRuleResponse({
+                status: !this.item.password2||value==this.item.password2,
+                message:'Password is not match'
+              }))
+          }),
         ]
       }),
       new ValidationOption({
@@ -108,6 +130,12 @@ export class UserEditComponent implements OnInit {
         dynamic: true,
         rules: [
           new RequiredValidationRule(() => AppConsts.RequiredError),
+          new CustomValidationRule(value => {
+            return of(new ValidationRuleResponse({
+              status: !this.item.password||value==this.item.password,
+              message:'Password is not match'
+            }))
+        }),
         ]
       }),
       new ValidationOption({

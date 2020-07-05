@@ -6,11 +6,16 @@
                 <katana-textbox  [validationName]="'Name'" [(model)]='item.name' [type]="'text'"></katana-textbox>
             </div>
             <div>
-                <label>Decription</label>
+                <label>Slug</label>
                 <katana-textbox  [validationName]="'Slug'" [(model)]='item.slug' [type]="'text'"></katana-textbox>
             </div>
             <katana-checkbox [title]="Status" [(model)]="item.status" ></katana-checkbox>
-
+            <div>
+                <label class="button-file"> Image</label>
+                <input class="form-control-file"  type="file" validation-name="Image" (change)="updateImage($event)"
+                    [(ngModel)]="item.images"><br />
+                <img *ngIf="item.images" style="width: 200px;" [src]="item.images" height="100px" width="50px">
+            </div>
         </div>
        
     </div>

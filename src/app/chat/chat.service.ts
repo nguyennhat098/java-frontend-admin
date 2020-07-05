@@ -18,10 +18,17 @@ getMessages(user) {
 }
 getRoomsChat(){
   return this.db
-  .list('/', ref => {
-  return ref.orderByChild('timeStamp');
+  .list('RoomName', ref => {
+  return ref.orderByChild('orderKey').limitToLast(100);
   })
   .valueChanges();
+  // return this.db
+  // .list('RoomName', (ref:any) => {
+  // return ref.orderByChild('timeStamp').on('child_added',snap=>{
+  //   console.log(snap.val())
+  // });
+  // })
+  // .valueChanges();
 }
 sendMessage(user, message, chatID) {
   const messageData = {
@@ -30,16 +37,16 @@ sendMessage(user, message, chatID) {
       senderName: user.name,
       timeStamp: new Date().getTime()
   };
-  const agentMeta = {
-      name: user.name,
-      new: true
-  };
-  const userMeta = {
-      new: false
-  };
+  // const agentMeta = {
+  //     name: user.name,
+  //     new: true
+  // };
+  // const userMeta = {
+  //     new: false
+  // };
   this.db.list(`Chat/${chatID}/messages`).push(messageData);
-  this.db.database.ref(`Chat/${chatID}/meta-data/agent`).update(agentMeta);
-  this.db.database.ref(`Chat/${chatID}/meta-data/user`).update(userMeta);
+  // this.db.database.ref(`Chat/${chatID}/meta-data/agent`).update(agentMeta);
+  // this.db.database.ref(`Chat/${chatID}/meta-data/user`).update(userMeta);
 }
 endConversation(chatID) {
   const agentMeta = {

@@ -50,7 +50,10 @@ export class UserService extends MockService {
         return this._httpClient.post<ActionResponse<Users>>(`${this.href}/user/deleteMutiple`, request);
     }
 
-    public checkUniqueName(request: string): Observable<ValidationRuleResponse> {
-        return this._httpClient.get(`${this.href}/role/checkUniqueName?params=${request}`, { params: request as any });
+    public checkUniqueUserName(request: string): Observable<ValidationRuleResponse> {
+        return this._httpClient.get(`${this.href}/user/checkUniqueUserName?userName=${request}`, { params: request as any });
+    }
+    public checkUniqueEmail(request: string): Observable<ValidationRuleResponse> {
+        return this._httpClient.get(`${this.href}/user/checkUniqueEmail?email=${request}`, {  });
     }
 }
