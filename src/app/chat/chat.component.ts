@@ -102,7 +102,4 @@ export class ChatComponent implements OnInit {
     var diffYear = Math.ceil((date2 - date1) / (60 * 1000 * 24 * 60 * 30 * 12));
     return diffYear + ' years ago';
   }
-  endConversation() {
-    this.chatService.endConversation('this.agent._id');
-  }
 }
