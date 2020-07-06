@@ -1,9 +1,8 @@
 import { Users } from './../users/user';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { Component, OnInit } from '@angular/core';
-import { AngularFireDatabase } from '@angular/fire/database';
 import { ChatService } from './chat.service';
+import { ChatMessage } from './chat';
 
 @Component({
   selector: 'app-chat',
@@ -13,48 +12,71 @@ import { ChatService } from './chat.service';
 export class ChatComponent implements OnInit {
   roomName: string;
   messagesList;
-   roomList;
+  roomList;
   properties: string[];
   formRef: FormGroup;
   submitted = false;
-  dataListRoomProperties:string[];
-  user:Users;
-  currentFullName:string;
-  currentImage:string;
-  constructor(private chatService: ChatService,private formBuilder: FormBuilder) { }
+  dataListRoomProperties: string[];
+  user: Users;
+  currentFullName: string;
+  currentImage: string;
+  selectedRoom:ChatMessage;
+  constructor(private chatService: ChatService, private formBuilder: FormBuilder) { }
   ngOnInit(): void {
-    this.user=JSON.parse(localStorage.getItem('currentUser')).user;
+    this.user = JSON.parse(localStorage.getItem('currentUser')).user;
     this.getListRoom();
     this.formRef = this.formBuilder.group({
       chatMessage: ['', Validators.required],
     })
   }
-  selectedMessage(roomName:string){
-    this.roomName=this.roomList[roomName].senderName;
-    this.currentFullName=this.roomList[roomName].fullName;
-    this.currentImage=this.roomList[roomName].image;
-     this.chatService.getMessages(this.roomName).subscribe(messages=>{
-      this.messagesList=messages;
-      this.properties = Object.keys(this.messagesList).map(val=>val);
-     });
+  selectedMessage(roomIndex: string) {
+    this.roomName = this.roomList[roomIndex].roomName;
+    this.currentFullName = this.roomList[roomIndex].fullName;
+    this.currentImage = this.roomList[roomIndex].image;
+    var roomData:ChatMessage =new ChatMessage({
+      fullName:this.currentFullName,
+      image:this.currentImage,
+      messageBody:'',
+      new:false,
+      senderID:this.roomList[roomIndex].senderID,
+      senderName:this.roomName,
+       timeStamp:this.roomList[roomIndex].timeStamp,
+      keyData: this.roomList[roomIndex].keyData,
+      roomName:this.roomList[roomIndex].roomName
+    }); 
+    debugger
+   this.selectedRoom=roomData;
+    this.chatService.updateRoom(roomData);
+    this.chatService.getMessages(this.roomName).subscribe(messages => {
+      this.messagesList = messages;
+      this.properties = Object.keys(this.messagesList).map(val => val);
+    });
   }
-  getListRoom(){
-    this.chatService.getRoomsChat().subscribe(roomData=>{
-      debugger
-      this.roomList=roomData;
-      this.dataListRoomProperties = Object.keys(roomData).map(val=>val);
+  getListRoom() {
+    this.chatService.getRoomsChat().subscribe(roomData => {
+      this.roomList = roomData;
+      this.dataListRoomProperties = Object.keys(roomData).map(val => val);
     })
   }
   postMessage() {
-    this.submitted=true;
-    if(this.formRef.invalid){
+    this.submitted = true;
+    if (this.formRef.invalid) {
       return;
     }
-    const user = {
-      id: this.user.id,
-      name: this.user.userName
-    };
-    this.chatService.sendMessage(user, this.formRef.value.chatMessage, this.roomName);
+    // const chat:ChatMessage = {
+    //   name: this.user.userName
+    // };
+    const chat:ChatMessage = new ChatMessage({
+      messageBody:this.formRef.value.chatMessage,
+      senderName:this.user.userName,
+      timeStamp:new Date().getTime(),
+      fullName:this.user.fullName,
+      image:this.user.image?this.user.image:'https://image.flaticon.com/icons/svg/145/145867.svg',
+      new:true,
+      senderID:this.user.id,
+      keyData:this.selectedRoom.keyData
+    });
+    this.chatService.sendMessage(chat, this.roomName);
     this.formRef.reset();
   }
   calculateDiff(sentDate) {
