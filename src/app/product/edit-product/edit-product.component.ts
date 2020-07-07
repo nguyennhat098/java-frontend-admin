@@ -45,20 +45,20 @@ export class EditProductComponent implements OnInit {
   }
   updateImage(event) {
     if (!event.target.files[0]) return;
-    this.uploadFireBase(event.target.files[0], false);
+    this.uploadFireBase(event.target.files[0]);
   }
   updateMutilImages(event) {
     if (event.target.files && event.target.files[0]) {
-      this.urls = [];
+      // this.urls = [];
       this.item.moreImages = null;
       var filesAmount = event.target.files.length;
       for (let i = 0; i < filesAmount; i++) {
-        var reader = new FileReader();
-        reader.onload = (event: any) => {
-          this.urls.push(event.target.result);
-        }
-        reader.readAsDataURL(event.target.files[i]);
-        this.uploadFireBase(event.target.files[i], true);
+        // var reader = new FileReader();
+        // reader.onload = (event: any) => {
+        //   this.urls.push(event.target.result);
+        // }
+        // reader.readAsDataURL(event.target.files[i]);
+        this.uploadMutipleFireBase(event.target.files[i]);
       }
     }
 
@@ -74,7 +74,8 @@ export class EditProductComponent implements OnInit {
   //     };
   //   }));
   // }
-  private uploadFireBase(file: any, check: boolean): void {
+  private uploadMutipleFireBase(file: any): void {
+    this.urls = [];
     var n = Date.now();
     const filePath = `test/${n}`;
     const fileRef = this._storage.ref(filePath);
@@ -86,10 +87,27 @@ export class EditProductComponent implements OnInit {
           var downloadURL = fileRef.getDownloadURL();
           downloadURL.subscribe(url => {
             if (url) {
-              if (check)
-                this.item.moreImages = this.item.moreImages ? this.item.moreImages += ',' + url : url;
-              else
-                this.item.images = url;
+              this.item.moreImages = this.item.moreImages ? this.item.moreImages += ',' + url : url;
+              this.urls.push(url);
+            }
+          });
+        })
+      )
+      .subscribe();
+  }
+  private uploadFireBase(file: any): void {
+    var n = Date.now();
+    const filePath = `test/${n}`;
+    const fileRef = this._storage.ref(filePath);
+    const task = this._storage.upload(`test/${n}`, file);
+    task
+      .snapshotChanges()
+      .pipe(
+        finalize(() => {
+          var downloadURL = fileRef.getDownloadURL();
+          downloadURL.subscribe(url => {
+            if (url) {
+              this.item.images = url;
             }
           });
         })
