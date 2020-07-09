@@ -1,0 +1,22 @@
+<katana-card>
+    <div class="row">
+        <div class="col-md-12" #formRef>
+            <div>
+                <label>Content (<span class="text-danger">*</span>)</label>
+                <katana-textbox  [validationName]="'Content'" [(model)]='item.content' [type]="'text'"></katana-textbox>
+            </div>
+            <div>
+                <label>Link</label>
+                <katana-textbox  [validationName]="'Link'" [(model)]='item.link' [type]="'text'"></katana-textbox>
+            </div>
+            <katana-checkbox [title]="Status" [(model)]="item.status" ></katana-checkbox>
+            <div>
+                <label class="button-file"> Image</label>
+                <input class="form-control-file"  type="file" validation-name="Image" (change)="updateImage($event)"
+                    [(ngModel)]="item.image"><br />
+                <img *ngIf="item.image" style="width: 200px;" [src]="item.image" height="100px" width="50px">
+            </div>
+        </div>
+       
+    </div>
+</katana-card>

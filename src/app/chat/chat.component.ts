@@ -1,6 +1,6 @@
 import { Users } from './../users/user';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { ChatService } from './chat.service';
 import { ChatMessage } from './chat';
 
@@ -9,7 +9,7 @@ import { ChatMessage } from './chat';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, AfterViewInit {
   roomName: string;
   messagesList;
   roomList;
@@ -21,7 +21,14 @@ export class ChatComponent implements OnInit {
   currentFullName: string;
   currentImage: string;
   selectedRoom:ChatMessage;
+  @ViewChildren('allTheseThings') things: QueryList<any>;
   constructor(private chatService: ChatService, private formBuilder: FormBuilder) { }
+  ngAfterViewInit(): void {
+    this.things.changes.subscribe(t => {
+      var objDiv = document.getElementById("scroll");
+      objDiv.scrollTop = objDiv.scrollHeight;
+    })
+  }
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('currentUser')).user;
     this.getListRoom();
@@ -44,7 +51,6 @@ export class ChatComponent implements OnInit {
       keyData: this.roomList[roomIndex].keyData,
       roomName:this.roomList[roomIndex].roomName
     }); 
-    debugger
    this.selectedRoom=roomData;
     this.chatService.updateRoom(roomData);
     this.chatService.getMessages(this.roomName).subscribe(messages => {
@@ -88,7 +94,7 @@ export class ChatComponent implements OnInit {
       return diffMinus + ' minutes ago';
     }
     var diffHour: any = Math.ceil((date2 - date1) / (60 * 1000 * 60));
-    if (diffHour < 60) {
+    if (diffHour < 24) {
       return diffHour + ' hours ago';
     }
     var diffDays = Math.ceil((date2 - date1) / (60 * 1000 * 24 * 60));

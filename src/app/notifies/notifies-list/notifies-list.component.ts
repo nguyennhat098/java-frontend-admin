@@ -1,25 +1,28 @@
+import { NotifiesUserComponent } from './../notifies-user/notifies-user.component';
 import { ActionResponse } from './../../shared/action-response';
+import { NotifiesEditComponent } from './../notifies-edit/notifies-edit.component';
 import { AppIcons, AppConsts } from './../../shared/AppConsts';
-import { CategoriesEditComponent } from './../categories-edit/categories-edit.component';
-import { ToastrService } from 'ngx-toastr';
+import { NotifiesService } from './../notifies.service';
 import { AuthenticationServices } from './../../helpers/authentication.service';
-import { ModalService, TableOption, TableComponent, DataService, TemplateViewModel, TableColumnType, ConfirmViewModel, TableConstant, TableText, TableMessage } from 'ngx-fw4c';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { CategoryService } from '../categories.service';
-import { Categories } from '../categories';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { TableComponent, TableOption, ModalService, DataService, TableText, TableMessage, TemplateViewModel, ConfirmViewModel, TableConstant, TableColumnType } from 'ngx-fw4c';
+import { ToastrService } from 'ngx-toastr';
+import { Notifies } from '../notifies';
 
 @Component({
-  selector: 'app-categories-list',
-  templateUrl: './categories-list.component.html',
-  styleUrls: ['./categories-list.component.scss']
+  selector: 'app-notifies-list',
+  templateUrl: './notifies-list.component.html',
+  styleUrls: ['./notifies-list.component.scss']
 })
-export class CategoriesListComponent implements OnInit {
+export class NotifiesListComponent implements OnInit {
   @ViewChild('tableList', { static: true }) tableList: TableComponent;
+  @ViewChild("image", { static: true }) public image: TemplateRef<any>;
+
   public option: TableOption;
   constructor(private _modalService: ModalService,
     private _authenticationService: AuthenticationServices,
     private _dataService: DataService,
-    private _categoryService: CategoryService,
+    private _notifiesService: NotifiesService,
     private _toastr: ToastrService,) { }
 
   ngOnInit() {
@@ -47,22 +50,22 @@ export class CategoriesListComponent implements OnInit {
           customClass: 'primary',
           title: () => AppConsts.New,
           hide: () => {
-            return !this._authenticationService.checkAuthenticate('ADD CATEGORY');
+            return !this._authenticationService.checkAuthenticate('ADD NOTIFIES');
           },
 
           executeAsync: item => {
             this._modalService.showTemplateDialog(
               new TemplateViewModel({
-                template: CategoriesEditComponent,
+                template: NotifiesEditComponent,
                 customSize: 'modal-lg',
-                validationKey: 'CategoriesEditComponent',
+                validationKey: 'NotifiesAddComponent',
                 icon: AppIcons.Add,
                 data: {
-                  item: new Categories()
+                  item: new Notifies()
                 },
-                title: "New Category",
+                title: "New Notify",
                 acceptCallback: item => {
-                  return this._categoryService.create(item).subscribe((val: any) => {
+                  return this._notifiesService.create(item).subscribe((val: any) => {
                     this.tableList.reload();
                     if (val.errorMessage == "true") {
                       this._toastr.success('Changes saved', 'Success');
@@ -80,19 +83,43 @@ export class CategoriesListComponent implements OnInit {
         {
           icon: AppIcons.Edit,
           customClass: 'primary',
-          hide: () => !this._authenticationService.checkAuthenticate('EDIT CATEGORY'),
+          hide: () => !this._authenticationService.checkAuthenticate('EDIT NOTIFIES'),
+          executeAsync: item => {
+            this._modalService.showTemplateDialog(new TemplateViewModel({
+              title: 'Edit Notify',
+              customSize: 'modal-lg',
+              icon: AppIcons.Edit,
+              template: NotifiesEditComponent,
+              validationKey: 'NotifiesEditComponent',
+              data: {
+                item: this._dataService.cloneItem(item)
+              },
+              acceptCallback: item => {
+                return this._notifiesService.update(item).subscribe(() => {
+                  this.tableList.reload();
+                  this._toastr.success('Changes saved', 'Success');
+                });
+              }
+            })
+            );
+          }
+        },
+        {
+          icon: AppIcons.Key,
+          customClass: 'primary',
+          hide: () => !this._authenticationService.checkAuthenticate('EDIT NOTIFIES'),
           executeAsync: item => {
             this._modalService.showTemplateDialog(new TemplateViewModel({
               title: 'Edit Category',
               customSize: 'modal-lg',
               icon: AppIcons.Edit,
-              template: CategoriesEditComponent,
-              validationKey: 'CategoriesEditComponent',
+              template: NotifiesUserComponent,
+              validationKey: 'NotifiesUserComponent',
               data: {
                 item: this._dataService.cloneItem(item)
               },
               acceptCallback: item => {
-                return this._categoryService.update(item).subscribe(() => {
+                return this._notifiesService.update(item).subscribe(() => {
                   this.tableList.reload();
                   this._toastr.success('Changes saved', 'Success');
                 });
@@ -104,7 +131,7 @@ export class CategoriesListComponent implements OnInit {
         {
           icon: AppIcons.Remove,
           customClass: "danger",
-          hide: () => !this._authenticationService.checkAuthenticate('DELETE CATEGORY'),
+          hide: () => !this._authenticationService.checkAuthenticate('DELETE NOTIFIES'),
           executeAsync: item => {
             this._modalService.showConfirmDialog(
               new ConfirmViewModel({
@@ -112,7 +139,7 @@ export class CategoriesListComponent implements OnInit {
                 title: AppConsts.Confirm,
                 message: AppConsts.ConfirmDelete,
                 acceptCallback: () => {
-                  this._categoryService.delete(item.id).subscribe(() => {
+                  this._notifiesService.delete(item.id).subscribe(() => {
                     this.tableList.reload();
                     this._toastr.success('Changes saved', 'Success');
                   })
@@ -127,18 +154,19 @@ export class CategoriesListComponent implements OnInit {
 					icon: AppIcons.Remove,
 					title: () => 'Delete',
 					customClass: 'danger',
-          hide: () => !this._authenticationService.checkAuthenticate('DELETE CATEGORY'),
+          hide: () => !this._authenticationService.checkAuthenticate('DELETE NOTIFIES'),
 					executeAsync: () => {
 						this._modalService.showConfirmDialog(new ConfirmViewModel({
 							title: AppConsts.Confirm,
 							message:  AppConsts.ConfirmDelete,
 							acceptCallback: () => {
                 var data = this.tableList.selectedItems;
-                this._categoryService.deleteMutiple(data).subscribe((val:ActionResponse<Categories>) => {
-                  this.tableList.reload();
+                this._notifiesService.deleteMutiple(data).subscribe((val:ActionResponse<Notifies>) => {
                   if(val.failureItems.length==0){
+                    this.tableList.reload();
                     this._toastr.success('Changes saved', 'Success');
                   }else{
+                    this.tableList.reload();
                     this._toastr.success(`Total fail ${val.failureItems.length}\n ToTal succes:${val.successItems.length}`, 'Success');
                   }
                    
@@ -155,14 +183,20 @@ export class CategoriesListComponent implements OnInit {
       mainColumns: [
         {
           type: TableColumnType.Description,
-          title: () => 'Name',
-          valueRef: () => 'name',
+          title: () => 'Content',
+          valueRef: () => 'content',
           allowFilter: true
         },
         {
           type: TableColumnType.Description,
-          title: () => 'Slug',
-          valueRef: () => 'slug',
+          title: () => 'Image',
+          valueRef: () => 'content',
+          customTemplate: () => this.image,
+        },
+        {
+          type: TableColumnType.Description,
+          title: () => 'Link',
+          valueRef: () => 'link',
 
         },
         {
@@ -172,6 +206,12 @@ export class CategoriesListComponent implements OnInit {
           valueRef: () => 'createdDate',
         },
         {
+          type: TableColumnType.Date,
+          title: () => 'Modify Date',
+
+          valueRef: () => 'modifyDate',
+        },
+        {
           type: TableColumnType.Description,
           title: () => 'Status',
           valueRef: () => 'status',
@@ -179,9 +219,9 @@ export class CategoriesListComponent implements OnInit {
       ],
       serviceProvider: {
         searchAsync: request => {
-          this._categoryService.search(request).subscribe(s => console.log(s))
+          this._notifiesService.search(request).subscribe(s => console.log(s))
 
-          return this._categoryService.search(request)
+          return this._notifiesService.search(request)
 
 
         }

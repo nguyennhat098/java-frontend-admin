@@ -10,7 +10,7 @@ import { UserImageComponent } from './user-image/user-image.component';
 const declarations = [
 UserEditComponent,
 UserListComponent,
-UserImageComponent
+UserImageComponent,
 ];
 @NgModule({
   declarations: declarations,

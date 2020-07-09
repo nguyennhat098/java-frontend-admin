@@ -1,0 +1,7 @@
+<katana-card>
+    <katana-table [option]="option" #tableList>
+        <ng-template let-item="item" #image>
+            <app-image-info [image]="item.image"></app-image-info>
+        </ng-template>
+    </katana-table>
+</katana-card>

@@ -1,16 +1,19 @@
+import { ImageInfoComponent } from './image-info/image-info.component';
+import { NotifiesUserComponent } from './notifies-user/notifies-user.component';
+
+import { NotifiesListComponent } from './notifies-list/notifies-list.component';
+import { NotifiesEditComponent } from './notifies-edit/notifies-edit.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Framework4CModule } from 'ngx-fw4c';
 import { BrowserModule } from '@angular/platform-browser';
-import { OrdersEditComponent } from './orders-edit/orders-edit.component';
-import { OrdersListComponent } from './orders-list/orders-list.component';
-import { OrdersInfoComponent } from './orders-info/orders-info.component';
 
 const declarations = [
-  OrdersEditComponent,
-  OrdersListComponent,
-  OrdersInfoComponent
+  NotifiesEditComponent,
+  NotifiesListComponent,
+  NotifiesUserComponent,
+  ImageInfoComponent
 ];
 @NgModule({
   declarations: declarations,
@@ -25,4 +28,4 @@ const declarations = [
 })
 
 
-export class OrdersModule { }
+export class NotifiesModule { }

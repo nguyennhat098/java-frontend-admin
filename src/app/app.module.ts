@@ -1,3 +1,4 @@
+import { NotifiesModule } from './notifies/notifies.module';
 import { CategoryModule } from './categories/categories.module';
 import { environment } from './../environments/environment';
 import { LoginAdminComponent } from './login-admin/login-admin.component';
@@ -25,7 +26,8 @@ const ListModule = [
   RoleModule,
   UserModule,
   OrdersModule,
-  CategoryModule
+  CategoryModule,
+  NotifiesModule
 ];
 
 @NgModule({
