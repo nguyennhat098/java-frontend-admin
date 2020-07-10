@@ -31,8 +31,13 @@ sendMessage(chatMessage:ChatMessage, chatID) :void{
     var roomData = Object.assign({}, snapshort.val());
     roomData.new=false;
     this.db.database.ref(`RoomName/${chatMessage.keyData}`).update(roomData);
-  })
- 
-  this.db.database.ref(`Chat/${chatID}/meta-data`).update({new:true,keyData:chatMessage.keyData});
+  });
+  this.db.database.ref(`Chat/${chatID}/meta-data`).once('value').then(snapshort=>{
+    var metaData = Object.assign({}, snapshort.val());
+    metaData.totalNew+=1;
+    this.db.database.ref(`Chat/${chatID}/meta-data`).update(metaData);
+  });
+  
+
 }
 }

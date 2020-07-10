@@ -15,7 +15,6 @@ export class ChatComponent implements OnInit, AfterViewInit {
   roomList;
   properties: string[];
   formRef: FormGroup;
-  submitted = false;
   dataListRoomProperties: string[];
   user: Users;
   currentFullName: string;
@@ -65,7 +64,6 @@ export class ChatComponent implements OnInit, AfterViewInit {
     })
   }
   postMessage() {
-    this.submitted = true;
     if (this.formRef.invalid) {
       return;
     }
