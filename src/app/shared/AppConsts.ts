@@ -48,6 +48,7 @@ export const AppConsts = {
     AssignRoleFailure: 'Assign role failure',
     SaveChangeSuccess: 'Save change success',
     SaveChangeFailure: 'Save change failure',
+    SaveChange:'Save Changes'
 }
 
 export const AppIcons = {
@@ -71,5 +72,6 @@ export const AppIcons = {
     Email: 'fa fa-envelope',
     Key: 'fa fa-key',
     SyncUsers: 'fa fa-sync',
+    SaveChange:'fa fa-address-book-o'
 }
 

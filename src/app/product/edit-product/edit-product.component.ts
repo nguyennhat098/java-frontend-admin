@@ -158,10 +158,7 @@ export class EditProductComponent implements OnInit {
         rules: [
           new RequiredValidationRule(() => AppConsts.RequiredError),
           new CustomValidationRule(value => {
-            return of(new ValidationRuleResponse({
-              message: 'sale price not greater price',
-              status: !this.item.salePrice || this.item.salePrice < value
-            }))
+            return this._productService.validatePrice(value,this.item);
           }),
         ]
       }),
@@ -171,10 +168,7 @@ export class EditProductComponent implements OnInit {
         dynamic: true,
         rules: [
           new CustomValidationRule(value => {
-            return of(new ValidationRuleResponse({
-              message: 'sale price not greater price',
-              status: !this.item.price || this.item.price > value
-            }));
+            return this._productService.validateSalePrice(value,this.item);
           }),
         ]
       }),
