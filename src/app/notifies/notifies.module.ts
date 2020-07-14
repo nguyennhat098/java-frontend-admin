@@ -1,3 +1,4 @@
+import { NotifiesExistComponent } from './notifies-exist/notifies-exist.component';
 import { ImageInfoComponent } from './image-info/image-info.component';
 import { NotifiesUserComponent } from './notifies-user/notifies-user.component';
 
@@ -13,7 +14,8 @@ const declarations = [
   NotifiesEditComponent,
   NotifiesListComponent,
   NotifiesUserComponent,
-  ImageInfoComponent
+  ImageInfoComponent,
+  NotifiesExistComponent
 ];
 @NgModule({
   declarations: declarations,

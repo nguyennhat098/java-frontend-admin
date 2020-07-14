@@ -14,12 +14,13 @@ export class ChatComponent implements OnInit, AfterViewInit {
   messagesList;
   roomList;
   properties: string[];
-  formRef: FormGroup;
+  // formRef: FormGroup;
   dataListRoomProperties: string[];
   user: Users;
   currentFullName: string;
   currentImage: string;
   selectedRoom:ChatMessage;
+  mes:string;
   @ViewChildren('allTheseThings') things: QueryList<any>;
   constructor(private chatService: ChatService, private formBuilder: FormBuilder) { }
   ngAfterViewInit(): void {
@@ -31,9 +32,9 @@ export class ChatComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('currentUser')).user;
     this.getListRoom();
-    this.formRef = this.formBuilder.group({
-      chatMessage: ['', Validators.required],
-    })
+    // this.formRef = this.formBuilder.group({
+    //   chatMessage: ['', Validators.required],
+    // })
   }
   selectedMessage(roomIndex: string) {
     this.roomName = this.roomList[roomIndex].roomName;
@@ -63,15 +64,15 @@ export class ChatComponent implements OnInit, AfterViewInit {
       this.dataListRoomProperties = Object.keys(roomData).map(val => val);
     })
   }
-  postMessage() {
-    if (this.formRef.invalid) {
+  postMessage(val) {
+    if (!val) {
       return;
     }
     // const chat:ChatMessage = {
     //   name: this.user.userName
     // };
     const chat:ChatMessage = new ChatMessage({
-      messageBody:this.formRef.value.chatMessage,
+      messageBody:val,
       senderName:this.user.userName,
       timeStamp:new Date().getTime(),
       fullName:this.user.fullName,
@@ -81,7 +82,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
       keyData:this.selectedRoom.keyData
     });
     this.chatService.sendMessage(chat, this.roomName);
-    this.formRef.reset();
+   this.mes=null;
   }
   calculateDiff(sentDate) {
     var date1: any = new Date(sentDate);

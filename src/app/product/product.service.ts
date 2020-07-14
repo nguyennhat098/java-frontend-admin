@@ -31,7 +31,7 @@ export class ProductService extends MockService {
         : Observable<ActionResponse<Products>> {
         return this._httpClient.delete<ActionResponse<Products>>(`${this.href}/product/delete?id=${request}`, { params: request as any });
     }
-    
+
     public search(request: any): Observable<SearchResponse<Products>> {
         return this._httpClient.get<SearchResponse<Products>>(`${this.href}/product/search`, { params: request as any }).pipe(retry(2));
     }
@@ -42,22 +42,16 @@ export class ProductService extends MockService {
     public deleteMutiple(request: Products[]): Observable<Products> {
         return this._httpClient.post<Products>(`${this.href}/product/deleteMutiple`, request);
     }
-    public getDataChange(listChange:Products[],item:Products):void{
-        if(listChange.find(x=>x.id==item.id)){
-            listChange= listChange.filter(x=>x.id!=item.id);
-           }
-         listChange.push(item);
-    }
-    public validatePrice(price: number,item:Products): Observable<ValidationRuleResponse> {
+    public validatePrice(price: number, item: Products): Observable<ValidationRuleResponse> {
         return of(new ValidationRuleResponse({
             message: 'sale price not greater price',
             status: !item.salePrice || item.salePrice < price
-          }))
+        }))
     }
-    public validateSalePrice(val: number,item:Products): Observable<ValidationRuleResponse> {
+    public validateSalePrice(val: number, item: Products): Observable<ValidationRuleResponse> {
         return of(new ValidationRuleResponse({
             message: 'sale price not greater price',
             status: !item.price || item.price > val
-          }));
+        }));
     }
 }

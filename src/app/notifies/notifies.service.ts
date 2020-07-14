@@ -1,3 +1,4 @@
+import { Users } from './../users/user';
 import { NotifiesUser } from './notifies-user';
 import { ActionResponse } from './../shared/action-response';
 import { ActionRequest } from './../shared/action-request';
@@ -42,5 +43,17 @@ export class NotifiesService extends MockService {
     }
     public assignNotifies( request: NotifiesUser[]): Observable<ActionResponse< NotifiesUser>> {
         return this._httpClient.post<ActionResponse< NotifiesUser>>(`${this.href}/assignNotifies`, request);
+    }
+    public updateMutiple( request: Notifies[]): Observable<ActionResponse< Notifies>> {
+        return this._httpClient.post<ActionResponse< Notifies>>(`${this.href}/updateMutipleNotifies`, request);
+    }
+    public searchNotExistUsers(request: any): Observable<SearchResponse<Users>> {
+        return this._httpClient.get<SearchResponse<Users>>(`${this.href}/searchNotExistUsers`, { params: request as any }).pipe(retry(2));
+    }
+    public searchExistUsers(request: any): Observable<SearchResponse<Users>> {
+        return this._httpClient.get<SearchResponse<Users>>(`${this.href}/searchExistUsers`, { params: request as any }).pipe(retry(2));
+    }
+    public removeAssignNotifies( request: NotifiesUser[]): Observable<ActionResponse< NotifiesUser>> {
+        return this._httpClient.post<ActionResponse< NotifiesUser>>(`${this.href}/removeAssignNotifies`, request);
     }
 }

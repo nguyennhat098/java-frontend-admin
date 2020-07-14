@@ -1,7 +1,6 @@
 import { OrdersService } from './../orders.service';
 import { OrdersEditComponent } from './../orders-edit/orders-edit.component';
 import { AppIcons, AppConsts } from './../../shared/AppConsts';
-import { ToastrService } from 'ngx-toastr';
 import { AuthenticationServices } from './../../helpers/authentication.service';
 import { TableComponent, TableOption, ModalService, DataService, TemplateViewModel, TableColumnType, TableText, TableMessage } from 'ngx-fw4c';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -36,14 +35,22 @@ export class OrdersListComponent implements OnInit {
     var tableMessage=new TableMessage();
     tableMessage.loadingMessage='Loading',
     tableMessage.notFoundMessage='No data found';
+    tableMessage.selectedItemsMessage=`record selected.`;
+    tableMessage.confirmClearAllRecordsMessage='Deselect all';
     this.option = new TableOption({
+      selectedChange:(item)=>{
+        tableMessage.selectedItemsMessage=`${this.tableList.selectedItems.length} record selected.`;
+      },
       paging: true,
       title: 'Orders Management',
       actions: [
         {
           icon: AppIcons.Edit,
           customClass: 'primary',
-          hide: () => !this._authenticationService.checkAuthenticate('EDIT ORDERS'),
+          hide: () =>{
+            tableMessage.foundMessage=`Found ${this.tableList.totalRecords} results.`;
+            return !this._authenticationService.checkAuthenticate('EDIT ORDERS');
+          },
           executeAsync: item => {
             this._modalService.showTemplateDialog(new TemplateViewModel({
               title: 'Edit Orders',
@@ -105,8 +112,6 @@ export class OrdersListComponent implements OnInit {
       ],
       serviceProvider: {
         searchAsync: request => {
-          this._orderService.search(request).subscribe(s => console.log(s))
-
           return this._orderService.search(request).pipe(map(val => {
             var data = [];
             for (let index = 0; index < val.items.length; index++) {

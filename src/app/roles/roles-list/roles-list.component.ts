@@ -17,8 +17,8 @@ import { MatrixManagementComponent } from '../matrix-management/matrix-managemen
 export class RolesListComponent implements OnInit {
   @ViewChild('tableList', { static: true }) tableList: TableComponent;
   public option: TableOption;
-  constructor( private _modalService: ModalService,
-    private _roleService:RoleService,
+  constructor(private _modalService: ModalService,
+    private _roleService: RoleService,
     private _dataService: DataService,
     private _authenticationService: AuthenticationServices,
     private _toastr: ToastrService) { }
@@ -26,34 +26,41 @@ export class RolesListComponent implements OnInit {
   ngOnInit() {
     this.initList();
   }
-  private initList(): void { 
-    var tableText=new TableText();
-    tableText.action='Action';
-    tableText.advancedSearchTitle='Search advance';
-    tableText.placeholderSearch='Enter search keywords';
-    tableText.allTitle='All';
-    tableText.advancedBtnCancelTitle='cancel';
-    tableText.filterTitle='Search By'
-    tableText.advancedBtnTitle='search';
-    tableText.selectPageSize='Display';
-    var tableMessage=new TableMessage();
-    tableMessage.loadingMessage='Loading',
-    tableMessage.notFoundMessage='No data found';
+  private initList(): void {
+    var tableText = new TableText();
+    tableText.action = 'Action';
+    tableText.advancedSearchTitle = 'Search advance';
+    tableText.placeholderSearch = 'Enter search keywords';
+    tableText.allTitle = 'All';
+    tableText.advancedBtnCancelTitle = 'cancel';
+    tableText.filterTitle = 'Search By'
+    tableText.advancedBtnTitle = 'search';
+    tableText.selectPageSize = 'Display';
+    var tableMessage = new TableMessage();
+    tableMessage.loadingMessage = 'Loading',
+      tableMessage.notFoundMessage = 'No data found';
+    tableMessage.selectedItemsMessage = `record selected.`;
+    tableMessage.confirmClearAllRecordsMessage = 'Deselect all';
     this.option = new TableOption({
+      selectedChange: (item) => {
+        tableMessage.selectedItemsMessage = `${this.tableList.selectedItems.length} record selected.`;
+      },
       paging: true,
-      title:'Roles Management',
-      hideCheckboxColumn:true,
+      title: 'Roles Management',
+      hideCheckboxColumn: true,
       topButtons: [
         {
           icon: AppIcons.Add,
           customClass: 'primary',
           title: () => AppConsts.New,
-          hide:()=>  !this._authenticationService.checkAuthenticate('ADD ROLE'),
-
+          hide: () => {
+            tableMessage.foundMessage = `Found ${this.tableList.totalRecords} results.`;
+            return !this._authenticationService.checkAuthenticate('ADD ROLE');
+          },
           executeAsync: item => {
             this._modalService.showTemplateDialog(
               new TemplateViewModel({
-                 template: RolesEditComponent,
+                template: RolesEditComponent,
                 customSize: 'modal-lg',
                 validationKey: 'RolesNewComponent',
                 icon: AppIcons.Add,
@@ -62,13 +69,12 @@ export class RolesListComponent implements OnInit {
                 },
                 title: "New Role",
                 acceptCallback: item => {
-                  return this._roleService.create(item).subscribe((val : any) => {
-                    if(val.errorMessage=="true"){
+                  return this._roleService.create(item).subscribe((val: any) => {
+                    this.tableList.reload();
+                    if (val.errorMessage == "true") {
                       this._toastr.success('Changes saved', 'Success');
-                      this.tableList.reload;
-                    }else{
-                      this._toastr.error('Changes fail','Error');
-                      this.tableList.reload;
+                    } else {
+                      this._toastr.error('Changes fail', 'Error');
                     }
                   });
                 }
@@ -81,7 +87,7 @@ export class RolesListComponent implements OnInit {
         {
           icon: AppIcons.Edit,
           customClass: 'primary',
-          hide:()=>  !this._authenticationService.checkAuthenticate('EDIT ROLE'),
+          hide: () => !this._authenticationService.checkAuthenticate('EDIT ROLE'),
           executeAsync: item => {
             this._modalService.showTemplateDialog(new TemplateViewModel({
               title: 'Edit Role',
@@ -145,8 +151,8 @@ export class RolesListComponent implements OnInit {
           }
         },
       ],
-     displayText:tableText,
-     message:tableMessage,
+      displayText: tableText,
+      message: tableMessage,
       inlineEdit: false,
       searchFields: ['Name'],
       mainColumns: [
@@ -154,19 +160,18 @@ export class RolesListComponent implements OnInit {
           type: TableColumnType.Description,
           title: () => 'Name',
           valueRef: () => 'roleName',
-        allowFilter:true
+          allowFilter: true
         },
         {
           type: TableColumnType.Description,
-          title: () =>'Decription',
-          allowFilter:true,
+          title: () => 'Decription',
+          allowFilter: true,
           valueRef: () => 'description',
         },
-       
+
       ],
       serviceProvider: {
         searchAsync: request => {
-          this._roleService.search(request).subscribe(s=>console.log(s))
           return this._roleService.search(request);
         }
       }

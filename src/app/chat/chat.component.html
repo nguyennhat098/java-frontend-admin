@@ -1,4 +1,4 @@
-<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" /> -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
 <div class="row">
   <div class="sidebars">
@@ -50,13 +50,11 @@
       </div>
      
     </div>
-    <form [formGroup]="formRef" (ngSubmit)="postMessage()">
     <div class="message-footer">
       
-        <input type="text"  formControlName="chatMessage"  data-placeholder="Send a message to {0}" />
+        <input type="text"  (keyup.enter)="postMessage($event.target.value)" [(ngModel)]="mes"  data-placeholder="Send a message to {0}" />
 
     </div>
-  </form>
 
   </div>
 </div>

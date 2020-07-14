@@ -1,3 +1,4 @@
+import { RolesListComponent } from './roles/roles-list/roles-list.component';
 import { NotifiesListComponent } from './notifies/notifies-list/notifies-list.component';
 import { CategoriesListComponent } from './categories/categories-list/categories-list.component';
 import { UserListComponent } from './users/user-list/user-list.component';
@@ -5,7 +6,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ProductListComponent } from './product/product-list/product-list.component';
 import { NotFoundComponent } from 'ngx-fw4c';
-import { RolesListComponent } from './roles';
+
 import { AuthGuard } from './helpers/auth.guard';
 import { LoginAdminComponent } from './login-admin/login-admin.component';
 import { OrdersListComponent } from './orders/orders-list/orders-list.component';

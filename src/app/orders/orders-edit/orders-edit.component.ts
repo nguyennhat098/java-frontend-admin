@@ -3,7 +3,7 @@ import { OrdersService } from './../orders.service';
 import { AuthenticationServices } from './../../helpers/authentication.service';
 import { Component, OnInit, Input, ViewChild, TemplateRef } from '@angular/core';
 import { Orders } from '../orders';
-import { TableComponent, TableOption, TableColumnType } from 'ngx-fw4c';
+import { TableComponent, TableOption, TableColumnType, TableText, TableMessage } from 'ngx-fw4c';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
 
@@ -61,14 +61,35 @@ export class OrdersEditComponent implements OnInit {
     });
   }
   private initList(): void {
-    
+    var tableText=new TableText();
+    tableText.action='Action';
+    tableText.advancedSearchTitle='Search advance';
+    tableText.placeholderSearch='Enter search keywords';
+    tableText.allTitle='All';
+    tableText.advancedBtnCancelTitle='cancel';
+    tableText.filterTitle='Search By'
+    tableText.advancedBtnTitle='search';
+    tableText.selectPageSize='Display';
+    var tableMessage=new TableMessage();
+    tableMessage.loadingMessage='Loading',
+    tableMessage.notFoundMessage='No data found';
+    tableMessage.selectedItemsMessage=`record selected.`;
+    tableMessage.confirmClearAllRecordsMessage='Deselect all';
     this.option = new TableOption({
-      localData:()=>this._orderService.getOrderDetails(this.item.id),
+      selectedChange:(item)=>{
+        tableMessage.selectedItemsMessage=`${this.tableList.selectedItems.length} record selected.`;
+      },
+      localData:()=>{
+        tableMessage.foundMessage=`Found ${this.tableList.totalRecords} results.`;
+       return this._orderService.getOrderDetails(this.item.id);
+      },
       paging: true,
       title: 'Orders Management',
     hideCheckboxColumn:true,
       inlineEdit: false,
       searchFields: ['Name'],
+      message:tableMessage,
+      displayText:tableText,
       mainColumns: [
         {
           type: TableColumnType.Description,

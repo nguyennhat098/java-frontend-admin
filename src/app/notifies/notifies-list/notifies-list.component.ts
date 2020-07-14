@@ -1,3 +1,4 @@
+import { NotifiesExistComponent } from './../notifies-exist/notifies-exist.component';
 import { NotifiesUserComponent } from './../notifies-user/notifies-user.component';
 import { ActionResponse } from './../../shared/action-response';
 import { NotifiesEditComponent } from './../notifies-edit/notifies-edit.component';
@@ -5,7 +6,7 @@ import { AppIcons, AppConsts } from './../../shared/AppConsts';
 import { NotifiesService } from './../notifies.service';
 import { AuthenticationServices } from './../../helpers/authentication.service';
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { TableComponent, TableOption, ModalService, DataService, TableText, TableMessage, TemplateViewModel, ConfirmViewModel, TableConstant, TableColumnType } from 'ngx-fw4c';
+import { TableComponent, TableOption, ModalService, DataService, TableText, TableMessage, TemplateViewModel, ConfirmViewModel, TableConstant, TableColumnType, ValidationOption, RequiredValidationRule } from 'ngx-fw4c';
 import { ToastrService } from 'ngx-toastr';
 import { Notifies } from '../notifies';
 
@@ -41,10 +42,40 @@ export class NotifiesListComponent implements OnInit {
     var tableMessage=new TableMessage();
     tableMessage.loadingMessage='Loading',
     tableMessage.notFoundMessage='No data found';
+    tableMessage.selectedItemsMessage=`record selected.`;
+    tableMessage.confirmClearAllRecordsMessage='Deselect all';
     this.option = new TableOption({
+      selectedChange:(item)=>{
+        tableMessage.selectedItemsMessage=`${this.tableList.selectedItems.length} record selected.`;
+      },
       paging: true,
-      title: 'Category Management',
+      title: 'Notifies Management',
       topButtons: [
+        {
+          icon: AppIcons.Edit,
+          customClass: "success",
+          hide: () => {
+            tableMessage.foundMessage=`Found ${this.tableList.totalRecords} results.`;
+            if (this.tableList.changedRows.length === 0) {
+              return true;
+            } else {
+              return false;
+            }
+          },
+          title: () => AppConsts.SaveChange,
+          executeAsync: () => {
+            var data=[];
+            for (let i = 0; i < this.tableList.changedRows.length; i++) {
+              data.push(this.tableList.changedRows[i].currentItem);
+            }
+            this._notifiesService.updateMutiple(data).subscribe(val=>{
+              
+              this._toastr.success('Changes saved', 'Success');
+              this.tableList.reload();
+              this.tableList.resetChanges();
+            })
+          }
+        },
         {
           icon: AppIcons.Add,
           customClass: 'primary',
@@ -110,11 +141,35 @@ export class NotifiesListComponent implements OnInit {
           hide: () => !this._authenticationService.checkAuthenticate('EDIT NOTIFIES'),
           executeAsync: item => {
             this._modalService.showTemplateDialog(new TemplateViewModel({
-              title: 'Edit Category',
+              title: 'Assign Notifies',
               customSize: 'modal-lg',
               icon: AppIcons.Edit,
               template: NotifiesUserComponent,
               validationKey: 'NotifiesUserComponent',
+              data: {
+                item: this._dataService.cloneItem(item)
+              },
+              acceptCallback: item => {
+                return this._notifiesService.update(item).subscribe(() => {
+                  this.tableList.reload();
+                  this._toastr.success('Changes saved', 'Success');
+                });
+              }
+            })
+            );
+          }
+        },
+        {
+          icon: AppIcons.Key,
+          customClass: 'danger',
+          hide: () => !this._authenticationService.checkAuthenticate('EDIT NOTIFIES'),
+          executeAsync: item => {
+            this._modalService.showTemplateDialog(new TemplateViewModel({
+              title: 'Active Notifies',
+              customSize: 'modal-lg',
+              icon: AppIcons.Edit,
+              template: NotifiesExistComponent,
+              validationKey: 'NotifiesExistComponent',
               data: {
                 item: this._dataService.cloneItem(item)
               },
@@ -178,14 +233,20 @@ export class NotifiesListComponent implements OnInit {
       ],
       displayText:tableText,
       message:tableMessage,
-      inlineEdit: false,
+      inlineEdit: true,
       searchFields: ['Name'],
       mainColumns: [
         {
           type: TableColumnType.Description,
           title: () => 'Content',
           valueRef: () => 'content',
-          allowFilter: true
+          allowFilter: true,
+          inlineEdit:true,
+          validationOption: new ValidationOption({
+            rules: [
+             new RequiredValidationRule(()=>AppConsts.RequiredError)
+            ]
+          })
         },
         {
           type: TableColumnType.Description,
@@ -197,33 +258,33 @@ export class NotifiesListComponent implements OnInit {
           type: TableColumnType.Description,
           title: () => 'Link',
           valueRef: () => 'link',
-
+          validationOption: new ValidationOption({
+            rules: [
+             new RequiredValidationRule(()=>AppConsts.RequiredError)
+            ]
+          })
         },
         {
           type: TableColumnType.Date,
           title: () => 'Created Date',
-
           valueRef: () => 'createdDate',
+          inlineEdit:false
         },
         {
           type: TableColumnType.Date,
           title: () => 'Modify Date',
-
+          inlineEdit:false,
           valueRef: () => 'modifyDate',
         },
         {
-          type: TableColumnType.Description,
+          type: TableColumnType.Number,
           title: () => 'Status',
           valueRef: () => 'status',
         },
       ],
       serviceProvider: {
         searchAsync: request => {
-          this._notifiesService.search(request).subscribe(s => console.log(s))
-
-          return this._notifiesService.search(request)
-
-
+          return this._notifiesService.search(request);
         }
       }
     });

@@ -38,7 +38,12 @@ export class CategoriesListComponent implements OnInit {
     var tableMessage=new TableMessage();
     tableMessage.loadingMessage='Loading',
     tableMessage.notFoundMessage='No data found';
+    tableMessage.selectedItemsMessage=`record selected.`;
+    tableMessage.confirmClearAllRecordsMessage='Deselect all';
     this.option = new TableOption({
+      selectedChange:(item)=>{
+        tableMessage.selectedItemsMessage=`${this.tableList.selectedItems.length} record selected.`;
+      },
       paging: true,
       title: 'Category Management',
       topButtons: [
@@ -47,6 +52,7 @@ export class CategoriesListComponent implements OnInit {
           customClass: 'primary',
           title: () => AppConsts.New,
           hide: () => {
+            tableMessage.foundMessage=`Found ${this.tableList.totalRecords} results.`;
             return !this._authenticationService.checkAuthenticate('ADD CATEGORY');
           },
 
@@ -179,11 +185,7 @@ export class CategoriesListComponent implements OnInit {
       ],
       serviceProvider: {
         searchAsync: request => {
-          this._categoryService.search(request).subscribe(s => console.log(s))
-
-          return this._categoryService.search(request)
-
-
+          return this._categoryService.search(request);
         }
       }
     });

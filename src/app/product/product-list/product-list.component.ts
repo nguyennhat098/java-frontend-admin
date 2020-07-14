@@ -7,8 +7,6 @@ import { ProductService } from '../product.service';
 import { EditProductComponent } from '../edit-product/edit-product.component';
 import { ToastrService } from 'ngx-toastr';
 import { Products } from '../product';
-import { of } from 'rxjs';
-import { map } from 'rxjs/operators';
 @Component({
   selector: 'product-list',
   templateUrl: './product-list.component.html',
@@ -18,8 +16,6 @@ export class ProductListComponent implements OnInit {
   @ViewChild('tableList', { static: true }) tableList: TableComponent;
   @ViewChild("image", { static: true }) public image: TemplateRef<any>;
   public option: TableOption;
-  public currentDataChange:Products[]=[];
-  public oldData:Products[]=[];
   constructor(
     private _modalService: ModalService,
     private _authenticationService: AuthenticationServices,
@@ -45,40 +41,18 @@ export class ProductListComponent implements OnInit {
      var tableMessage=new TableMessage();
      tableMessage.loadingMessage='Loading',
      tableMessage.notFoundMessage='No data found';
+     tableMessage.confirmClearAllRecordsMessage='Deselect all';
+     tableMessage.selectedItemsMessage=`record selected.`;
     this.option = new TableOption({
       paging: true,
       title: 'Products Management',
       topButtons: [
         {
-          icon:AppIcons.Edit,
-          customClass: "success",
-          hide: () => {
-            if (this.tableList.changedRows.length === 0) {
-              return true;
-            } else {
-              return false;
-            }
-          },
-          title: () =>AppConsts.SaveChange,
-          executeAsync: () => {
-            console.log(this.oldData)
-            console.log(this.currentDataChange)
-            // for (let i = 0; i < this.tableList.changedRows.length; i++) {
-            //   this._serviceManagementService.updateService(this.tableTemplate.changedRows[i].currentItem, new ServiceUpdateRequest({}))
-            //     .subscribe(() => {
-            //       if (i === (this.tableTemplate.changedRows.length - 1)) {
-            //         this.tableTemplate.resetChanges();
-            //         this.tableTemplate.reload();
-            //       }
-            //     });
-            // }
-          }
-        },
-        {
           icon: AppIcons.Add,
           customClass: 'primary',
           title: () => AppConsts.New,
           hide: () => {
+            tableMessage.foundMessage=`Found ${this.tableList.totalRecords} results.`;
             return !this._authenticationService.checkAuthenticate('ADD PRODUCT');
           },
 
@@ -117,7 +91,7 @@ export class ProductListComponent implements OnInit {
             this._modalService.showTemplateDialog(new TemplateViewModel({
               title: 'Edit Product',
               customSize: 'modal-lg',
-              icon: 'AppIcons.Edit',
+              icon: AppIcons.Edit,
               template: EditProductComponent,
               validationKey: 'EditProductComponent',
               data: {
@@ -158,17 +132,15 @@ export class ProductListComponent implements OnInit {
           icon: AppIcons.Remove,
           title: () => 'Delete',
           customClass: 'danger',
-          hide: () => !this._authenticationService.checkAuthenticate('DELETE PRODUCT'),
+          hide: () =>{
+           return !this._authenticationService.checkAuthenticate('DELETE PRODUCT');
+          },
           executeAsync: () => {
             this._modalService.showConfirmDialog(new ConfirmViewModel({
               title: AppConsts.Confirm,
               message: AppConsts.ConfirmDelete,
               acceptCallback: () => {
                 var data = this.tableList.selectedItems;
-                var listId = [];
-                for (let index = 0; index < data.length; index++) {
-                  listId.push(data[index].id);
-                }
                 this._productService.deleteMutiple(data).subscribe((val: ActionResponse<Products>) => {
                   this.tableList.reload();
                   if (val.failureItems.length == 0) {
@@ -185,23 +157,17 @@ export class ProductListComponent implements OnInit {
       ],
       displayText:tableText,
       message:tableMessage,
-      inlineEdit: true ,
+      inlineEdit: false ,
       searchFields: ['Name'],
+      selectedChange:(item)=>{
+        tableMessage.selectedItemsMessage=`${this.tableList.selectedItems.length} record selected.`;
+      },
       mainColumns: [
         {
           type: TableColumnType.Description,
           title: () => 'Name',
           valueRef: () => 'name',
-          validationOption: new ValidationOption({
-            rules: [
-             new CustomValidationRule((val,payload,rowIndex)=>{
-              //  if(payload[rowIndex].name==this.oldData[rowIndex].name){
-              //    return of(new ValidationRuleResponse({status:true}));
-              //  }
-               return this._productService.checkUniqueName(val);
-             })
-            ]
-          })
+          allowFilter:true
         },
         {
           type: TableColumnType.Description,
@@ -220,56 +186,31 @@ export class ProductListComponent implements OnInit {
           title: () => 'Content',
           allowFilter: true,
           valueRef: () => 'content',
-          validationOption: new ValidationOption({
-            rules: [
-             new RequiredValidationRule(()=>'Content is required')
-            ]
-          })
         },
         {
           type: TableColumnType.Number,
           title: () => 'Price',
           valueRef: () => 'price',
-          validationOption: new ValidationOption({
-            rules: [
-             new CustomValidationRule((val,payload,rowIndex)=>{
-              this._productService.getDataChange(this.currentDataChange,payload[rowIndex]);
-               return this._productService.validatePrice(val,payload[rowIndex]);
-             })
-            ]
-          })
         },
         {
           type: TableColumnType.Number,
           title: () => 'Sale Price',
           valueRef: () => 'salePrice',
-          validationOption: new ValidationOption({
-            rules: [
-             new CustomValidationRule((val,payload,rowIndex)=>{
-               return this._productService.validateSalePrice(val,payload[rowIndex]);
-             })
-            ]
-          })
         },
         {
           type: TableColumnType.Date,
           title: () => 'Created Date',
           valueRef: () => 'created',
-          inlineEdit:false
         },
         {
           type: TableColumnType.Date,
           title: () => 'Edited Date',
           valueRef: () => 'modifileDate',
-          inlineEdit:false
         },
       ],
       serviceProvider: {
         searchAsync: request => {
-          return this._productService.search(request).pipe(map(val=>{
-            this.oldData=val.items.map(x => Object.assign({}, x));
-            return val;
-          }));
+          return this._productService.search(request);
         }
       }
     });

@@ -1,7 +1,7 @@
 import { UserService } from './../user.service';
 import { ActionResponse } from './../../shared/action-response';
 import { UserEditComponent } from './../user-edit/user-edit.component';
-import { AppIcons,AppConsts } from './../../shared/AppConsts';
+import { AppIcons, AppConsts } from './../../shared/AppConsts';
 import { AuthenticationServices } from './../../helpers/authentication.service';
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { TableComponent, TableOption, ModalService, DataService, TemplateViewModel, ConfirmViewModel, TableConstant, TableColumnType, TableText, TableMessage } from 'ngx-fw4c';
@@ -21,7 +21,7 @@ export class UserListComponent implements OnInit {
     private _modalService: ModalService,
     private _authenticationService: AuthenticationServices,
     private _dataService: DataService,
-    private _userService:UserService,
+    private _userService: UserService,
     private _toastr: ToastrService,
   ) { }
 
@@ -29,34 +29,40 @@ export class UserListComponent implements OnInit {
     this.initList();
   }
   private initList(): void {
-    var tableText=new TableText();
-    tableText.action='Action';
-    tableText.advancedSearchTitle='Search advance';
-    tableText.placeholderSearch='Enter search keywords';
-    tableText.allTitle='All';
-    tableText.advancedBtnCancelTitle='cancel';
-    tableText.filterTitle='Search By'
-    tableText.advancedBtnTitle='search';
-    tableText.selectPageSize='Display';
-    var tableMessage=new TableMessage();
-    tableMessage.loadingMessage='Loading',
-    tableMessage.notFoundMessage='No data found';
+    var tableText = new TableText();
+    tableText.action = 'Action';
+    tableText.advancedSearchTitle = 'Search advance';
+    tableText.placeholderSearch = 'Enter search keywords';
+    tableText.allTitle = 'All';
+    tableText.advancedBtnCancelTitle = 'cancel';
+    tableText.filterTitle = 'Search By'
+    tableText.advancedBtnTitle = 'search';
+    tableText.selectPageSize = 'Display';
+    var tableMessage = new TableMessage();
+    tableMessage.loadingMessage = 'Loading',
+      tableMessage.notFoundMessage = 'No data found';
+    tableMessage.selectedItemsMessage = `record selected.`;
+    tableMessage.confirmClearAllRecordsMessage = 'Deselect all';
     this.option = new TableOption({
+      selectedChange: (item) => {
+        tableMessage.selectedItemsMessage = `${this.tableList.selectedItems.length} record selected.`;
+      },
       paging: true,
-      title:'User Management',
+      title: 'User Management',
       topButtons: [
         {
           icon: AppIcons.Add,
           customClass: 'primary',
           title: () => AppConsts.New,
-          hide: () => {            
-          return !this._authenticationService.checkAuthenticate('ADD USER');
+          hide: () => {
+            tableMessage.foundMessage = `Found ${this.tableList.totalRecords} results.`;
+            return !this._authenticationService.checkAuthenticate('ADD USER');
           },
 
           executeAsync: item => {
             this._modalService.showTemplateDialog(
               new TemplateViewModel({
-                 template: UserEditComponent,
+                template: UserEditComponent,
                 customSize: 'modal-lg',
                 validationKey: 'NewUserComponent',
                 icon: AppIcons.Add,
@@ -65,12 +71,12 @@ export class UserListComponent implements OnInit {
                 },
                 title: "New User",
                 acceptCallback: item => {
-                  return this._userService.create(item).subscribe((val : any) => {
-                    if(val.errorMessage=="true"){
+                  return this._userService.create(item).subscribe((val: any) => {
+                    if (val.errorMessage == "true") {
                       this._toastr.success('Changes saved', 'Success');
                       this.tableList.reload;
-                    }else{
-                      this._toastr.error('Changes fail','Error');
+                    } else {
+                      this._toastr.error('Changes fail', 'Error');
                       this.tableList.reload;
                     }
                   });
@@ -84,7 +90,7 @@ export class UserListComponent implements OnInit {
         {
           icon: AppIcons.Edit,
           customClass: 'primary',
-         hide:()=>  !this._authenticationService.checkAuthenticate('EDIT USER'),
+          hide: () => !this._authenticationService.checkAuthenticate('EDIT USER'),
           executeAsync: item => {
             this._modalService.showTemplateDialog(new TemplateViewModel({
               title: 'Edit User',
@@ -108,7 +114,7 @@ export class UserListComponent implements OnInit {
         {
           icon: AppIcons.Remove,
           customClass: "danger",
-          hide:()=>  !this._authenticationService.checkAuthenticate('DELETE USER'),
+          hide: () => !this._authenticationService.checkAuthenticate('DELETE USER'),
           executeAsync: item => {
             this._modalService.showConfirmDialog(
               new ConfirmViewModel({
@@ -126,37 +132,37 @@ export class UserListComponent implements OnInit {
           }
         },
         {
-					type: TableConstant.ActionType.Toolbar,
-					icon: AppIcons.Remove,
-					title: () => 'Delete',
-					customClass: 'danger',
-          hide:()=>  !this._authenticationService.checkAuthenticate('DELETE USER'),
-					executeAsync: () => {
-						this._modalService.showConfirmDialog(new ConfirmViewModel({
-							title: AppConsts.Confirm,
-							message:  AppConsts.ConfirmDelete,
-							acceptCallback: () => {
+          type: TableConstant.ActionType.Toolbar,
+          icon: AppIcons.Remove,
+          title: () => 'Delete',
+          customClass: 'danger',
+          hide: () => !this._authenticationService.checkAuthenticate('DELETE USER'),
+          executeAsync: () => {
+            this._modalService.showConfirmDialog(new ConfirmViewModel({
+              title: AppConsts.Confirm,
+              message: AppConsts.ConfirmDelete,
+              acceptCallback: () => {
                 var data = this.tableList.selectedItems;
-                var listId=[];
+                var listId = [];
                 for (let index = 0; index < data.length; index++) {
                   listId.push(data[index].id);
                 }
-                this._userService.deleteMutiple(data).subscribe((val:ActionResponse<Users>) => {
-                  if(val.failureItems.length==0){
+                this._userService.deleteMutiple(data).subscribe((val: ActionResponse<Users>) => {
+                  if (val.failureItems.length == 0) {
                     this.tableList.reload();
                     this._toastr.success('Changes saved', 'Success');
-                  }else{
+                  } else {
                     this.tableList.reload();
                     this._toastr.success(`Total fail ${val.failureItems.length}\n ToTal succes:${val.successItems.length}`, 'Success');
                   }
                 })
-							}
-						}))
-					}
-				},
+              }
+            }))
+          }
+        },
       ],
-     displayText:tableText,
-     message:tableMessage,
+      displayText: tableText,
+      message: tableMessage,
       inlineEdit: false,
       searchFields: ['Name'],
       mainColumns: [
@@ -164,41 +170,41 @@ export class UserListComponent implements OnInit {
           type: TableColumnType.Description,
           title: () => 'UserName',
           valueRef: () => 'userName',
-        allowFilter:true
+          allowFilter: true
         },
         {
           type: TableColumnType.Description,
-          title: () =>'role Name',
-          allowFilter:false,
+          title: () => 'role Name',
+          allowFilter: false,
           valueRef: () => 'roleName',
         },
         {
           type: TableColumnType.Description,
-          title: () =>'Address',
-          allowFilter:true,
-          
+          title: () => 'Address',
+          allowFilter: true,
+
           valueRef: () => 'address',
         },
         {
           type: TableColumnType.Description,
-          title: () =>'Image',
-          allowFilter:false,
-          valueRef:()=>'',
+          title: () => 'Image',
+          allowFilter: false,
+          valueRef: () => '',
           customTemplate: () => this.image,
         },
         {
           type: TableColumnType.Description,
-          title: () =>'FullName',
-          allowFilter:true,
+          title: () => 'FullName',
+          allowFilter: true,
           valueRef: () => 'fullName',
         },
         {
           type: TableColumnType.Description,
-          title: () =>'Status',
-          allowFilter:false,
+          title: () => 'Status',
+          allowFilter: false,
           valueRef: () => 'status'
         },
-        
+
       ],
       serviceProvider: {
         searchAsync: request => {

@@ -19,7 +19,6 @@ export class CategoriesEditComponent implements OnInit {
     private _storage: AngularFireStorage) { }
 
   ngOnInit() {
-    console.log(this.item)
     this.initValidations();
   }
   updateImage(event) {

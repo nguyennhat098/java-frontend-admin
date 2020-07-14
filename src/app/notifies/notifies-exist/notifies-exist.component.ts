@@ -8,13 +8,13 @@ import { Component, OnInit, ViewChild, TemplateRef, Input } from '@angular/core'
 import { TableComponent, TableOption, ModalService, TableMessage, TableText, ConfirmViewModel, TableConstant, TableColumnType } from 'ngx-fw4c';
 import { ToastrService } from 'ngx-toastr';
 import { Notifies } from '../notifies';
-
 @Component({
-  selector: 'app-notifies-user',
-  templateUrl: './notifies-user.component.html',
-  styleUrls: ['./notifies-user.component.scss']
+  selector: 'app-notifies-exist',
+  templateUrl: './notifies-exist.component.html',
+  styleUrls: ['./notifies-exist.component.scss']
 })
-export class NotifiesUserComponent implements OnInit {
+export class NotifiesExistComponent implements OnInit {
+
   @ViewChild('tableList', { static: true }) tableList: TableComponent;
   @ViewChild("image", { static: true }) public image: TemplateRef<any>;
   @Input() item:Notifies;
@@ -50,16 +50,16 @@ export class NotifiesUserComponent implements OnInit {
         tableMessage.selectedItemsMessage=`${this.tableList.selectedItems.length} record selected.`;
       },
       paging: true,
-      title:'Assign Notifies to Users',
+      title:'Active Notifies',
       actions: [
         {
 					type: TableConstant.ActionType.Toolbar,
-					icon: AppIcons.Add,
-					title: () => 'Add',
-					customClass: 'primary',
+					icon: AppIcons.Remove,
+					title: () => 'Delete',
+					customClass: 'danger',
           hide:()=> {
             tableMessage.foundMessage=`Found ${this.tableList.totalRecords} results.`;
-            return !this._authenticationService.checkAuthenticate('EDIT NOTIFIES');
+            return  !this._authenticationService.checkAuthenticate('DELETE NOTIFIES');
           },
 					executeAsync: () => {
 						this._modalService.showConfirmDialog(new ConfirmViewModel({
@@ -71,7 +71,7 @@ export class NotifiesUserComponent implements OnInit {
                 for (let index = 0; index < data.length; index++) {
                   list.push(new NotifiesUser({userId:data[index].id,notifiesId:this.item.id}));
                 }
-                this._notifiesService.assignNotifies(list).subscribe((val:ActionResponse<NotifiesUser>) => {
+                this._notifiesService.removeAssignNotifies(list).subscribe((val:ActionResponse<NotifiesUser>) => {
                   if(val.failureItems.length==0){
                     this.tableList.reload();
                     this._toastr.success('Changes saved', 'Success');
@@ -125,9 +125,10 @@ export class NotifiesUserComponent implements OnInit {
         searchAsync: (request) => {
           request.notifiesId=this.item.id;
           this._notifiesService.searchNotExistUsers(request).subscribe(val=>console.log(val))
-          return this._notifiesService.searchNotExistUsers(request);
+          return this._notifiesService.searchExistUsers(request);
         }
       }
     });
   }
+
 }

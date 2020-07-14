@@ -1,3 +1,4 @@
+import { Users } from './../users/user';
 import { CommonService } from './../shared/common.service';
 import { AuthenticationServices } from './../helpers/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,37 +12,35 @@ import { first } from 'rxjs/operators';
   styleUrls: ['./login-admin.component.scss']
 })
 export class LoginAdminComponent implements OnInit {
-  user: FormGroup;
   returnUrl: string;
-  error = '';
-  submitted:boolean=false;
-  constructor(  private formBuilder: FormBuilder,
+  message = '';
+  user:Users=new Users();
+  constructor(private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private authenticationService: AuthenticationServices,
-    private _commonService:CommonService) { }
+    private authenticationService: AuthenticationServices) { }
 
   ngOnInit() {
-    this.user = this.formBuilder.group({
-      userName: ['', Validators.required],
-      password: ['', Validators.required]
-  });
-  this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
-  get f() { return this.user.controls; }
   onSubmit() {
-this.submitted=true;
-if(this.user.invalid){
-  return;
-}
-    this.authenticationService.login(this.user.value)
-    .pipe(first())
-    .subscribe(
+    if (!this.user.userName&&!this.user.password) {
+      return;
+    }
+    this.authenticationService.login(this.user)
+      .pipe(first())
+      .subscribe(
         data => {
-            this.router.navigate([this.returnUrl]);
+          this.message=data.user.message;
+          this.router.navigate([this.returnUrl]);
+          setTimeout(() => {
+            location.reload();
+          }, 5);
+        
+
         },
         error => {
-            this.error = error;
+          this.message = error;
         });
     // throw Error('something go wrong');
   }
