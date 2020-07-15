@@ -4,15 +4,25 @@
 
 export const environment = {
   production: false,
+  //  firebaseConfig : {
+  //   apiKey: "AIzaSyCqTIteJ98DULcbURqncS_LHavMZqdp4jI",
+  //   authDomain: "shopdemo-a7f84.firebaseapp.com",
+  //   databaseURL: "https://shopdemo-a7f84.firebaseio.com",
+  //   projectId: "shopdemo-a7f84",
+  //   storageBucket: "shopdemo-a7f84.appspot.com",
+  //   messagingSenderId: "69980437022",
+  //   appId: "1:69980437022:web:c421531b883fbcc4208c0f",
+  //   measurementId: "G-7ERVLCJ275"
+  // }
    firebaseConfig : {
-    apiKey: "AIzaSyCqTIteJ98DULcbURqncS_LHavMZqdp4jI",
-    authDomain: "shopdemo-a7f84.firebaseapp.com",
-    databaseURL: "https://shopdemo-a7f84.firebaseio.com",
-    projectId: "shopdemo-a7f84",
-    storageBucket: "shopdemo-a7f84.appspot.com",
-    messagingSenderId: "69980437022",
-    appId: "1:69980437022:web:c421531b883fbcc4208c0f",
-    measurementId: "G-7ERVLCJ275"
+    apiKey: "AIzaSyDyCG0h_0wTk3Qp2nH9ATHGDM3WWs8J86k",
+    authDomain: "oganic-shopping.firebaseapp.com",
+    databaseURL: "https://oganic-shopping.firebaseio.com",
+    projectId: "oganic-shopping",
+    storageBucket: "oganic-shopping.appspot.com",
+    messagingSenderId: "848900379700",
+    appId: "1:848900379700:web:df69e79d3f3516cfb4a661",
+    measurementId: "G-MSMLEDLRN0"
   }
 };
 

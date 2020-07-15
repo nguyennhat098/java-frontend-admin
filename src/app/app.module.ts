@@ -58,7 +58,8 @@ const ListModule = [
     ListModule
   ],
   providers: [
-    { provide: BUCKET, useValue: "shopdemo-a7f84.appspot.com" },
+    // { provide: BUCKET, useValue: "shopdemo-a7f84.appspot.com" },
+    { provide: BUCKET, useValue: "https://oganic-shopping.firebaseio.com" },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
