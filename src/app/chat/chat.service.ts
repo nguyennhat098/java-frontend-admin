@@ -30,11 +30,14 @@ sendMessage(chatMessage:ChatMessage, chatID) :void{
   this.db.database.ref(`RoomName/${chatMessage.keyData}`).once('value').then(snapshort=>{
     var roomData = Object.assign({}, snapshort.val());
     roomData.new=false;
+    roomData.messageBody=chatMessage.messageBody;
     this.db.database.ref(`RoomName/${chatMessage.keyData}`).update(roomData);
   });
   this.db.database.ref(`Chat/${chatID}/meta-data`).once('value').then(snapshort=>{
     var metaData = Object.assign({}, snapshort.val());
     metaData.totalNew+=1;
+    metaData.timeStamp=new Date().getTime()*-1;
+    metaData.messageBody=chatMessage.messageBody;
     this.db.database.ref(`Chat/${chatID}/meta-data`).update(metaData);
   });
   
