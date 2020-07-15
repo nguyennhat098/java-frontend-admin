@@ -36,8 +36,6 @@ export class LoginAdminComponent implements OnInit {
           setTimeout(() => {
             location.reload();
           }, 5);
-        
-
         },
         error => {
           this.message = error;

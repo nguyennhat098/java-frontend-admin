@@ -6,11 +6,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RolesEditComponent } from './roles-edit/roles-edit.component';
 import { RolesListComponent } from './roles-list/roles-list.component';
 import { MatrixManagementComponent } from './matrix-management/matrix-management.component';
+import { AssignRoleComponent } from './assign-role/assign-role.component';
 
 const declarations = [
  RolesEditComponent,
  RolesListComponent,
- MatrixManagementComponent
+ MatrixManagementComponent,
+ AssignRoleComponent
 ];
 @NgModule({
   declarations: declarations,

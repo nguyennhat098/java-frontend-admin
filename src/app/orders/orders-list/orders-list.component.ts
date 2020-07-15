@@ -37,6 +37,7 @@ export class OrdersListComponent implements OnInit {
     tableMessage.notFoundMessage='No data found';
     tableMessage.selectedItemsMessage=`record selected.`;
     tableMessage.confirmClearAllRecordsMessage='Deselect all';
+    tableMessage.refMessage='related to';
     this.option = new TableOption({
       selectedChange:(item)=>{
         tableMessage.selectedItemsMessage=`${this.tableList.selectedItems.length} record selected.`;

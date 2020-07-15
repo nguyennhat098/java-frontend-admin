@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { RolesEditComponent } from '../roles-edit/roles-edit.component';
 import { Roles } from '../Role';
 import { MatrixManagementComponent } from '../matrix-management/matrix-management.component';
+import { AssignRoleComponent } from '../assign-role/assign-role.component';
 
 @Component({
   selector: 'app-roles-list',
@@ -104,6 +105,26 @@ export class RolesListComponent implements OnInit {
                   this._toastr.success('Changes saved', 'Success');
                 });
               }
+            })
+            );
+          }
+        },
+        {
+          icon: AppIcons.Key,
+          customClass: 'primary',
+          hide: () => {
+            return !this._authenticationService.checkAuthenticate('VIEW PERMISSION');
+          },
+          executeAsync: item => {
+            this._modalService.showTemplateDialog(new TemplateViewModel({
+              title: 'Assign Permission',
+              customSize: 'modal-xlg',
+              icon: AppIcons.Key,
+              template: AssignRoleComponent,
+              validationKey: 'AssignRoleComponent',
+              data: {
+                item: this._dataService.cloneItem(item)
+              },
             })
             );
           }

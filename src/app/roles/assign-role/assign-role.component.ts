@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+const arrPermission=[{}]
 @Component({
   selector: 'app-assign-role',
   templateUrl: './assign-role.component.html',
