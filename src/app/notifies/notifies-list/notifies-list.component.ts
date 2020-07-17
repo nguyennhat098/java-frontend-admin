@@ -136,14 +136,14 @@ export class NotifiesListComponent implements OnInit {
           }
         },
         {
-          icon: AppIcons.Key,
+          icon: AppIcons.notify,
           customClass: 'primary',
           hide: () => !this._authenticationService.checkAuthenticate('EDIT NOTIFIES'),
           executeAsync: item => {
             this._modalService.showTemplateDialog(new TemplateViewModel({
               title: 'Assign Notifies',
               customSize: 'modal-lg',
-              icon: AppIcons.Edit,
+              icon: AppIcons.notify,
               template: NotifiesUserComponent,
               validationKey: 'NotifiesUserComponent',
               data: {
@@ -160,14 +160,14 @@ export class NotifiesListComponent implements OnInit {
           }
         },
         {
-          icon: AppIcons.Key,
+          icon: AppIcons.notify,
           customClass: 'danger',
           hide: () => !this._authenticationService.checkAuthenticate('EDIT NOTIFIES'),
           executeAsync: item => {
             this._modalService.showTemplateDialog(new TemplateViewModel({
               title: 'Active Notifies',
               customSize: 'modal-lg',
-              icon: AppIcons.Edit,
+              icon: AppIcons.notify,
               template: NotifiesExistComponent,
               validationKey: 'NotifiesExistComponent',
               data: {

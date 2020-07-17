@@ -72,6 +72,7 @@ export const AppIcons = {
     Email: 'fa fa-envelope',
     Key: 'fa fa-key',
     SyncUsers: 'fa fa-sync',
-    SaveChange:'fa fa-address-book-o'
+    SaveChange:'fa fa-address-book-o',
+    notify:'fa fa-bell'
 }
 

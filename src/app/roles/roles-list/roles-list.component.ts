@@ -112,9 +112,9 @@ export class RolesListComponent implements OnInit {
         {
           icon: AppIcons.Key,
           customClass: 'primary',
-          hide: () => {
-            return !this._authenticationService.checkAuthenticate('VIEW PERMISSION');
-          },
+          // hide: () => {
+          //   return !this._authenticationService.checkAuthenticate('VIEW PERMISSION');
+          // },
           executeAsync: item => {
             this._modalService.showTemplateDialog(new TemplateViewModel({
               title: 'Assign Permission',
@@ -122,6 +122,7 @@ export class RolesListComponent implements OnInit {
               icon: AppIcons.Key,
               template: AssignRoleComponent,
               validationKey: 'AssignRoleComponent',
+              hideAcceptBtn:true,
               data: {
                 item: this._dataService.cloneItem(item)
               },
@@ -129,26 +130,26 @@ export class RolesListComponent implements OnInit {
             );
           }
         },
-        {
-          icon: AppIcons.Key,
-          customClass: 'primary',
-          hide: () => {
-            return !this._authenticationService.checkAuthenticate('VIEW PERMISSION');
-          },
-          executeAsync: item => {
-            this._modalService.showTemplateDialog(new TemplateViewModel({
-              title: 'Assign Permission',
-              customSize: 'modal-xlg',
-              icon: AppIcons.Key,
-              template: MatrixManagementComponent,
-              validationKey: 'MatrixManagementComponent',
-              data: {
-                item: this._dataService.cloneItem(item)
-              },
-            })
-            );
-          }
-        },
+        // {
+        //   icon: AppIcons.Key,
+        //   customClass: 'primary',
+        //   hide: () => {
+        //     return !this._authenticationService.checkAuthenticate('VIEW PERMISSION');
+        //   },
+        //   executeAsync: item => {
+        //     this._modalService.showTemplateDialog(new TemplateViewModel({
+        //       title: 'Assign Permission',
+        //       customSize: 'modal-xlg',
+        //       icon: AppIcons.Key,
+        //       template: MatrixManagementComponent,
+        //       validationKey: 'MatrixManagementComponent',
+        //       data: {
+        //         item: this._dataService.cloneItem(item)
+        //       },
+        //     })
+        //     );
+        //   }
+        // },
         {
           icon: AppIcons.Remove,
           customClass: "danger",

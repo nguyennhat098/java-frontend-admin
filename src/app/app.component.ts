@@ -46,6 +46,8 @@ export class AppComponent implements OnInit{
         this.menus=val;
         
       });
+    }else{
+      this.router.navigateByUrl('/login');
     }
   }
 
