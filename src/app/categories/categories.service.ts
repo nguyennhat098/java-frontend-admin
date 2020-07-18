@@ -12,7 +12,7 @@ import { Categories } from './categories';
 })
 
 export class CategoryService extends MockService {
-    private href = 'http://localhost:8080/category';
+    private href = 'https://shopdemo112.herokuapp.com/category';
     constructor(private _httpClient: HttpClient) {
         super();
     }

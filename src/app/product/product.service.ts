@@ -12,7 +12,7 @@ import { Products } from './product';
 })
 
 export class ProductService extends MockService {
-    private href = 'http://localhost:8080';
+    private href = 'https://shopdemo112.herokuapp.com';
     constructor(private _httpClient: HttpClient) {
         super();
     }

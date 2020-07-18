@@ -17,7 +17,7 @@ import { retry } from 'rxjs/operators';
 })
 
 export class NotifiesService extends MockService {
-    private href = 'http://localhost:8080/notifiesCustom';
+    private href = 'https://shopdemo112.herokuapp.com/notifiesCustom';
     constructor(private _httpClient: HttpClient) {
         super();
     }

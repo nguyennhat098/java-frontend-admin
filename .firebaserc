@@ -1,0 +1,35 @@
+{
+  "projects": {
+    "default": "oganic-shopping",
+    "oganics-admin": "oganic-shopping",
+    "admin-oganic": "admin-oganic"
+  },
+  "targets": {
+    "oganic-shopping": {
+      "hosting": {
+        "oganic": [
+          "oganic-admin",
+          "shopping"
+        ],
+        "oganics-admin": [
+          "oganic-shopping"
+        ],
+        "oganic-shopping": [
+          "oganics-admin"
+        ]
+      }
+    },
+    "admin-oganic": {
+      "hosting": {
+        "oganics": [
+          "admin",
+          "oganic",
+          "shopping"
+        ],
+        "oganic-shopping": [
+          "oganics-admin"
+        ]
+      }
+    }
+  }
+}

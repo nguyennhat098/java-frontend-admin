@@ -124,7 +124,6 @@ export class NotifiesExistComponent implements OnInit {
       serviceProvider: {
         searchAsync: (request) => {
           request.notifiesId=this.item.id;
-          this._notifiesService.searchNotExistUsers(request).subscribe(val=>console.log(val))
           return this._notifiesService.searchExistUsers(request);
         }
       }

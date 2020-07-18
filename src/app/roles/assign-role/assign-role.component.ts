@@ -14,6 +14,7 @@ const arrPermission = [
   { actionName: 'USER', view: 'VIEW USER', add: 'ADD USER', edit: 'EDIT USER', delete: 'DELETE USER',nameDb:'USER' },
   { actionName: 'ORDERS', view: 'VIEW ORDERS', add: '', edit: 'EDIT ORDERS', delete: '',nameDb:'ORDERS' },
   { actionName: 'CHAT', view: 'VIEW CHAT', add: 'ADD CHAT', edit: '', delete: '',nameDb:'CHAT' },
+  { actionName: 'Permission', view: '', add: 'ADD PERMISSION', edit: 'EDIT PERMISSION', delete: 'DELETE PERMISSION',nameDb:'PERMISSION' },
 ];
 @Component({
   selector: 'app-assign-role',
@@ -66,7 +67,6 @@ export class AssignRoleComponent implements OnInit {
     }else{
       this.selectPermission.push(`${permission} ${actionName}`);
     }
-    console.log(this.selectPermission)
   }
   saveChanges(){
     var roleActionAdd:RoleActions[]=[];
@@ -87,24 +87,10 @@ export class AssignRoleComponent implements OnInit {
       }
     }
     this._roleService.deleteMutipleAction(roleActionRemove).subscribe((val: ActionResponse<Roles>) => {
-      // if (val.failureItems.length == 0) {
-      //   // this.tableList.reload();
-        
-      // } else {
-      //   // this.tableList.reload();
-      //   this._toastr.success(`Total fail ${val.failureItems}\n ToTal succes:${val.successItems}`, 'Success');
-      // }
     });
     this._roleService.addMutipleAction(roleActionAdd).subscribe((val: ActionResponse<RoleActions>) => {
-      debugger
-      // if (val.failureItems.length == 0) {
-      //   this._toastr.success('Changes saved', 'Success');
-      // } else {
-      //   this._toastr.success(`Total fail ${val.failureItems.length}\n ToTal succes:${val.successItems.length}`, 'Success');
-      // }
     });
-    console.log(roleActionAdd)
-    console.log(roleActionRemove)
     this._toastr.success('Changes saved', 'Success');
+    this.selectPermission=[];
   }
 }

@@ -112,9 +112,9 @@ export class RolesListComponent implements OnInit {
         {
           icon: AppIcons.Key,
           customClass: 'primary',
-          // hide: () => {
-          //   return !this._authenticationService.checkAuthenticate('VIEW PERMISSION');
-          // },
+          hide: () => {
+            return !this._authenticationService.checkAuthenticate('EDIT PERMISSION');
+          },
           executeAsync: item => {
             this._modalService.showTemplateDialog(new TemplateViewModel({
               title: 'Assign Permission',

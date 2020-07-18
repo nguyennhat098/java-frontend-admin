@@ -19,8 +19,8 @@ export class ChatComponent implements OnInit, AfterViewInit {
   user: Users;
   currentFullName: string;
   currentImage: string;
-  selectedRoom:ChatMessage;
-  mes:string;
+  selectedRoom: ChatMessage;
+  mes: string;
   @ViewChildren('allTheseThings') things: QueryList<any>;
   constructor(private chatService: ChatService, private formBuilder: FormBuilder) { }
   ngAfterViewInit(): void {
@@ -40,18 +40,18 @@ export class ChatComponent implements OnInit, AfterViewInit {
     this.roomName = this.roomList[roomIndex].roomName;
     this.currentFullName = this.roomList[roomIndex].fullName;
     this.currentImage = this.roomList[roomIndex].image;
-    var roomData:ChatMessage =new ChatMessage({
-      fullName:this.currentFullName,
-      image:this.currentImage,
-      messageBody:'',
-      new:false,
-      senderID:this.roomList[roomIndex].senderID,
-      senderName:this.roomName,
-       timeStamp:this.roomList[roomIndex].timeStamp,
+    var roomData: ChatMessage = new ChatMessage({
+      fullName: this.currentFullName,
+      image: this.currentImage,
+      messageBody: this.roomList[roomIndex].messageBody,
+      new: false,
+      senderID: this.roomList[roomIndex].senderID,
+      senderName: this.roomName,
+      timeStamp: this.roomList[roomIndex].timeStamp,
       keyData: this.roomList[roomIndex].keyData,
-      roomName:this.roomList[roomIndex].roomName
-    }); 
-   this.selectedRoom=roomData;
+      roomName: this.roomList[roomIndex].roomName
+    });
+    this.selectedRoom = roomData;
     this.chatService.updateRoom(roomData);
     this.chatService.getMessages(this.roomName).subscribe(messages => {
       this.messagesList = messages;
@@ -71,18 +71,18 @@ export class ChatComponent implements OnInit, AfterViewInit {
     // const chat:ChatMessage = {
     //   name: this.user.userName
     // };
-    const chat:ChatMessage = new ChatMessage({
-      messageBody:val,
-      senderName:this.user.userName,
-      timeStamp:new Date().getTime(),
-      fullName:this.user.fullName,
-      image:this.user.image?this.user.image:'https://image.flaticon.com/icons/svg/145/145867.svg',
-      new:true,
-      senderID:this.user.id,
-      keyData:this.selectedRoom.keyData
+    const chat: ChatMessage = new ChatMessage({
+      messageBody: val,
+      senderName: this.user.userName,
+      timeStamp: new Date().getTime(),
+      fullName: this.user.fullName,
+      image: this.user.image ? this.user.image : 'https://image.flaticon.com/icons/svg/145/145867.svg',
+      new: true,
+      senderID: this.user.id,
+      keyData: this.selectedRoom.keyData
     });
     this.chatService.sendMessage(chat, this.roomName);
-   this.mes=null;
+    this.mes = null;
   }
   calculateDiff(sentDate) {
     var date1: any = new Date(sentDate);
