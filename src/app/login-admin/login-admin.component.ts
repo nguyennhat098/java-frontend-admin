@@ -12,16 +12,18 @@ import { first } from 'rxjs/operators';
   styleUrls: ['./login-admin.component.scss']
 })
 export class LoginAdminComponent implements OnInit {
-  returnUrl: string;
   message = '';
   user:Users=new Users();
-  constructor(private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
+  constructor(
     private router: Router,
     private authenticationService: AuthenticationServices) { }
 
   ngOnInit() {
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    if(this.user.id){
+      this.router.navigateByUrl('/');
+    }else{
+      this.router.navigateByUrl('/login');
+    }
   }
   onSubmit() {
     if (!this.user.userName&&!this.user.password) {
@@ -31,11 +33,15 @@ export class LoginAdminComponent implements OnInit {
       .pipe(first())
       .subscribe(
         data => {
-          this.message=data.user.message;
-          this.router.navigate([this.returnUrl]);
-          setTimeout(() => {
-            location.reload();
-          }, 5);
+          if(data.user.message=='true'){
+            this.user=data.user;
+            this.router.navigateByUrl('/product');
+            setTimeout(() => {
+              location.reload();
+            }, 5);
+          }else{
+            this.message=data.user.message;
+          }
         },
         error => {
           this.message = error;

@@ -11,14 +11,14 @@ export class ChatService {
 getMessages(user) :Observable<any>{
   return this.db
   .list('Chat/' + user + '/messages', ref => {
-  return ref.orderByChild('timeStamp');
+  return ref.limitToLast(100).orderByChild('timeStamp');
   })
   .valueChanges();
 }
 getRoomsChat():Observable<any>{
   return this.db
   .list('RoomName', ref => {
-  return ref.orderByChild('timeStamp').limitToLast(100);
+  return ref.orderByChild('timeStamp');
   })
   .valueChanges();
 }
@@ -40,7 +40,5 @@ sendMessage(chatMessage:ChatMessage, chatID) :void{
     metaData.messageBody=chatMessage.messageBody;
     this.db.database.ref(`Chat/${chatID}/meta-data`).update(metaData);
   });
-  
-
 }
 }

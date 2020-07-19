@@ -5,7 +5,7 @@ import { UserListComponent } from './users/user-list/user-list.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ProductListComponent } from './product/product-list/product-list.component';
-import { NotFoundComponent } from 'ngx-fw4c';
+import { NotFoundComponent, AccessDeniedComponent } from 'ngx-fw4c';
 
 import { AuthGuard } from './helpers/auth.guard';
 import { LoginAdminComponent } from './login-admin/login-admin.component';
@@ -39,13 +39,18 @@ const routes: Routes = [
         path:'notifies',component:NotifiesListComponent,canActivate:[AuthGuard],
       },
       {
+        path: 'auth',
+        component: AccessDeniedComponent
+      },
+      {
         path: 'not-found',
         component: NotFoundComponent
       }
+     
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes,{onSameUrlNavigation: 'reload'})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

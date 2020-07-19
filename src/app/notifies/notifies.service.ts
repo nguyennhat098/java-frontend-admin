@@ -17,7 +17,7 @@ import { retry } from 'rxjs/operators';
 })
 
 export class NotifiesService extends MockService {
-    private href = 'https://shopdemo112.herokuapp.com/notifiesCustom';
+    private href = 'http://localhost:8080/notifiesCustom';
     constructor(private _httpClient: HttpClient) {
         super();
     }
@@ -56,4 +56,7 @@ export class NotifiesService extends MockService {
     public removeAssignNotifies( request: NotifiesUser[]): Observable<ActionResponse< NotifiesUser>> {
         return this._httpClient.post<ActionResponse< NotifiesUser>>(`${this.href}/removeAssignNotifies`, request);
     }
+    public checkExistNotify(request: any): Observable<SearchResponse<Users>> {
+        return this._httpClient.get<SearchResponse<Users>>(`${this.href}/checkExistNotify?notifyId=${request}`).pipe(retry(2));
+    } 
 }

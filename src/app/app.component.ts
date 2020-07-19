@@ -4,7 +4,7 @@ import { CommonService } from './shared/common.service';
 import { AuthenticationServices } from './helpers/authentication.service';
 import { Users } from './users/user';
 import { Component, OnInit, SimpleChanges, OnChanges } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -18,24 +18,26 @@ export class AppComponent implements OnInit{
   title = 'java-frontend';
   constructor(private router: Router,
     private _commonService:CommonService,
-    private authenticationService: AuthenticationServices) {
-      this.authenticationService.currentUser.subscribe((x: any) =>{
-        this.currentUser = x;
-        if(this.currentUser){
-          this._commonService.getByRoleId(x.user.roleId.id).subscribe(val=> {
-            this.menus=val;
-          });
-          this._commonService.getActionByRole(x.user.roleId.id).subscribe(val=>{
-            var listAction=[];
-            for (let index = 0; index < val.length; index++) {
-              const element = val[index];
-             var action=new Actions({id:element[0],actionName:element[1]});
-             listAction.push(action);
+    private authenticationService: AuthenticationServices,
+    private _router:Router) {
+          this.authenticationService.currentUser.subscribe((x: any) =>{
+            this.currentUser = x;
+            if(this.currentUser){
+              // this._commonService.getByRoleId(x.user.roleId.id).subscribe(val=> {
+              //   this.menus=val;
+              // });
+              this._commonService.getActionByRole(x.user.roleId.id).subscribe(val=>{
+                var listAction=[];
+                for (let index = 0; index < val.length; index++) {
+                  const element = val[index];
+                 var action=new Actions({id:element[0],actionName:element[1]});
+                 listAction.push(action);
+                }
+                localStorage.setItem('currentAction', JSON.stringify(listAction));
+              })
             }
-            localStorage.setItem('currentAction', JSON.stringify(listAction));
-          })
-        }
       });
+     
   }
   //   get isAdmin() {
   //     return this.currentUser && this.currentUser.role === Role.Admin;
@@ -46,8 +48,6 @@ export class AppComponent implements OnInit{
         this.menus=val;
         
       });
-    }else{
-      this.router.navigateByUrl('/login');
     }
   }
 

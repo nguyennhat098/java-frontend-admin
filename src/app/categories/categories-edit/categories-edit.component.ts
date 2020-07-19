@@ -1,7 +1,7 @@
 import { finalize } from 'rxjs/operators';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { AppConsts } from './../../shared/AppConsts';
-import { ValidationOption, RequiredValidationRule, ClientValidator, ValidationService } from 'ngx-fw4c';
+import { ValidationOption, RequiredValidationRule, ClientValidator, ValidationService, ValidationRuleResponse, CustomValidationRule } from 'ngx-fw4c';
 import { Component, OnInit, ViewChild, Input, ElementRef } from '@angular/core';
 import { Categories } from '../categories';
 import { Observable, of } from 'rxjs';
@@ -52,14 +52,22 @@ export class CategoriesEditComponent implements OnInit {
         valueResolver: () => this.item.name,
         rules: [
           new RequiredValidationRule(() => AppConsts.RequiredError),
-          // new CustomValidationRule(value => {
-          //   // if (this.oldItem && this.oldItem.name == value) {
-          //   //   return of(new ValidationRuleResponse({
-          //   //     status: true,
-          //   //   }))
-          //   // }
-          //   return this._roleService.checkUniqueName(value);
-          // }),
+          new CustomValidationRule(value => {
+            this.item.slug = this.item.name.toString().toLowerCase();
+
+            //Đổi ký tự có dấu thành không dấu
+            this.item.slug = this.item.slug.replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a');
+            this.item.slug = this.item.slug.replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e');
+            this.item.slug = this.item.slug.replace(/i|í|ì|ỉ|ĩ|ị/gi, 'i');
+            this.item.slug = this.item.slug.replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'o');
+            this.item.slug = this.item.slug.replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u');
+            this.item.slug = this.item.slug.replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y');
+            this.item.slug = this.item.slug.replace(/đ/gi, 'd');
+            this.item.slug = this.item.slug.replace(/ /gi, "-");
+              return of(new ValidationRuleResponse({
+                status: true,
+              }))
+          }),
         ]
       }),
       new ValidationOption({

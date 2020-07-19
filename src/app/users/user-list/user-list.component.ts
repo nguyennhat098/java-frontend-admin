@@ -72,12 +72,11 @@ export class UserListComponent implements OnInit {
                 title: "New User",
                 acceptCallback: item => {
                   return this._userService.create(item).subscribe((val: any) => {
+                    this.tableList.reload();
                     if (val.errorMessage == "true") {
                       this._toastr.success('Changes saved', 'Success');
-                      this.tableList.reload;
                     } else {
                       this._toastr.error('Changes fail', 'Error');
-                      this.tableList.reload;
                     }
                   });
                 }
@@ -148,11 +147,10 @@ export class UserListComponent implements OnInit {
                   listId.push(data[index].id);
                 }
                 this._userService.deleteMutiple(data).subscribe((val: ActionResponse<Users>) => {
+                  this.tableList.reload();
                   if (val.failureItems.length == 0) {
-                    this.tableList.reload();
                     this._toastr.success('Changes saved', 'Success');
                   } else {
-                    this.tableList.reload();
                     this._toastr.success(`Total fail ${val.failureItems.length}\n ToTal succes:${val.successItems.length}`, 'Success');
                   }
                 })

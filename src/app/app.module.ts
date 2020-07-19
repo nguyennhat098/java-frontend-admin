@@ -36,7 +36,6 @@ const ListModule = [
 @NgModule({
   declarations: [
     AppComponent,
-    // LoginAdminComponent,
   ],
   imports: [
     BrowserModule,

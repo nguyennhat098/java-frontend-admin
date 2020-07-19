@@ -51,6 +51,17 @@ export class NotifiesExistComponent implements OnInit {
       },
       paging: true,
       title:'Active Notifies',
+      topButtons: [
+        {
+          icon: AppIcons.Add,
+          customClass: 'primary',
+          title: () => AppConsts.New,
+          hide: () => {
+            tableMessage.foundMessage=`Found ${this.tableList.totalRecords} results.`;
+            return true;
+          },
+        }
+      ],
       actions: [
         {
 					type: TableConstant.ActionType.Toolbar,
@@ -58,7 +69,6 @@ export class NotifiesExistComponent implements OnInit {
 					title: () => 'Delete',
 					customClass: 'danger',
           hide:()=> {
-            tableMessage.foundMessage=`Found ${this.tableList.totalRecords} results.`;
             return  !this._authenticationService.checkAuthenticate('DELETE NOTIFIES');
           },
 					executeAsync: () => {

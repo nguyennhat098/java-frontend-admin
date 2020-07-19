@@ -10,7 +10,7 @@ import { retry } from 'rxjs/operators';
 })
 
 export class CommonService extends MockService {
-    private href = 'https://shopdemo112.herokuapp.com';
+    private href = 'http://localhost:8080';
     constructor(private _httpClient: HttpClient) {
         super();
     }

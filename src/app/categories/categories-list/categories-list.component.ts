@@ -4,7 +4,7 @@ import { CategoriesEditComponent } from './../categories-edit/categories-edit.co
 import { ToastrService } from 'ngx-toastr';
 import { AuthenticationServices } from './../../helpers/authentication.service';
 import { ModalService, TableOption, TableComponent, DataService, TemplateViewModel, TableColumnType, ConfirmViewModel, TableConstant, TableText, TableMessage } from 'ngx-fw4c';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { CategoryService } from '../categories.service';
 import { Categories } from '../categories';
 
@@ -15,6 +15,7 @@ import { Categories } from '../categories';
 })
 export class CategoriesListComponent implements OnInit {
   @ViewChild('tableList', { static: true }) tableList: TableComponent;
+  @ViewChild("image", { static: true }) public image: TemplateRef<any>;
   public option: TableOption;
   constructor(private _modalService: ModalService,
     private _authenticationService: AuthenticationServices,
@@ -170,6 +171,12 @@ export class CategoriesListComponent implements OnInit {
           title: () => 'Slug',
           valueRef: () => 'slug',
 
+        },
+        {
+          type: TableColumnType.Description,
+          title: () => 'Image',
+          valueRef: () => '',
+          customTemplate: () => this.image,
         },
         {
           type: TableColumnType.Date,

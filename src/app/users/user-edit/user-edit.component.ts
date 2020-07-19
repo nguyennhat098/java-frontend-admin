@@ -173,7 +173,6 @@ export class UserEditComponent implements OnInit {
 
   public callback(): Observable<any> {
      this.item.roleId = this.role;
-    console.log(this.item)
     return of(this.item);
   }
 }

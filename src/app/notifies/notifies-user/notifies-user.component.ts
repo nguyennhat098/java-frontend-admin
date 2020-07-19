@@ -5,7 +5,7 @@ import { UserService } from './../../users/user.service';
 import { AppIcons, AppConsts } from './../../shared/AppConsts';
 import { AuthenticationServices } from './../../helpers/authentication.service';
 import { Component, OnInit, ViewChild, TemplateRef, Input } from '@angular/core';
-import { TableComponent, TableOption, ModalService, TableMessage, TableText, ConfirmViewModel, TableConstant, TableColumnType } from 'ngx-fw4c';
+import { TableComponent, TableOption, ModalService, TableMessage, TableText, ConfirmViewModel, TableConstant, TableColumnType, TemplateViewModel } from 'ngx-fw4c';
 import { ToastrService } from 'ngx-toastr';
 import { Notifies } from '../notifies';
 
@@ -31,26 +31,37 @@ export class NotifiesUserComponent implements OnInit {
     this.initList();
   }
   private initList(): void {
-    var tableText=new TableText();
-    tableText.action='Action';
-    tableText.advancedSearchTitle='Search advance';
-    tableText.placeholderSearch='Enter search keywords';
-    tableText.allTitle='All';
-    tableText.advancedBtnCancelTitle='cancel';
-    tableText.filterTitle='Search By'
-    tableText.advancedBtnTitle='search';
-    tableText.selectPageSize='Display';
-    var tableMessage=new TableMessage();
-    tableMessage.loadingMessage='Loading',
-    tableMessage.notFoundMessage='No data found';
-    tableMessage.selectedItemsMessage=`record selected.`;
-    tableMessage.confirmClearAllRecordsMessage='Deselect all';
+    var tableText = new TableText();
+    tableText.action = 'Action';
+    tableText.advancedSearchTitle = 'Search advance';
+    tableText.placeholderSearch = 'Enter search keywords';
+    tableText.allTitle = 'All';
+    tableText.advancedBtnCancelTitle = 'cancel';
+    tableText.filterTitle = 'Search By'
+    tableText.advancedBtnTitle = 'search';
+    tableText.selectPageSize = 'Display';
+    var tableMessage = new TableMessage();
+    tableMessage.loadingMessage = 'Loading',
+      tableMessage.notFoundMessage = 'No data found';
+    tableMessage.selectedItemsMessage = `record selected.`;
+    tableMessage.confirmClearAllRecordsMessage = 'Deselect all';
     this.option = new TableOption({
       selectedChange:(item)=>{
         tableMessage.selectedItemsMessage=`${this.tableList.selectedItems.length} record selected.`;
       },
       paging: true,
       title:'Assign Notifies to Users',
+      topButtons: [
+        {
+          icon: AppIcons.Add,
+          customClass: 'primary',
+          title: () => AppConsts.New,
+          hide: () => {
+            tableMessage.foundMessage=`Found ${this.tableList.totalRecords} results.`;
+            return true;
+          },
+        }
+      ],
       actions: [
         {
 					type: TableConstant.ActionType.Toolbar,
@@ -58,7 +69,6 @@ export class NotifiesUserComponent implements OnInit {
 					title: () => 'Add',
 					customClass: 'primary',
           hide:()=> {
-            tableMessage.foundMessage=`Found ${this.tableList.totalRecords} results.`;
             return !this._authenticationService.checkAuthenticate('EDIT NOTIFIES');
           },
 					executeAsync: () => {

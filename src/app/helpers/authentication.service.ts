@@ -5,16 +5,19 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 // import { environment } from '../../environment';
 // import { User } from '../_models';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationServices {
-    private href = 'https://shopdemo112.herokuapp.com';
+    private href = 'http://localhost:8080';
+    // private href = 'http://localhost:8080';
+
     private currentUserSubject: BehaviorSubject<Auths>;
     public currentUser: Observable<Auths>;
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient,private router:Router) {
         this.currentUserSubject = new BehaviorSubject<Auths>(JSON.parse(localStorage.getItem('currentUser')));
         this.currentUser = this.currentUserSubject.asObservable();
     }
@@ -42,7 +45,8 @@ export class AuthenticationServices {
         localStorage.removeItem('currentUser');
         localStorage.removeItem('currentAction');
         this.currentUserSubject.next(null);
-        location.reload(true);
+        this.router.navigateByUrl('/login');
+        // location.reload(true);
     }
     public checkAuthenticate(actionName: string): boolean {
         var currentActions = JSON.parse(localStorage.getItem('currentAction')) as Actions[];

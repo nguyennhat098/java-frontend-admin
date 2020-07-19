@@ -6,7 +6,7 @@ import { AppIcons, AppConsts } from './../../shared/AppConsts';
 import { NotifiesService } from './../notifies.service';
 import { AuthenticationServices } from './../../helpers/authentication.service';
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { TableComponent, TableOption, ModalService, DataService, TableText, TableMessage, TemplateViewModel, ConfirmViewModel, TableConstant, TableColumnType, ValidationOption, RequiredValidationRule } from 'ngx-fw4c';
+import { TableComponent, TableOption, ModalService, DataService, TableText, TableMessage, TemplateViewModel, ConfirmViewModel, TableConstant, TableColumnType, ValidationOption, RequiredValidationRule, NotificationViewModel } from 'ngx-fw4c';
 import { ToastrService } from 'ngx-toastr';
 import { Notifies } from '../notifies';
 
@@ -30,23 +30,23 @@ export class NotifiesListComponent implements OnInit {
     this.initList();
   }
   private initList(): void {
-    var tableText=new TableText();
-    tableText.action='Action';
-    tableText.advancedSearchTitle='Search advance';
-    tableText.placeholderSearch='Enter search keywords';
-    tableText.allTitle='All';
-    tableText.advancedBtnCancelTitle='cancel';
-    tableText.filterTitle='Search By'
-    tableText.advancedBtnTitle='search';
-    tableText.selectPageSize='Display';
-    var tableMessage=new TableMessage();
-    tableMessage.loadingMessage='Loading',
-    tableMessage.notFoundMessage='No data found';
-    tableMessage.selectedItemsMessage=`record selected.`;
-    tableMessage.confirmClearAllRecordsMessage='Deselect all';
+    var tableText = new TableText();
+    tableText.action = 'Action';
+    tableText.advancedSearchTitle = 'Search advance';
+    tableText.placeholderSearch = 'Enter search keywords';
+    tableText.allTitle = 'All';
+    tableText.advancedBtnCancelTitle = 'cancel';
+    tableText.filterTitle = 'Search By'
+    tableText.advancedBtnTitle = 'search';
+    tableText.selectPageSize = 'Display';
+    var tableMessage = new TableMessage();
+    tableMessage.loadingMessage = 'Loading',
+      tableMessage.notFoundMessage = 'No data found';
+    tableMessage.selectedItemsMessage = `record selected.`;
+    tableMessage.confirmClearAllRecordsMessage = 'Deselect all';
     this.option = new TableOption({
-      selectedChange:(item)=>{
-        tableMessage.selectedItemsMessage=`${this.tableList.selectedItems.length} record selected.`;
+      selectedChange: (item) => {
+        tableMessage.selectedItemsMessage = `${this.tableList.selectedItems.length} record selected.`;
       },
       paging: true,
       title: 'Notifies Management',
@@ -55,7 +55,7 @@ export class NotifiesListComponent implements OnInit {
           icon: AppIcons.Edit,
           customClass: "success",
           hide: () => {
-            tableMessage.foundMessage=`Found ${this.tableList.totalRecords} results.`;
+            tableMessage.foundMessage = `Found ${this.tableList.totalRecords} results.`;
             if (this.tableList.changedRows.length === 0) {
               return true;
             } else {
@@ -64,12 +64,11 @@ export class NotifiesListComponent implements OnInit {
           },
           title: () => AppConsts.SaveChange,
           executeAsync: () => {
-            var data=[];
+            var data = [];
             for (let i = 0; i < this.tableList.changedRows.length; i++) {
               data.push(this.tableList.changedRows[i].currentItem);
             }
-            this._notifiesService.updateMutiple(data).subscribe(val=>{
-              
+            this._notifiesService.updateMutiple(data).subscribe(val => {
               this._toastr.success('Changes saved', 'Success');
               this.tableList.reload();
               this.tableList.resetChanges();
@@ -83,7 +82,6 @@ export class NotifiesListComponent implements OnInit {
           hide: () => {
             return !this._authenticationService.checkAuthenticate('ADD NOTIFIES');
           },
-
           executeAsync: item => {
             this._modalService.showTemplateDialog(
               new TemplateViewModel({
@@ -149,6 +147,7 @@ export class NotifiesListComponent implements OnInit {
               data: {
                 item: this._dataService.cloneItem(item)
               },
+              hideAcceptBtn: true,
               acceptCallback: item => {
                 return this._notifiesService.update(item).subscribe(() => {
                   this.tableList.reload();
@@ -163,7 +162,7 @@ export class NotifiesListComponent implements OnInit {
           icon: AppIcons.notify,
           customClass: 'danger',
           hide: () => !this._authenticationService.checkAuthenticate('EDIT NOTIFIES'),
-          executeAsync: item => {
+          executeAsync: data => {
             this._modalService.showTemplateDialog(new TemplateViewModel({
               title: 'Active Notifies',
               customSize: 'modal-lg',
@@ -171,8 +170,9 @@ export class NotifiesListComponent implements OnInit {
               template: NotifiesExistComponent,
               validationKey: 'NotifiesExistComponent',
               data: {
-                item: this._dataService.cloneItem(item)
+                item: this._dataService.cloneItem(data)
               },
+              hideAcceptBtn: true,
               acceptCallback: item => {
                 return this._notifiesService.update(item).subscribe(() => {
                   this.tableList.reload();
@@ -194,45 +194,60 @@ export class NotifiesListComponent implements OnInit {
                 title: AppConsts.Confirm,
                 message: AppConsts.ConfirmDelete,
                 acceptCallback: () => {
-                  this._notifiesService.delete(item.id).subscribe(() => {
-                    this.tableList.reload();
-                    this._toastr.success('Changes saved', 'Success');
-                  })
+                  this._notifiesService.checkExistNotify(item.id).subscribe(data => {
+                    if (data == true) {
+                      this._modalService.showNotificationDialog(new NotificationViewModel({
+                        title: 'warning',
+                        message: 'Notification has been used.please delete notifications related to users'
+                      }));
+                    } else {
+                      this._notifiesService.delete(item.id).subscribe(() => {
+                        this.tableList.reload();
+                        this._toastr.success('Changes saved', 'Success');
+                      })
+                    }
+                  });
                 }
               })
             );
           }
         },
-        
         {
-					type: TableConstant.ActionType.Toolbar,
-					icon: AppIcons.Remove,
-					title: () => 'Delete',
-					customClass: 'danger',
+          type: TableConstant.ActionType.Toolbar,
+          icon: AppIcons.Remove,
+          title: () => 'Delete',
+          customClass: 'danger',
           hide: () => !this._authenticationService.checkAuthenticate('DELETE NOTIFIES'),
-					executeAsync: () => {
-						this._modalService.showConfirmDialog(new ConfirmViewModel({
-							title: AppConsts.Confirm,
-							message:  AppConsts.ConfirmDelete,
-							acceptCallback: () => {
+          executeAsync: () => {
+            this._modalService.showConfirmDialog(new ConfirmViewModel({
+              title: AppConsts.Confirm,
+              message: AppConsts.ConfirmDelete,
+              acceptCallback: () => {
                 var data = this.tableList.selectedItems;
-                this._notifiesService.deleteMutiple(data).subscribe((val:ActionResponse<Notifies>) => {
-                  if(val.failureItems.length==0){
-                    this.tableList.reload();
+                this._notifiesService.deleteMutiple(data).subscribe((val: ActionResponse<Notifies>) => {
+                  this.tableList.reload();
+                  if (val.failureItems.length == 0) {
                     this._toastr.success('Changes saved', 'Success');
-                  }else{
-                    this.tableList.reload();
-                    this._toastr.success(`Total fail ${val.failureItems.length}\n ToTal succes:${val.successItems.length}`, 'Success');
+                  } else {
+                    this._notifiesService.checkExistNotify(data[0].id).subscribe(data => {
+                      if (data == true) {
+                        this._modalService.showNotificationDialog(new NotificationViewModel({
+                          title: 'warning',
+                          message: 'Notification has been used.please delete notifications related to users'
+                        }));
+                      } else {
+                        this._toastr.success(`Total fail ${val.failureItems.length}\n ToTal succes:${val.successItems.length}`, 'Success');
+                      }
+                    });
                   }
-                   
-                })
-							}
-						}))
-					}
-				},
+                });
+              }
+            }))
+          }
+        },
       ],
-      displayText:tableText,
-      message:tableMessage,
+      displayText: tableText,
+      message: tableMessage,
       inlineEdit: true,
       searchFields: ['Name'],
       mainColumns: [
@@ -241,10 +256,10 @@ export class NotifiesListComponent implements OnInit {
           title: () => 'Content',
           valueRef: () => 'content',
           allowFilter: true,
-          inlineEdit:true,
+          inlineEdit: true,
           validationOption: new ValidationOption({
             rules: [
-             new RequiredValidationRule(()=>AppConsts.RequiredError)
+              new RequiredValidationRule(() => AppConsts.RequiredError)
             ]
           })
         },
@@ -260,7 +275,7 @@ export class NotifiesListComponent implements OnInit {
           valueRef: () => 'link',
           validationOption: new ValidationOption({
             rules: [
-             new RequiredValidationRule(()=>AppConsts.RequiredError)
+              new RequiredValidationRule(() => AppConsts.RequiredError)
             ]
           })
         },
@@ -268,12 +283,12 @@ export class NotifiesListComponent implements OnInit {
           type: TableColumnType.Date,
           title: () => 'Created Date',
           valueRef: () => 'createdDate',
-          inlineEdit:false
+          inlineEdit: false
         },
         {
           type: TableColumnType.Date,
           title: () => 'Modify Date',
-          inlineEdit:false,
+          inlineEdit: false,
           valueRef: () => 'modifyDate',
         },
         {

@@ -5,9 +5,11 @@ import { Framework4CModule } from 'ngx-fw4c';
 import { BrowserModule } from '@angular/platform-browser';
 import { CategoriesListComponent } from './categories-list/categories-list.component';
 import { CategoriesEditComponent } from './categories-edit/categories-edit.component';
+import { CategoriesInfoComponent } from './categories-info/categories-info.component';
 const declarations = [
   CategoriesListComponent,
-  CategoriesEditComponent
+  CategoriesEditComponent,
+  CategoriesInfoComponent
 ];
 @NgModule({
   declarations: declarations,
