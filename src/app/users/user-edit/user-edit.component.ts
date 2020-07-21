@@ -17,11 +17,7 @@ import { ValidationOption, RequiredValidationRule, CustomValidationRule, Validat
 export class UserEditComponent implements OnInit {
   @ViewChild('formRef', { static: true }) public formRef: ElementRef;
   @Input() item: Users;
-  // private urls = [];
-  // private downloadURL: Observable<string>;
   private roles: Roles[];
-  // private fb;
-  // private image;
   private role = new Roles();
   private oldItem: Users;
   constructor(private _storage: AngularFireStorage,
@@ -173,6 +169,11 @@ export class UserEditComponent implements OnInit {
 
   public callback(): Observable<any> {
      this.item.roleId = this.role;
+     if(this.item.id){
+       this.item.editedDate=new Date;
+     }else{
+       this.item.createdDate=new Date;
+     }
     return of(this.item);
   }
 }

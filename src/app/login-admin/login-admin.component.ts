@@ -1,9 +1,7 @@
 import { Users } from './../users/user';
-import { CommonService } from './../shared/common.service';
 import { AuthenticationServices } from './../helpers/authentication.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 @Component({
@@ -35,7 +33,7 @@ export class LoginAdminComponent implements OnInit {
         data => {
           if(data.user.message=='true'){
             this.user=data.user;
-            this.router.navigateByUrl('/product');
+            this.router.navigateByUrl('/');
             setTimeout(() => {
               location.reload();
             }, 5);

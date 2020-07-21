@@ -1,7 +1,7 @@
 import { AppConsts } from './../../shared/AppConsts';
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { Roles } from '../Role';
-import { ValidationOption, RequiredValidationRule, ValidationRuleResponse, CustomValidationRule, ValidationService, ClientValidator } from 'ngx-fw4c';
+import { ValidationOption, RequiredValidationRule, ValidationRuleResponse, CustomValidationRule, ValidationService, ClientValidator, DataService } from 'ngx-fw4c';
 import { of, Observable } from 'rxjs';
 import { RoleService } from '../role.service';
 
@@ -15,10 +15,14 @@ export class RolesEditComponent implements OnInit {
   @Input() item: Roles;
   private oldItem: Roles;
   constructor( private _validationService: ValidationService,
-    private _roleService:RoleService) { }
+    private _roleService:RoleService,
+    private _dataService: DataService) { }
 
   ngOnInit() {
+    if (this.item.id) {
+      this.oldItem =this._dataService.cloneItem(this.item);
     this.initValidations();
+    }
   }
   private initValidations(): void {
     var options = [

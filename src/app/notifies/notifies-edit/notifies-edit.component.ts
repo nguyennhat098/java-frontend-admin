@@ -50,15 +50,7 @@ export class NotifiesEditComponent implements OnInit {
         dynamic: true,
         valueResolver: () => this.item.content,
         rules: [
-          new RequiredValidationRule(() => AppConsts.RequiredError),
-          // new CustomValidationRule(value => {
-          //   // if (this.oldItem && this.oldItem.name == value) {
-          //   //   return of(new ValidationRuleResponse({
-          //   //     status: true,
-          //   //   }))
-          //   // }
-          //   return this._roleService.checkUniqueName(value);
-          // }),
+          new RequiredValidationRule(() => AppConsts.RequiredError)
         ]
       }),
       new ValidationOption({

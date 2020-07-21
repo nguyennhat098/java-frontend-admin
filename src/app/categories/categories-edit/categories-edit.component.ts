@@ -104,6 +104,11 @@ export class CategoriesEditComponent implements OnInit {
   }
 
   public callback(): Observable<any> {
+    if(this.item.id){
+      this.item.modifileDate=new Date;
+    }else{
+      this.item.createdDate=new Date;
+    }
     return of(this.item);
   }
 }

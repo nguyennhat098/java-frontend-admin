@@ -15,6 +15,8 @@ export class Users {
     image?: string;
     gender?: string;
     roleName?:string;
+    editedDate?:Date;
+    createdDate?:Date;
     constructor(init?: Partial<Users>) {
         Object.assign(this, init);
     }

@@ -13,7 +13,7 @@ const arrPermission = [
   { actionName: 'ROLE', view: 'VIEW ROLE', add: 'ADD ROLE', edit: 'EDIT ROLE', delete: 'DELETE ROLE',nameDb:'ROLE' },
   { actionName: 'USER', view: 'VIEW USER', add: 'ADD USER', edit: 'EDIT USER', delete: 'DELETE USER',nameDb:'USER' },
   { actionName: 'ORDERS', view: 'VIEW ORDERS', add: '', edit: 'EDIT ORDERS', delete: '',nameDb:'ORDERS' },
-  { actionName: 'CHAT', view: 'VIEW CHAT', add: 'ADD CHAT', edit: '', delete: '',nameDb:'CHAT' },
+  { actionName: 'CHAT', view: 'VIEW CHAT', add: '', edit: '', delete: '',nameDb:'CHAT' },
   { actionName: 'Permission', view: '', add: 'ADD PERMISSION', edit: 'EDIT PERMISSION', delete: 'DELETE PERMISSION',nameDb:'PERMISSION' },
 ];
 @Component({

@@ -24,7 +24,6 @@ export class EditProductComponent implements OnInit {
   constructor(private _productService: ProductService,
     private _categoryService: CategoryService,
     private _validationService: ValidationService,
-    private _dataService: DataService,
     private _storage: AngularFireStorage) { }
 
   ngOnInit() {
@@ -49,31 +48,16 @@ export class EditProductComponent implements OnInit {
   }
   updateMutilImages(event) {
     if (event.target.files && event.target.files[0]) {
-      // this.urls = [];
       this.item.moreImages = null;
       var filesAmount = event.target.files.length;
       for (let i = 0; i < filesAmount; i++) {
-        // var reader = new FileReader();
-        // reader.onload = (event: any) => {
-        //   this.urls.push(event.target.result);
-        // }
-        // reader.readAsDataURL(event.target.files[i]);
         this.uploadMutipleFireBase(event.target.files[i]);
       }
     }
-
   }
   public categoryChange(id): void {
     this.category.id = id;
   }
-  // public searchCategories = (searchText: string): Observable<{ items: any[] }> => {
-  //   return this.categories.pipe(map(val => {
-  //     return {
-  //       items: val.map(s => ({ name: s.name, value: s.id }))
-  //         .filter(s => !searchText || s.name.toString().toLowerCase().indexOf(searchText.toLowerCase()) > -1)
-  //     };
-  //   }));
-  // }
   private uploadMutipleFireBase(file: any): void {
     this.urls = [];
     var n = Date.now();
