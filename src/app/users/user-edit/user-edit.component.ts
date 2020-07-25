@@ -82,10 +82,10 @@ export class UserEditComponent implements OnInit {
             return this._userService.checkUniqueUserName(value);
           }),
           new CustomValidationRule(value => {
-            var regexp = /^\S+$/;
+            var regexp = /^[A-Za-z0-9\.\-\_]+$/i
             return of(new ValidationRuleResponse({
               status: regexp.test(value),
-              message:'User Name is not contain space'
+              message:'User Name is not contain special characters'
             }))
         }),
         ]
@@ -171,9 +171,11 @@ export class UserEditComponent implements OnInit {
      this.item.roleId = this.role;
      if(this.item.id){
        this.item.editedDate=new Date;
+       this.item.password=this.item.password==this.oldItem.password?this.item.password:this.item.password+'{check_pwd_change}';
      }else{
        this.item.createdDate=new Date;
      }
+     console.log(this.item.password)
     return of(this.item);
   }
 }

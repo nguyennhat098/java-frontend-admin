@@ -28,8 +28,8 @@ export class ProductService extends MockService {
     }
 
     public delete(request: ActionRequest<Products>)
-        : Observable<ActionResponse<Products>> {
-        return this._httpClient.delete<ActionResponse<Products>>(`${this.href}/product/delete?id=${request}`, { params: request as any });
+        : Observable<ActionItem<Products>> {
+        return this._httpClient.delete<ActionItem<Products>>(`${this.href}/product/delete?id=${request}`, { params: request as any });
     }
 
     public search(request: any): Observable<SearchResponse<Products>> {

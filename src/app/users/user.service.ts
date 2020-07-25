@@ -38,8 +38,8 @@ export class UserService extends MockService {
     }
 
     public delete(request: ActionRequest<Users>)
-        : Observable<ActionResponse<Users>> {
-        return this._httpClient.delete<ActionResponse<Users>>(`${this.href}/user/delete?id=${request}`, { params: request as any });
+        : Observable<ActionItem<Users>> {
+        return this._httpClient.delete<ActionItem<Users>>(`${this.href}/user/delete?id=${request}`, { params: request as any });
     }
 
 

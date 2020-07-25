@@ -1,4 +1,3 @@
-import { LoginAdminComponent } from './login-admin/login-admin.component';
 import { UserModule } from './users/user.module';
 import { RoleModule } from './roles/role.module';
 import { LoginModule } from './login-admin/login.module';
@@ -22,7 +21,6 @@ import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { OrdersModule } from './orders/orders.module';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
-import { IndexComponent } from './index/index.component';
 import { IndexModule } from './index/index.module';
 const ListModule = [
   ProductModule,

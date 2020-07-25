@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-    private href = 'http://localhost:8080';
+    private href = 'https://shopdemo112.herokuapp.com';
     constructor(private authenticationService: AuthenticationServices) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

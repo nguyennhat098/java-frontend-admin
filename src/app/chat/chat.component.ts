@@ -1,5 +1,5 @@
 import { Users } from './../users/user';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {  FormBuilder } from '@angular/forms';
 import { Component, OnInit, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { ChatService } from './chat.service';
 import { ChatMessage } from './chat';
@@ -14,7 +14,6 @@ export class ChatComponent implements OnInit, AfterViewInit {
   messagesList;
   roomList;
   properties: string[];
-  // formRef: FormGroup;
   dataListRoomProperties: string[];
   user: Users;
   currentFullName: string;
@@ -32,9 +31,6 @@ export class ChatComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('currentUser')).user;
     this.getListRoom();
-    // this.formRef = this.formBuilder.group({
-    //   chatMessage: ['', Validators.required],
-    // })
   }
   selectedMessage(roomIndex: string) {
     this.roomName = this.roomList[roomIndex].roomName;
@@ -68,9 +64,6 @@ export class ChatComponent implements OnInit, AfterViewInit {
     if (!val) {
       return;
     }
-    // const chat:ChatMessage = {
-    //   name: this.user.userName
-    // };
     const chat: ChatMessage = new ChatMessage({
       messageBody: val,
       senderName: this.user.userName,

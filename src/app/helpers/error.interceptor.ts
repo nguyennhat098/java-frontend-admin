@@ -9,8 +9,7 @@ import { Router } from '@angular/router';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-    constructor(private authenticationService: AuthenticationServices,
-        private _router:Router) { }
+    constructor( private _router:Router) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(request).pipe(catchError(err => {

@@ -30,8 +30,8 @@ export class RoleService extends MockService {
     }
 
     public delete(request: ActionRequest<Roles>)
-        : Observable<ActionResponse<Roles>> {
-        return this._httpClient.delete<ActionResponse<Roles>>(`${this.href}/role/delete?id=${request}`, { params: request as any });
+        : Observable<ActionItem<Roles>> {
+        return this._httpClient.delete<ActionItem<Roles>>(`${this.href}/role/delete?id=${request}`, { params: request as any });
     }
     public search(request: any): Observable<SearchResponse<Roles>> {
         return this._httpClient.get<SearchResponse<Roles>>(`${this.href}/role/search`, { params: request as any }).pipe(retry(2));

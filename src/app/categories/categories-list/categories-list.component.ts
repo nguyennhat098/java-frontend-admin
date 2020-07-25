@@ -99,9 +99,13 @@ export class CategoriesListComponent implements OnInit {
                 item: this._dataService.cloneItem(item)
               },
               acceptCallback: item => {
-                return this._categoryService.update(item).subscribe(() => {
+                return this._categoryService.update(item).subscribe(val => {
                   this.tableList.reload();
-                  this._toastr.success('Changes saved', 'Success');
+                  if (val.errorMessage == "true") {
+                    this._toastr.success('Changes saved', 'Success');
+                  } else {
+                    this._toastr.error('Changes fail', 'Error');
+                  }
                 });
               }
             })
@@ -119,9 +123,15 @@ export class CategoriesListComponent implements OnInit {
                 title: AppConsts.Confirm,
                 message: AppConsts.ConfirmDelete,
                 acceptCallback: () => {
-                  this._categoryService.delete(item.id).subscribe(() => {
+                  this._categoryService.delete(item.id).subscribe(val => {
                     this.tableList.reload();
-                    this._toastr.success('Changes saved', 'Success');
+                    if (val.errorMessage == "true") {
+                      this._toastr.success('Changes saved', 'Success');
+                    } else if(val.errorMessage.indexOf('could not execute statement')>-1){
+                      this._toastr.error('The data is being used in another screen so it cannot be deleted', 'Error');
+                    }else{
+                      this._toastr.error('Changes fail', 'Error');
+                    }
                   })
                 }
               })

@@ -21,12 +21,20 @@
 <script>
  function changeMenu(){
     var element = document.querySelector(".sidebar-mini");
-    if(element.classList.contains("sidebar-collapse")){
+    if(element.classList.contains("sidebar-open")){
       element.classList.remove("sidebar-collapse");
+      element.classList.add("sidebar-close");
+      element.classList.remove("sidebar-open");
     } else{
       element.classList.add("sidebar-collapse");
+      element.classList.add("sidebar-open");
+      element.classList.remove("sidebar-close");
     }
   }
- 
+ function hideMenu(){
+  var element = document.querySelector(".sidebar-mini");
+  element.classList.remove("sidebar-open");
+  element.classList.add("sidebar-close");
+ }
 </script>
 </html>

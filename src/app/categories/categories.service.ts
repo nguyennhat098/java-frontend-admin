@@ -28,8 +28,8 @@ export class CategoryService extends MockService {
     }
 
     public delete(request: ActionRequest<Categories>)
-        : Observable<ActionResponse<Categories>> {
-        return this._httpClient.delete<ActionResponse<Categories>>(`${this.href}/delete?id=${request}`, { params: request as any });
+        : Observable<ActionItem<Categories>> {
+        return this._httpClient.delete<ActionItem<Categories>>(`${this.href}/delete?id=${request}`, { params: request as any });
     }
 
 

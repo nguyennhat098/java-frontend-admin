@@ -17,7 +17,7 @@ import { retry } from 'rxjs/operators';
 })
 
 export class NotifiesService extends MockService {
-    private href = 'http://localhost:8080/notifiesCustom';
+    private href = 'https://shopdemo112.herokuapp.com/notifiesCustom';
     constructor(private _httpClient: HttpClient) {
         super();
     }
@@ -35,8 +35,8 @@ export class NotifiesService extends MockService {
     }
 
     public delete(request: ActionRequest<Notifies>)
-        : Observable<ActionResponse<Notifies>> {
-        return this._httpClient.delete<ActionResponse<Notifies>>(`${this.href}/delete?id=${request}`, { params: request as any });
+        : Observable<ActionItem<Notifies>> {
+        return this._httpClient.delete<ActionItem<Notifies>>(`${this.href}/delete?id=${request}`, { params: request as any });
     }
     public deleteMutiple( request: Notifies[]): Observable<ActionResponse< Notifies>> {
         return this._httpClient.post<ActionResponse< Notifies>>(`${this.href}/deleteMutiple`, request);

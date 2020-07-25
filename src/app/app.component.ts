@@ -34,7 +34,6 @@ export class AppComponent implements OnInit {
         this._commonService.getByRoleId(this.currentUser.user.roleId.id).subscribe(val => {
           this.menus = val;
         });
-        this.router.navigateByUrl('/');
       } else {
         this.router.navigateByUrl('/login');
       }
