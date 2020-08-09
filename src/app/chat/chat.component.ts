@@ -3,6 +3,8 @@ import {  FormBuilder } from '@angular/forms';
 import { Component, OnInit, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { ChatService } from './chat.service';
 import { ChatMessage } from './chat';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-chat',
@@ -20,8 +22,28 @@ export class ChatComponent implements OnInit, AfterViewInit {
   currentImage: string;
   selectedRoom: ChatMessage;
   mes: string;
+  isTyping:boolean;
+  showTyping:boolean;
   @ViewChildren('allTheseThings') things: QueryList<any>;
-  constructor(private chatService: ChatService, private formBuilder: FormBuilder) { }
+  constructor(private chatService: ChatService, private _router: Router) {
+    // this._router.events
+    // .pipe(filter((rs): rs is NavigationEnd => rs instanceof NavigationEnd))
+    // .subscribe(event => {
+    //   if (
+    //     event.id === 1 &&
+    //     event.url === event.urlAfterRedirects 
+    //   ) {
+    //    debugger // here your code when page is refresh
+    //   }
+    // })
+    _router.events.forEach((event) => {
+
+      if (event instanceof NavigationEnd) {
+        debugger
+        this.chatService.changeTyping(this.roomName,false);
+      }
+      });
+   }
   ngAfterViewInit(): void {
     this.things.changes.subscribe(t => {
       var objDiv = document.getElementById("scroll");
@@ -76,7 +98,19 @@ export class ChatComponent implements OnInit, AfterViewInit {
     });
     this.chatService.sendMessage(chat, this.roomName);
     this.mes = null;
+    this.isTyping=false;
   }
+  ChangeTyping(){
+    if(this.mes.length>0&&!this.isTyping){
+      this.isTyping=true;
+      this.chatService.changeTyping(this.roomName,true);
+    }
+    if(this.mes.length==0&&this.isTyping){
+      this.isTyping=false;
+      this.chatService.changeTyping(this.roomName,false);
+    }
+  }
+
   calculateDiff(sentDate) {
     var date1: any = new Date(sentDate);
     var date2: any = new Date();
