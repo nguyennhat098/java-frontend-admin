@@ -49,8 +49,15 @@
           <p>
            {{item.statusName}}
           </p>
-          <strong *ngIf="actionStatus"><i class="fa fa-pencil margin-r-5"></i> Change Status</strong>
-          <a *ngIf="actionStatus" href="javscript:void(0)" (click)="changeStatus()" class="btn btn-primary btn-block"><b>{{actionStatus}}</b></a>
+          <ng-container *ngIf="actionStatus">
+            <strong ><i class="fa fa-pencil margin-r-5"></i> Change Status</strong>
+            <a  href="javscript:void(0)" (click)="changeStatus(0)" class="btn btn-primary btn-block"><b>{{actionStatus}}</b></a>
+            <strong ><i class="fa fa-pencil margin-r-5"></i>Message Cancel Order</strong>
+           <input   class="text-muted" [(ngModel)]="message" style="width:100%;margin-bottom: 10px;" type="text" placeholder="messge cancel"/>
+           <span *ngIf="showError" style="color: red;">message is required</span>
+            <a  href="javscript:void(0)" (click)="changeStatus(-1)" class="btn btn-danger btn-block"><b>Cancel Order</b></a>
+          </ng-container>
+          
         </div>
         <!-- /.box-body -->
       </div>

@@ -8,18 +8,8 @@ export class ChatMessage {
     timeStamp: number;
     keyData?:string;
     roomName?:string;
+    totalNew?:number;
     constructor(init?: Partial<ChatMessage>) {
         Object.assign(this, init);
     }
 }
-
-// export class ChatMessage {
-//     senderID: number;
-//       messageBody: string;
-//       senderName: string;
-//       timeStamp: number;
-//     constructor(init?: Partial<ChatMessage>) {
-//         Object.assign(this, init);
-//     }
-// }
-

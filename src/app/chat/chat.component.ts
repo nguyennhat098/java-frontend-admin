@@ -3,6 +3,7 @@ import {  FormBuilder } from '@angular/forms';
 import { Component, OnInit, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { ChatService } from './chat.service';
 import { ChatMessage } from './chat';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-chat',
@@ -20,13 +21,15 @@ export class ChatComponent implements OnInit, AfterViewInit {
   currentImage: string;
   selectedRoom: ChatMessage;
   mes: string;
+  totalNew:number=0;
   @ViewChildren('allTheseThings') things: QueryList<any>;
-  constructor(private chatService: ChatService, private formBuilder: FormBuilder) { }
+  constructor(private chatService: ChatService, private formBuilder: FormBuilder, private _titleService: Title) { }
   ngAfterViewInit(): void {
     this.things.changes.subscribe(t => {
       var objDiv = document.getElementById("scroll");
       objDiv.scrollTop = objDiv.scrollHeight;
-    })
+    });
+   
   }
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('currentUser')).user;
@@ -45,7 +48,8 @@ export class ChatComponent implements OnInit, AfterViewInit {
       senderName: this.roomName,
       timeStamp: this.roomList[roomIndex].timeStamp,
       keyData: this.roomList[roomIndex].keyData,
-      roomName: this.roomList[roomIndex].roomName
+      roomName: this.roomList[roomIndex].roomName,
+      totalNew:0
     });
     this.selectedRoom = roomData;
     this.chatService.updateRoom(roomData);
@@ -56,8 +60,19 @@ export class ChatComponent implements OnInit, AfterViewInit {
   }
   getListRoom() {
     this.chatService.getRoomsChat().subscribe(roomData => {
+      this.totalNew=0;
       this.roomList = roomData;
       this.dataListRoomProperties = Object.keys(roomData).map(val => val);
+      for (let index = 0; index < this.dataListRoomProperties.length; index++) {
+        const item = this.roomList[index];
+        if(item.new){
+         this.totalNew+=item.totalNew;
+         this._titleService.setTitle(`(${this.totalNew}) Admin`);
+       }
+      }
+      if(this.totalNew==0){
+        this._titleService.setTitle(`Admin`);
+      }
     })
   }
   postMessage(val) {
@@ -99,5 +114,9 @@ export class ChatComponent implements OnInit, AfterViewInit {
     }
     var diffYear = Math.ceil((date2 - date1) / (60 * 1000 * 24 * 60 * 30 * 12));
     return diffYear + ' years ago';
+  }
+  checkNewMessages(){
+  
+    
   }
 }

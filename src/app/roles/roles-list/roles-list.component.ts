@@ -122,7 +122,7 @@ export class RolesListComponent implements OnInit {
           executeAsync: item => {
             this._modalService.showTemplateDialog(new TemplateViewModel({
               title: 'Assign Permission',
-              customSize: 'modal-xlg',
+              customSize: 'modal-lg',
               icon: AppIcons.Key,
               template: AssignRoleComponent,
               validationKey: 'AssignRoleComponent',

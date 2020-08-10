@@ -16,6 +16,7 @@ export class Products {
     categories:Categories;
     catgoryName:string;
     categoryId:number;
+    unit?:string;
     constructor(init?: Partial<Products>) {
         Object.assign(this, init);
     }

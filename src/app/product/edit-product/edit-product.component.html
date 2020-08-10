@@ -18,6 +18,10 @@
             <katana-textbox  [validationName]="'Name'" [(model)]='item.name'  [type]="'text'"  ></katana-textbox>
         </div>
         <div>
+            <label>Unit </label>
+            <katana-textbox   [(model)]='item.unit'  [type]="'text'"  ></katana-textbox>
+        </div>
+        <div>
             <label>Slug (<span class="text-danger">*</span>)</label>
             <katana-textbox  [(model)]='item.slug'  [validationName]="'Slug'"  [type]="'text'"></katana-textbox>
         </div>

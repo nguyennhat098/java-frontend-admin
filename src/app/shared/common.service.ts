@@ -16,10 +16,10 @@ export class CommonService extends MockService {
     }
 
     public getByRoleId(request: any): Observable<Menus[]> {
-        return this._httpClient.get<Menus[]>(`${this.href}/menu/getListByRoleId?roleId=${request}`, {}).pipe(retry(2));
+        return this._httpClient.get<Menus[]>(`${this.href}/menu/getListByRoleId?roleId=${request}`).pipe(retry(2));
     }
     
     public getActionByRole(roleId: any): Observable<any> {
-        return this._httpClient.get<any>(`${this.href}/role/getActionByRole?roleId=${roleId}`, {}).pipe(retry(2));
+        return this._httpClient.get<any>(`${this.href}/role/getActionByRole?roleId=${roleId}`).pipe(retry(2));
     }
 }

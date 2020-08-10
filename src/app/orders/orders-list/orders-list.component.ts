@@ -120,19 +120,23 @@ export class OrdersListComponent implements OnInit {
               element.name = element.phone;
               element.userName = element.userId.userName;
               switch (element.status) {
+                case -1:
+                  element.statusName ="<span class='btn btn-danger'>cancel</span>" ;
+                  break;
                 case 0:
-                  element.statusName = 'pending';
+                  element.statusName ="<span class='btn btn-info'>pending</span>";
                   break;
                 case 1:
-                  element.statusName = 'ready';
+                  element.statusName ="<span class='btn btn-primary'>ready</span>";
                   break;
                 case 2:
-                  element.statusName = 'ordering';
+                  element.statusName = "<span class='btn btn-primary'>ordering</span>";
                   break;
                 case 3:
-                  element.statusName = 'ordered';
+                  element.statusName ="<span class='btn btn-success'>ordered</span>";
                   break;
                 default:
+                  element.statusName ="<span class='btn btn-success'>ordered</span>";
                   break;
               }
               data.push(element);

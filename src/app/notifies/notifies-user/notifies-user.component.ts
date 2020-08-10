@@ -74,7 +74,7 @@ export class NotifiesUserComponent implements OnInit {
 					executeAsync: () => {
 						this._modalService.showConfirmDialog(new ConfirmViewModel({
 							title: AppConsts.Confirm,
-							message:  AppConsts.ConfirmDelete,
+							message:  AppConsts.ConfirmSave,
 							acceptCallback: () => {
                 var data = this.tableList.selectedItems;
                 var list=[];

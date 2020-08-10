@@ -175,7 +175,6 @@ export class UserEditComponent implements OnInit {
      }else{
        this.item.createdDate=new Date;
      }
-     console.log(this.item.password)
     return of(this.item);
   }
 }
