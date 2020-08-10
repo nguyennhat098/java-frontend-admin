@@ -9,10 +9,12 @@
         <div class="info">
           <span class="user">{{roomList[item].fullName}}</span>
           <span class="text">{{roomList[item].messageBody}}</span>
+          <span *ngIf="roomList[item].isTyping" class="text">{{roomList[item].fullName}} is typing...</span>
         </div>
         <span class="time">{{ calculateDiff(-roomList[item].timeStamp)}}</span>
+        
       </div>
-   
+ 
     </div>
   </div>
   <div class="content" style="overflow-y: scroll;height: 900px;" >
@@ -35,6 +37,7 @@
             </p>
             </div>
             <div class="time">{{ calculateDiff(messagesList[item].timeStamp)}}</div>
+           
           </div>
           <ng-template #elseBlock>
             <div  class="message-list me " style="float: right;">
@@ -48,11 +51,17 @@
           </ng-template>
         
       </div>
-     
+      <div *ngIf="showTyping" class="chat-bubble">
+        <div class="typing">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+        </div>
     </div>
     <div class="message-footer">
       
-        <input type="text"  (keyup.enter)="postMessage($event.target.value)" [(ngModel)]="mes"  data-placeholder="Send a message to {0}" />
+        <input type="text" (keyup)="ChangeTyping()"  (keyup.enter)="postMessage($event.target.value)" [(ngModel)]="mes"  data-placeholder="Send a message to {0}" />
 
     </div>
 

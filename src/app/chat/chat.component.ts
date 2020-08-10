@@ -1,9 +1,10 @@
 import { Users } from './../users/user';
-import {  FormBuilder } from '@angular/forms';
-import { Component, OnInit, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList, AfterViewInit, HostListener } from '@angular/core';
 import { ChatService } from './chat.service';
 import { ChatMessage } from './chat';
+import { Router, NavigationEnd } from '@angular/router';
 import { Title } from '@angular/platform-browser';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-chat',
@@ -21,21 +22,43 @@ export class ChatComponent implements OnInit, AfterViewInit {
   currentImage: string;
   selectedRoom: ChatMessage;
   mes: string;
-  totalNew:number=0;
+  isTyping: boolean;
+  showTyping: boolean;
+  totalNew: number = 0;
+  roomIndex: string;
   @ViewChildren('allTheseThings') things: QueryList<any>;
-  constructor(private chatService: ChatService, private formBuilder: FormBuilder, private _titleService: Title) { }
+  constructor(private chatService: ChatService, private _router: Router, private _titleService: Title) {
+    _router.events.forEach((event) => {
+      if (event instanceof NavigationEnd) {
+        this.chatService.changeTyping(this.roomName, false);
+      }
+    });
+  }
+  @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
+    this.chatService.changeTyping(this.roomName, false);
+    event.returnValue = false;
+  }
+
   ngAfterViewInit(): void {
     this.things.changes.subscribe(t => {
       var objDiv = document.getElementById("scroll");
       objDiv.scrollTop = objDiv.scrollHeight;
     });
-   
   }
+
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('currentUser')).user;
     this.getListRoom();
   }
+
   selectedMessage(roomIndex: string) {
+    if(this.roomName){
+      this.chatService.changeTyping(this.roomName, false);
+      this.isTyping=false;
+    }
+  
+    this.mes=null;
+    this.roomIndex = roomIndex;
     this.roomName = this.roomList[roomIndex].roomName;
     this.currentFullName = this.roomList[roomIndex].fullName;
     this.currentImage = this.roomList[roomIndex].image;
@@ -49,36 +72,52 @@ export class ChatComponent implements OnInit, AfterViewInit {
       timeStamp: this.roomList[roomIndex].timeStamp,
       keyData: this.roomList[roomIndex].keyData,
       roomName: this.roomList[roomIndex].roomName,
-      totalNew:0
+      totalNew: 0,
     });
+
     this.selectedRoom = roomData;
     this.chatService.updateRoom(roomData);
     this.chatService.getMessages(this.roomName).subscribe(messages => {
       this.messagesList = messages;
       this.properties = Object.keys(this.messagesList).map(val => val);
     });
+    if (this.roomList[roomIndex].isTyping) {
+      this.showTyping = true;
+    } else {
+      this.showTyping = false;
+    }
   }
-  getListRoom() {
+
+  getListRoom(): void {
     this.chatService.getRoomsChat().subscribe(roomData => {
-      this.totalNew=0;
+      this.totalNew = 0;
       this.roomList = roomData;
       this.dataListRoomProperties = Object.keys(roomData).map(val => val);
       for (let index = 0; index < this.dataListRoomProperties.length; index++) {
         const item = this.roomList[index];
-        if(item.new){
-         this.totalNew+=item.totalNew;
-         this._titleService.setTitle(`(${this.totalNew}) Admin`);
-       }
+        if (item.new) {
+          this.totalNew += item.totalNew;
+          this._titleService.setTitle(`(${this.totalNew}) Admin`);
+        }
       }
-      if(this.totalNew==0){
+
+      if (this.totalNew == 0) {
         this._titleService.setTitle(`Admin`);
+      }
+
+      if (this.roomIndex) {
+        if (this.roomList[this.roomIndex].isTyping) {
+          this.showTyping = true;
+        } else {
+          this.showTyping = false;
+        }
       }
     })
   }
-  postMessage(val) {
-    if (!val) {
-      return;
-    }
+
+  postMessage(val): void {
+    if (!val) return;
+
     const chat: ChatMessage = new ChatMessage({
       messageBody: val,
       senderName: this.user.userName,
@@ -91,8 +130,21 @@ export class ChatComponent implements OnInit, AfterViewInit {
     });
     this.chatService.sendMessage(chat, this.roomName);
     this.mes = null;
+    this.isTyping = false;
   }
-  calculateDiff(sentDate) {
+
+  ChangeTyping(): void {
+    if (this.mes.length > 0 && !this.isTyping) {
+      this.isTyping = true;
+      this.chatService.changeTyping(this.roomName, true);
+    }
+    if (this.mes.length == 0 && this.isTyping) {
+      this.isTyping = false;
+      this.chatService.changeTyping(this.roomName, false);
+    }
+  }
+
+  calculateDiff(sentDate): string {
     var date1: any = new Date(sentDate);
     var date2: any = new Date();
 
@@ -113,10 +165,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
       return diffMonth + ' months ago';
     }
     var diffYear = Math.ceil((date2 - date1) / (60 * 1000 * 24 * 60 * 30 * 12));
+
     return diffYear + ' years ago';
-  }
-  checkNewMessages(){
-  
-    
   }
 }
