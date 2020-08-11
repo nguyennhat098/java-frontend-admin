@@ -37,8 +37,8 @@ sendMessage(chatMessage:ChatMessage, chatID) :void{
   this.db.database.ref(`Chat/${chatID}/meta-data`).once('value').then(snapshort=>{
     var metaData = Object.assign({}, snapshort.val());
     metaData.totalNew+=1;
-    metaData.timeStamp=new Date().getTime()*-1;
-    metaData.messageBody=chatMessage.messageBody;
+    // metaData.timeStamp=new Date().getTime()*-1;
+    // metaData.messageBody=chatMessage.messageBody;
     metaData.isTyping=false;
     this.db.database.ref(`Chat/${chatID}/meta-data`).update(metaData);
   });
@@ -50,5 +50,8 @@ changeTyping(chatID:string,isTyping:boolean){
     metaData.isTyping=isTyping;
     this.db.database.ref(`Chat/${chatID}/meta-data`).update(metaData);
   });
+}
+getMetaData(chatID:string){
+ return this.db.database.ref(`Chat/${chatID}/meta-data`).once('value');
 }
 }

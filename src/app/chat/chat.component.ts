@@ -30,13 +30,17 @@ export class ChatComponent implements OnInit, AfterViewInit {
   constructor(private chatService: ChatService, private _router: Router, private _titleService: Title) {
     _router.events.forEach((event) => {
       if (event instanceof NavigationEnd) {
-        this.chatService.changeTyping(this.roomName, false);
+        if (this.roomName) {
+          this.chatService.changeTyping(this.roomName, false);
+        }
       }
     });
   }
   @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
-    this.chatService.changeTyping(this.roomName, false);
-    event.returnValue = false;
+    if (this.roomName) {
+      this.chatService.changeTyping(this.roomName, false);
+      event.returnValue = false;
+    }
   }
 
   ngAfterViewInit(): void {
@@ -49,15 +53,16 @@ export class ChatComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('currentUser')).user;
     this.getListRoom();
+    document.getElementById("content").style.height = document.body.clientHeight-50+"px";
   }
 
   selectedMessage(roomIndex: string) {
-    if(this.roomName){
+    if (this.roomName) {
       this.chatService.changeTyping(this.roomName, false);
-      this.isTyping=false;
+      this.isTyping = false;
     }
-  
-    this.mes=null;
+
+    this.mes = null;
     this.roomIndex = roomIndex;
     this.roomName = this.roomList[roomIndex].roomName;
     this.currentFullName = this.roomList[roomIndex].fullName;
