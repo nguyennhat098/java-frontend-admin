@@ -49,14 +49,13 @@ html,body {
   }
   .list-wrap {
     width: 100%;
-    overflow: auto;
+  //  overflow: auto;
     //list
     .list {
       border-bottom: 1px solid #ccc;
       background: #fff;
       display: flex;
       align-items: center;
-      padding: 5px;
       height: 70px;
       cursor: pointer;
       &:hover, &.active {
