@@ -32,6 +32,7 @@ sendMessage(chatMessage:ChatMessage, chatID) :void{
     roomData.new=false;
     roomData.messageBody=chatMessage.messageBody;
     roomData.timeStamp=new Date().getTime()*-1;
+    roomData.totalNew=0;
     this.db.database.ref(`RoomName/${chatMessage.keyData}`).update(roomData);
   });
   this.db.database.ref(`Chat/${chatID}/meta-data`).once('value').then(snapshort=>{
