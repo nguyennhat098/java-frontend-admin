@@ -53,7 +53,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('currentUser')).user;
     this.getListRoom();
-    document.getElementById("content").style.height = document.body.clientHeight-50+"px";
+    document.getElementById("content").style.height = document.getElementsByTagName('body')[0].clientHeight-50+"px";
   }
 
   selectedMessage(roomIndex: string) {
