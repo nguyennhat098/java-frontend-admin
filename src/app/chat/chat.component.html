@@ -1,7 +1,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
 <div class="row">
-  <div class="sidebars">
+  <div class="sidebars" id="sidebar">
    <span class="logo">CHAT</span>
     <div class="list-wrap">
       <div  [style.background]="roomList[item].new ? '#edf2fa' : null" class="list" *ngFor="let item of dataListRoomProperties" (click)="selectedMessage(item)">
@@ -9,7 +9,12 @@
         <div class="info">
           <span class="user">{{roomList[item].fullName}}</span>
           <span class="text">{{roomList[item].messageBody}}</span>
-          <span *ngIf="roomList[item].isTyping" class="text">{{roomList[item].fullName}} is typing...</span>
+          <span *ngIf="roomList[item].isTyping" class="text">  
+            <div class="typing">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div></span>
         </div>
         <span class="time">{{ calculateDiff(-roomList[item].timeStamp)}}</span>
         
@@ -25,7 +30,7 @@
         <span class="time"></span>
       </div>
       <div class="open">
-        <a href="javascript:;">UP</a>
+        <a href="javascript:;" (click)="openNarBarMobile()">{{textNarBar}}</a>
       </div>
     </header>
     <div class="message-wrap" id="scroll">
@@ -51,13 +56,22 @@
           </ng-template>
         
       </div>
-      <div *ngIf="showTyping" class="chat-bubble">
-        <div class="typing">
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
+      <div *ngIf="showTyping"  class="message-list  " style="display: flex;width: 50%;">
+        
+        <div >
+          {{currentFullName}} is typing
+        
         </div>
-        </div>
+        <div  class="chat-bubble" style="float: right;margin-left: 10px;width:30px">
+            
+          <div class="typing" >
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+          </div>
+      </div>
+     
     </div>
     <div class="message-footer">
       

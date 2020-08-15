@@ -51,7 +51,6 @@ export class RoleService extends MockService {
         return this._httpClient.get<Actions[]>(`${this.href}/role/getActionByRoleAction?roleId=${request.id}`, {}).pipe(retry(2));
     }
     public deleteMutipleAction( request: RoleActions[]): Observable<ActionResponse<Roles>> {
-        console.log(request)
         return this._httpClient.post<ActionResponse<Roles>>(`${this.href}/roleAction/deleteMutiple`, request);
     }
     public deleteAction(request:number):Observable<any>{

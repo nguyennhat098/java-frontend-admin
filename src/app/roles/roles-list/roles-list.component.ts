@@ -1,13 +1,12 @@
 import { AuthenticationServices } from './../../helpers/authentication.service';
 import { AppIcons, AppConsts } from './../../shared/AppConsts';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { TableColumnType, TableComponent, TableOption, ModalService, TemplateViewModel, DataService, ConfirmViewModel, TableConstant, TableText, TableMessage } from 'ngx-fw4c';
+import { TableColumnType, TableComponent, TableOption, ModalService, TemplateViewModel, DataService, ConfirmViewModel, TableText, TableMessage } from 'ngx-fw4c';
 // import { AppIcons, AppConsts } from 'src/app/shared/AppConsts';
 import { RoleService } from '../role.service';
 import { ToastrService } from 'ngx-toastr';
 import { RolesEditComponent } from '../roles-edit/roles-edit.component';
 import { Roles } from '../Role';
-import { MatrixManagementComponent } from '../matrix-management/matrix-management.component';
 import { AssignRoleComponent } from '../assign-role/assign-role.component';
 
 @Component({

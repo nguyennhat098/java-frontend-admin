@@ -7,6 +7,8 @@ import { RoleActions } from '../RoleActions';
 import { ToastrService } from 'ngx-toastr';
 import { SearchRequest } from './../../shared/search-request';
 import { ActionResponse } from './../../shared/action-response';
+import { AuthenticationServices } from './../../helpers/authentication.service';
+
 const arrPermission = [
   { actionName: 'Category', view: 'VIEW CATEGORY', add: 'ADD CATEGORY', edit: 'EDIT CATEGORY', delete: 'DELETE CATEGORY',nameDb:'CATEGORY' },
   { actionName: 'PRODUCT', view: 'VIEW PRODUCT', add: 'ADD PRODUCT', edit: 'EDIT PRODUCT', delete: 'DELETE PRODUCT',nameDb:'PRODUCT' },
@@ -14,7 +16,7 @@ const arrPermission = [
   { actionName: 'USER', view: 'VIEW USER', add: 'ADD USER', edit: 'EDIT USER', delete: 'DELETE USER',nameDb:'USER' },
   { actionName: 'ORDERS', view: 'VIEW ORDERS', add: '', edit: 'EDIT ORDERS', delete: '',nameDb:'ORDERS' },
   { actionName: 'CHAT', view: 'VIEW CHAT', add: '', edit: '', delete: '',nameDb:'CHAT' },
-  { actionName: 'Permission', view: '', add: 'ADD PERMISSION', edit: 'EDIT PERMISSION', delete: 'DELETE PERMISSION',nameDb:'PERMISSION' },
+  { actionName: 'Permission', view: '', add: '', edit: 'EDIT PERMISSION', delete: '',nameDb:'PERMISSION' },
 ];
 @Component({
   selector: 'app-assign-role',
@@ -28,7 +30,7 @@ export class AssignRoleComponent implements OnInit {
   actionsActive:Actions[]=[];
    actionsAvailableList: Actions[] = [];
    selectPermission:string[]=[];
-  constructor(private _roleService: RoleService,private _toastr:ToastrService) { }
+  constructor(private _roleService: RoleService,private _toastr:ToastrService,private _authenticationService: AuthenticationServices,) { }
 
   ngOnInit() {
     this._roleService.getActionByRoleAction(new SearchRequest({ id: this.item.id })).subscribe(val=>{
@@ -68,13 +70,16 @@ export class AssignRoleComponent implements OnInit {
       this.selectPermission.push(`${permission} ${actionName}`);
     }
   }
+  checkAuthenticateSave():boolean{
+    return this._authenticationService.checkAuthenticate('EDIT PERMISSION');
+  }
   saveChanges(){
     var roleActionAdd:RoleActions[]=[];
     var roleActionRemove:RoleActions[]=[];
     for (let index = 0; index < this.selectPermission.length; index++) {
       const name = this.selectPermission[index];
       var currentPermission=this.actionsActive.find(x=>x.actionName==name);
-      var roleAction=new RoleActions();
+       var roleAction=new RoleActions();
       if(currentPermission){
         roleAction.actionId=new Actions({id:currentPermission.id,actionName:currentPermission.actionName});
         roleAction.roleId=new Roles({id:this.item.id});
@@ -86,11 +91,15 @@ export class AssignRoleComponent implements OnInit {
         roleActionAdd.push(roleAction);
       }
     }
-    this._roleService.deleteMutipleAction(roleActionRemove).subscribe((val: ActionResponse<Roles>) => {
+    this._roleService.deleteMutipleAction(roleActionRemove).subscribe((valDelete: ActionResponse<Roles>) => {
+      this._roleService.addMutipleAction(roleActionAdd).subscribe((val: ActionResponse<RoleActions>) => {
+        if(val.failureItems.length==0&&valDelete.failureItems.length==0){
+          this._toastr.success('Changes saved', 'Success');
+        }else{
+          this._toastr.success(`Total fail ${val.failureItems.length+valDelete.failureItems.length}\n ToTal succes:${val.successItems.length}`, 'Success');
+        }
+      });
     });
-    this._roleService.addMutipleAction(roleActionAdd).subscribe((val: ActionResponse<RoleActions>) => {
-    });
-    this._toastr.success('Changes saved', 'Success');
     this.selectPermission=[];
   }
 }

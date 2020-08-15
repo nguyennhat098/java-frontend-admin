@@ -4,7 +4,7 @@ import { ChatService } from './chat.service';
 import { ChatMessage } from './chat';
 import { Router, NavigationEnd } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-import { filter } from 'rxjs/operators';
+import { AuthenticationServices } from './../helpers/authentication.service';
 
 @Component({
   selector: 'app-chat',
@@ -26,8 +26,9 @@ export class ChatComponent implements OnInit, AfterViewInit {
   showTyping: boolean;
   totalNew: number = 0;
   roomIndex: string;
+  textNarBar:string='UP';
   @ViewChildren('allTheseThings') things: QueryList<any>;
-  constructor(private chatService: ChatService, private _router: Router, private _titleService: Title) {
+  constructor(private chatService: ChatService, private _router: Router, private _titleService: Title,private _authenticationService: AuthenticationServices,) {
     _router.events.forEach((event) => {
       if (event instanceof NavigationEnd) {
         if (this.roomName) {
@@ -51,6 +52,9 @@ export class ChatComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    if(!this._authenticationService.checkAuthenticate('VIEW CHAT')){
+      this._router.navigateByUrl('/auth');
+    }
     this.user = JSON.parse(localStorage.getItem('currentUser')).user;
     this.getListRoom();
     document.getElementById("content").style.height = document.getElementsByTagName('body')[0].clientHeight-50+"px";
@@ -146,6 +150,17 @@ export class ChatComponent implements OnInit, AfterViewInit {
     if (this.mes.length == 0 && this.isTyping) {
       this.isTyping = false;
       this.chatService.changeTyping(this.roomName, false);
+    }
+  }
+
+  openNarBarMobile(){
+    var checkExist=document.getElementsByClassName('opened');
+    if(checkExist[0]){
+      document.getElementById("sidebar").classList.remove('opened');
+      this.textNarBar='UP';
+    }else{
+      document.getElementById("sidebar").classList.add('opened');
+      this.textNarBar='DOWN';
     }
   }
 
