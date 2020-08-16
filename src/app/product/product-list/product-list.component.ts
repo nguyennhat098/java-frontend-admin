@@ -40,7 +40,7 @@ export class ProductListComponent implements OnInit {
      tableText.selectPageSize='Display';
      var tableMessage=new TableMessage();
      tableMessage.loadingMessage='Loading',
-     tableMessage.notFoundMessage='No data found';
+     //tableMessage.notFoundMessage='No data found';
      tableMessage.confirmClearAllRecordsMessage='Deselect all';
      tableMessage.selectedItemsMessage=`record selected.`;
     this.option = new TableOption({

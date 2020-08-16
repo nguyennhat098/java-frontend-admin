@@ -5,10 +5,11 @@
    <span class="logo">CHAT</span>
     <div class="list-wrap">
       <div  [style.background]="roomList[item].new ? '#edf2fa' : null" class="list" *ngFor="let item of dataListRoomProperties" (click)="selectedMessage(item)">
-        <img src="{{roomList[item].image}}" alt="" />
+        <img src="{{roomList[item].image}}"  alt="" />
         <div class="info">
+          
           <span class="user">{{roomList[item].fullName}}</span>
-          <span class="text">{{roomList[item].messageBody}}</span>
+          <span class="text"> {{ShowRoomMessage(roomList[item].messageBody) }}</span>
           <span *ngIf="roomList[item].isTyping" class="text">  
             <div class="typing">
             <div class="dot"></div>
@@ -16,7 +17,10 @@
             <div class="dot"></div>
           </div></span>
         </div>
-        <span class="time">{{ calculateDiff(-roomList[item].timeStamp)}}</span>
+        <span class="time">{{ calculateDiff(-roomList[item].timeStamp)}} 
+          <span *ngIf="roomList[item].totalNew>0&&roomList[item].totalNew<10" class="notify" > {{roomList[item].totalNew}}</span>
+          <span *ngIf="roomList[item].totalNew>9" class="notify" style="padding: 1px;" >9+</span>
+        </span>
         
       </div>
  
@@ -35,8 +39,9 @@
     </header>
     <div class="message-wrap" id="scroll">
       <div *ngFor="let item of properties">
-          <div *ngIf="user.id!=messagesList[item].senderID; else elseBlock" class="message-list clearfix" style="width: 50%;">
+          <div *ngIf="user.id!=messagesList[item].senderID; else elseBlock" class="message-list clearfix" style="width: 40%;">
             <div class="msg" style="width:100%">
+              
               <p >
                 {{messagesList[item].messageBody}}
             </p>
@@ -45,7 +50,7 @@
            
           </div>
           <ng-template #elseBlock>
-            <div  class="message-list me " style="float: right;">
+            <div  class="message-list me " style="float: right;width: 40%;">
               <div class="msg" >
                   <p>
                     {{messagesList[item].messageBody}}
@@ -76,7 +81,7 @@
     <div class="message-footer">
       
         <input type="text" (keyup)="ChangeTyping()"  (keyup.enter)="postMessage($event.target.value)" [(ngModel)]="mes"  data-placeholder="Send a message to {0}" />
-
+      <button [hidden]="textNarBar=='DOWN'" type="submit" class="btn btn-primary" (click)="postMessage(mes)" style="margin-left: 30px;padding: 15px;padding-top: 10px;">send</button>
     </div>
 
   </div>

@@ -84,7 +84,7 @@ export class OrdersEditComponent implements OnInit {
     tableText.selectPageSize = 'Display';
     var tableMessage = new TableMessage();
     tableMessage.loadingMessage = 'Loading',
-      tableMessage.notFoundMessage = 'No data found';
+    //  tableMessage.notFoundMessage = 'No data found';
     tableMessage.selectedItemsMessage = `record selected.`;
     tableMessage.confirmClearAllRecordsMessage = 'Deselect all';
     this.option = new TableOption({

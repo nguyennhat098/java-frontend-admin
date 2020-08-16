@@ -38,7 +38,7 @@ export class CategoriesListComponent implements OnInit {
     tableText.selectPageSize='Display';
     var tableMessage=new TableMessage();
     tableMessage.loadingMessage='Loading',
-    tableMessage.notFoundMessage='No data found';
+   // tableMessage.notFoundMessage='No data found';
     tableMessage.selectedItemsMessage=`record selected.`;
     tableMessage.confirmClearAllRecordsMessage='Deselect all';
     this.option = new TableOption({
@@ -174,7 +174,6 @@ export class CategoriesListComponent implements OnInit {
           type: TableColumnType.Description,
           title: () => 'Name',
           valueRef: () => 'name',
-          allowFilter: true
         },
         {
           type: TableColumnType.Description,

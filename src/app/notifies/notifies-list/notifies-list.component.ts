@@ -41,7 +41,7 @@ export class NotifiesListComponent implements OnInit {
     tableText.selectPageSize = 'Display';
     var tableMessage = new TableMessage();
     tableMessage.loadingMessage = 'Loading',
-      tableMessage.notFoundMessage = 'No data found';
+    //  tableMessage.notFoundMessage = 'No data found';
     tableMessage.selectedItemsMessage = `record selected.`;
     tableMessage.confirmClearAllRecordsMessage = 'Deselect all';
     this.option = new TableOption({
@@ -49,6 +49,7 @@ export class NotifiesListComponent implements OnInit {
         tableMessage.selectedItemsMessage = `${this.tableList.selectedItems.length} record selected.`;
       },
       paging: true,
+      expandFilterArea:false,
       title: 'Notifies Management',
       topButtons: [
         {
@@ -253,7 +254,6 @@ export class NotifiesListComponent implements OnInit {
           type: TableColumnType.Description,
           title: () => 'Content',
           valueRef: () => 'content',
-          allowFilter: true,
           inlineEdit: true,
           validationOption: new ValidationOption({
             rules: [

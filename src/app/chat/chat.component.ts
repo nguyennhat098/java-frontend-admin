@@ -26,9 +26,9 @@ export class ChatComponent implements OnInit, AfterViewInit {
   showTyping: boolean;
   totalNew: number = 0;
   roomIndex: string;
-  textNarBar:string='UP';
+  textNarBar: string = 'UP';
   @ViewChildren('allTheseThings') things: QueryList<any>;
-  constructor(private chatService: ChatService, private _router: Router, private _titleService: Title,private _authenticationService: AuthenticationServices,) {
+  constructor(private chatService: ChatService, private _router: Router, private _titleService: Title, private _authenticationService: AuthenticationServices,) {
     _router.events.forEach((event) => {
       if (event instanceof NavigationEnd) {
         if (this.roomName) {
@@ -52,12 +52,12 @@ export class ChatComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    if(!this._authenticationService.checkAuthenticate('VIEW CHAT')){
+    if (!this._authenticationService.checkAuthenticate('VIEW CHAT')) {
       this._router.navigateByUrl('/auth');
     }
     this.user = JSON.parse(localStorage.getItem('currentUser')).user;
     this.getListRoom();
-    document.getElementById("content").style.height = document.getElementsByTagName('body')[0].clientHeight-50+"px";
+    document.getElementById("content").style.height = document.getElementsByTagName('body')[0].clientHeight - 50 + "px";
   }
 
   selectedMessage(roomIndex: string) {
@@ -125,14 +125,14 @@ export class ChatComponent implements OnInit, AfterViewInit {
   }
 
   postMessage(val): void {
-    if (!val) return;
+    if (!val && !this.selectedRoom) return;
 
     const chat: ChatMessage = new ChatMessage({
       messageBody: val,
       senderName: this.user.userName,
       timeStamp: new Date().getTime(),
       fullName: this.user.fullName,
-      image: this.user.image ? this.user.image : 'https://image.flaticon.com/icons/svg/145/145867.svg',
+      image: this.user.image ? this.user.image : 'assets/images/avatar.svg',
       new: true,
       senderID: this.user.id,
       keyData: this.selectedRoom.keyData
@@ -142,6 +142,13 @@ export class ChatComponent implements OnInit, AfterViewInit {
     this.isTyping = false;
   }
 
+  ShowRoomMessage(message: string): string {
+    if (message.length > 25) {
+      message = message.substring(0, 25) + '...';
+    }
+    return message;
+  }
+  
   ChangeTyping(): void {
     if (this.mes.length > 0 && !this.isTyping) {
       this.isTyping = true;
@@ -153,14 +160,14 @@ export class ChatComponent implements OnInit, AfterViewInit {
     }
   }
 
-  openNarBarMobile(){
-    var checkExist=document.getElementsByClassName('opened');
-    if(checkExist[0]){
+  openNarBarMobile():void {
+    var checkExist = document.getElementsByClassName('opened');
+    if (checkExist[0]) {
       document.getElementById("sidebar").classList.remove('opened');
-      this.textNarBar='UP';
-    }else{
+      this.textNarBar = 'UP';
+    } else {
       document.getElementById("sidebar").classList.add('opened');
-      this.textNarBar='DOWN';
+      this.textNarBar = 'DOWN';
     }
   }
 
