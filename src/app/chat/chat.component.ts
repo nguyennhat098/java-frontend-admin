@@ -58,6 +58,9 @@ export class ChatComponent implements OnInit, AfterViewInit {
     this.user = JSON.parse(localStorage.getItem('currentUser')).user;
     this.getListRoom();
     document.getElementById("content").style.height = document.getElementsByTagName('body')[0].clientHeight - 50 + "px";
+    if(document.getElementsByTagName('body')[0].clientWidth<768){
+      // document.getElementById('header-image').style.width=document.getElementsByTagName('body')[0].clientWidth+'px';
+    }
   }
 
   selectedMessage(roomIndex: string) {

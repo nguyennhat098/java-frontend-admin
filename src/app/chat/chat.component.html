@@ -27,7 +27,7 @@
     </div>
   </div>
   <div id="content" class="content" style="height: 900px;" >
-    <header>
+    <header id="header-image">
       <img src="{{currentImage}}" alt="">
       <div class="info">
         <span class="user">{{currentFullName}}</span>
@@ -39,18 +39,18 @@
     </header>
     <div class="message-wrap" id="scroll">
       <div *ngFor="let item of properties">
-          <div *ngIf="user.id!=messagesList[item].senderID; else elseBlock" class="message-list clearfix" style="width: 40%;">
+          <div *ngIf="user.id!=messagesList[item].senderID; else elseBlock" class="message-list clearfix" >
             <div class="msg" style="width:100%">
               
               <p >
                 {{messagesList[item].messageBody}}
             </p>
             </div>
-            <div class="time">{{ calculateDiff(messagesList[item].timeStamp)}}</div>
+            <div class="time" style="text-align:left">{{ calculateDiff(messagesList[item].timeStamp)}}</div>
            
           </div>
           <ng-template #elseBlock>
-            <div  class="message-list me " style="float: right;width: 40%;">
+            <div  class="message-list me " >
               <div class="msg" >
                   <p>
                     {{messagesList[item].messageBody}}
@@ -80,8 +80,8 @@
     </div>
     <div class="message-footer">
       
-        <input type="text" (keyup)="ChangeTyping()"  (keyup.enter)="postMessage($event.target.value)" [(ngModel)]="mes"  data-placeholder="Send a message to {0}" />
-      <button [hidden]="textNarBar=='DOWN'" type="submit" class="btn btn-primary" (click)="postMessage(mes)" style="margin-left: 30px;padding: 15px;padding-top: 10px;">send</button>
+        <input style="width:80%" type="text" (keyup)="ChangeTyping()"  (keyup.enter)="postMessage($event.target.value)" [(ngModel)]="mes"  data-placeholder="Send a message to {0}" />
+      <button [hidden]="textNarBar=='DOWN'" type="submit" class="btn btn-primary" (click)="postMessage(mes)" style="margin-left: 15px;padding: 15px;padding-top: 10px;">send</button>
     </div>
 
   </div>
