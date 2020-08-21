@@ -22,6 +22,9 @@ import { ErrorInterceptor } from './helpers/error.interceptor';
 import { OrdersModule } from './orders/orders.module';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { IndexModule } from './index/index.module';
+import { DeniedComponent } from './denied/denied.component';
+import { NotfoundComponent } from './notfound/notfound.component';
+
 const ListModule = [
   ProductModule,
   RoleModule,
@@ -31,12 +34,15 @@ const ListModule = [
   NotifiesModule,
   ChatModule,
   LoginModule,
-  IndexModule
+  IndexModule,
+  
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
+    DeniedComponent,
+    NotfoundComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,7 +51,6 @@ const ListModule = [
     FormsModule,
     ReactiveFormsModule,
     AngularFireStorageModule,
-    // AngularFireModule.initializeApp(environment.firebaseConfig), 
     AngularFireDatabaseModule,
     AngularFireModule.initializeApp(environment.firebaseConfig, "cloud"),
     ToastrModule.forRoot({
@@ -58,7 +63,6 @@ const ListModule = [
     ListModule
   ],
   providers: [
-    // { provide: BUCKET, useValue: "shopdemo-a7f84.appspot.com" },
     { provide: BUCKET, useValue: "oganic-shopping.appspot.com" },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

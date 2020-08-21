@@ -144,6 +144,12 @@ export class EditProductComponent implements OnInit {
           new CustomValidationRule(value => {
             return this._productService.validatePrice(value,this.item);
           }),
+          new CustomValidationRule(value => {
+            return of(new ValidationRuleResponse({
+              message: 'The price is not negative',
+              status:  !(this.item.price <0)
+          }));
+          }),
         ]
       }),
       new ValidationOption({
@@ -153,6 +159,12 @@ export class EditProductComponent implements OnInit {
         rules: [
           new CustomValidationRule(value => {
             return this._productService.validateSalePrice(value,this.item);
+          }),
+          new CustomValidationRule(value => {
+            return of(new ValidationRuleResponse({
+              message: 'The Sale Price is not negative',
+              status:  !(this.item.salePrice <0)
+          }));
           }),
         ]
       }),

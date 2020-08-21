@@ -117,7 +117,6 @@ export class OrdersListComponent implements OnInit {
             var data = [];
             for (let index = 0; index < val.items.length; index++) {
               const element = val.items[index];
-              element.name = element.phone;
               element.userName = element.userId.userName;
               switch (element.status) {
                 case -1:

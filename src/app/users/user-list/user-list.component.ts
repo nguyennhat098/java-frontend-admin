@@ -195,6 +195,13 @@ export class UserListComponent implements OnInit {
         },
         {
           type: TableColumnType.Description,
+          title: () => 'Email',
+          allowFilter: true,
+
+          valueRef: () => 'email',
+        },
+        {
+          type: TableColumnType.Description,
           title: () => 'Image',
           allowFilter: false,
           valueRef: () => '',
